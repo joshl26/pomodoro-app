@@ -1,19 +1,35 @@
 .container {
-  flex: flex;
+  display: flex;
   color: var(--tertiary-color);
   background-color: var(--primary-color);
-  height: 15vh;
+  height: 13vh;
   width: 100%;
 }
 
 .content {
+  display: flex;
+  width: 100%;
   color: white;
 }
 
-.logoText {
-  font-size: 50px;
+.logo_text {
+  padding: 1rem;
+  font-size: 25px;
 }
 
-.logoImage {
-  height: 50px;
+.logo_image {
+  vertical-align: middle;
+  display: flex;
+  height: 7.5vh;
+}
+
+.logo_link {
+  color: white;
+  text-decoration: none;
+  height: 100%;
+  display: flex;
+  padding: 1rem;
+}
+
+.nav {
 }
