@@ -1,4 +1,19 @@
 .container {
-  color: red;
-  background-color: blue;
+  flex: flex;
+  color: var(--tertiary-color);
+  background-color: var(--primary-color);
+  height: 15vh;
+  width: 100%;
+}
+
+.content {
+  color: white;
+}
+
+.logoText {
+  font-size: 50px;
+}
+
+.logoImage {
+  height: 50px;
 }
