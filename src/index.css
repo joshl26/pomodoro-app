@@ -25,3 +25,14 @@ body {
   flex-direction: column;
   flex-grow: 1;
 }
+
+ul {
+  list-style-type: none;
+}
+
+button {
+  background-color: rgba(256, 256, 256, 0.2);
+  border: none;
+  border-radius: 10px;
+  padding: 5px;
+}
