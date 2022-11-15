@@ -1,7 +1,10 @@
+import classes from "./Timer.module.css";
+import Progress from "./Progress";
+
 const Timer = () => {
   return (
     <div>
-      <h1>TIMER</h1>
+      <Progress />
     </div>
   );
 };
