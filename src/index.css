@@ -35,4 +35,7 @@ button {
   border: none;
   border-radius: 10px;
   padding: 5px;
+  margin: 5px;
+  cursor: pointer;
+  color: white;
 }
