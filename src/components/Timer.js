@@ -1,17 +1,10 @@
 import classes from "./Timer.module.css";
 import Progress from "./Progress";
+import SecondaryButtons from "./SecondaryButtons";
 
 import { POMODORO, LONG_BREAK, SHORT_BREAK } from "../constants";
 
-const SecondaryButton = ({ label }) => {
-  return <button onClick={onClick}>{label}</button>;
-};
-
-const onClick = () => {
-  console.log("TEST");
-};
-
-const progress = "20%";
+const progress = "30%";
 
 const initialState = {
   modes: {
@@ -19,16 +12,19 @@ const initialState = {
       id: POMODORO,
       label: "Pomodoro",
       time: 25,
+      active: true,
     },
     [SHORT_BREAK]: {
       id: SHORT_BREAK,
       label: "Short Break",
       time: 5,
+      active: false,
     },
     [LONG_BREAK]: {
       id: LONG_BREAK,
       label: "Long Break",
       time: 15,
+      active: false,
     },
   },
 };
@@ -39,12 +35,7 @@ const Timer = () => {
       <Progress percent={progress} />
       <div className={classes.container}>
         <div className={classes.content}>
-          <ul>
-            <SecondaryButton label={"POMO"} />
-            <button className={classes.btn_secondary_active}>Pomodoro</button>
-            <button className={classes.btn_secondary}>Short Break</button>
-            <button className={classes.btn_secondary}>Long Break</button>
-          </ul>
+          <SecondaryButtons />
           <div className={classes.time}>25:00</div>
           <div>
             <button className={classes.action_btn}>START</button>

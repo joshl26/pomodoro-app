@@ -7,7 +7,7 @@ function App() {
     <div className={classes.container}>
       <Header />
       <div className={classes.content}>
-        <Timer percent />
+        <Timer />
       </div>
     </div>
   );
