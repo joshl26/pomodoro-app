@@ -7,7 +7,7 @@ import { POMODORO, LONG_BREAK, SHORT_BREAK } from "../constants";
 
 const progress = "20%";
 
-const initialState = {
+export const initialState = {
   modes: {
     [POMODORO]: {
       id: POMODORO,
@@ -39,7 +39,7 @@ const Timer = () => {
       <Progress percent={progress} />
       <div className={classes.container}>
         <div className={classes.content}>
-          <SecondaryButtons stateChanger={setTime} stateChanger1={setActive} />
+          <SecondaryButtons timeChange={setTime} activeChange={setActive} />
           <div className={classes.time}>{time}</div>
           <div>
             <button className={classes.action_btn}>START</button>

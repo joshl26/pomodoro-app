@@ -1,15 +1,15 @@
 import { useState } from "react";
 import classes from "./SecondaryButtons.module.css";
 
-const SecondaryButtons = ({ stateChanger, stateChanger1 }) => {
+const SecondaryButtons = ({ timeChange, activeChange }) => {
   // const handleClick = (event) => {
   //   stateChanger(event.target.value);
   //   stateChanger1(event.target.id);
   // };
 
   function handleClick(event) {
-    stateChanger(event.target.value);
-    stateChanger1(event.target.id);
+    timeChange(event.target.value);
+    activeChange(event.target.id);
   }
 
   const active = "1";
