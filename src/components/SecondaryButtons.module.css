@@ -1,3 +1,14 @@
+.btn_secondary {
+  font-size: 1.25rem;
+  background-color: rgba(256, 256, 256, 0.2);
+  border: none;
+  border-radius: 15px;
+  padding: 8px;
+  margin: 5px;
+  cursor: pointer;
+  color: white;
+}
+
 .active {
   background-color: red;
 }

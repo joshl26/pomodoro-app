@@ -2,7 +2,7 @@ import { useState } from "react";
 import classes from "./SecondaryButtons.module.css";
 
 const SecondaryButtons = () => {
-  const [active, setActive] = useState("");
+  const [active, setActive] = useState("1");
 
   const handleClick = (event) => {
     setActive(event.target.id);
@@ -12,7 +12,11 @@ const SecondaryButtons = () => {
     <div className={classes.container}>
       <button
         key={1}
-        className={active === "1" ? `${classes.active}` : undefined}
+        className={
+          active === "1"
+            ? `${classes.active} ${classes.btn_secondary}`
+            : `${classes.btn_secondary}`
+        }
         id={"1"}
         onClick={handleClick}
       >
@@ -21,7 +25,11 @@ const SecondaryButtons = () => {
 
       <button
         key={2}
-        className={active === "2" ? `${classes.active}` : undefined}
+        className={
+          active === "2"
+            ? `${classes.active} ${classes.btn_secondary}`
+            : `${classes.btn_secondary}`
+        }
         id={"2"}
         onClick={handleClick}
       >
@@ -30,7 +38,11 @@ const SecondaryButtons = () => {
 
       <button
         key={3}
-        className={active === "3" ? `${classes.active}` : undefined}
+        className={
+          active === "3"
+            ? `${classes.active} ${classes.btn_secondary}`
+            : `${classes.btn_secondary}`
+        }
         id={"3"}
         onClick={handleClick}
       >
