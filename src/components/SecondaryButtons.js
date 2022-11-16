@@ -1,16 +1,23 @@
 import { useState } from "react";
 import classes from "./SecondaryButtons.module.css";
 
-const SecondaryButtons = () => {
-  const [active, setActive] = useState("1");
+const SecondaryButtons = ({ stateChanger, stateChanger1 }) => {
+  // const handleClick = (event) => {
+  //   stateChanger(event.target.value);
+  //   stateChanger1(event.target.id);
+  // };
 
-  const handleClick = (event) => {
-    setActive(event.target.id);
-  };
+  function handleClick(event) {
+    stateChanger(event.target.value);
+    stateChanger1(event.target.id);
+  }
+
+  const active = "1";
 
   return (
     <div className={classes.container}>
       <button
+        value={"25:00"}
         key={1}
         className={
           active === "1"
@@ -24,6 +31,7 @@ const SecondaryButtons = () => {
       </button>
 
       <button
+        value={"15:00"}
         key={2}
         className={
           active === "2"
@@ -37,6 +45,7 @@ const SecondaryButtons = () => {
       </button>
 
       <button
+        value={"30:00"}
         key={3}
         className={
           active === "3"

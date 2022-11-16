@@ -1,10 +1,11 @@
 import classes from "./Timer.module.css";
 import Progress from "./Progress";
 import SecondaryButtons from "./SecondaryButtons";
+import { useState } from "react";
 
 import { POMODORO, LONG_BREAK, SHORT_BREAK } from "../constants";
 
-const progress = "30%";
+const progress = "20%";
 
 const initialState = {
   modes: {
@@ -30,18 +31,21 @@ const initialState = {
 };
 
 const Timer = () => {
+  const [time, setTime] = useState("25:00");
+  const [active, setActive] = useState("1");
+
   return (
     <div>
       <Progress percent={progress} />
       <div className={classes.container}>
         <div className={classes.content}>
-          <SecondaryButtons />
-          <div className={classes.time}>25:00</div>
+          <SecondaryButtons stateChanger={setTime} stateChanger1={setActive} />
+          <div className={classes.time}>{time}</div>
           <div>
             <button className={classes.action_btn}>START</button>
           </div>
         </div>
-        <div className={classes.counter}>#1</div>
+        <div className={classes.counter}>{active}</div>
         <footer>Time to Focus!</footer>
       </div>
     </div>
