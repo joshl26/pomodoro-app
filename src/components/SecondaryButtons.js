@@ -1,61 +1,66 @@
-import { useState } from "react";
 import classes from "./SecondaryButtons.module.css";
+import { initialData } from "./InitialData";
 
-const SecondaryButtons = ({ timeChange, activeChange }) => {
+const SecondaryButtons = ({
+  timeChange,
+  valueChange,
+  activeChange,
+  active,
+}) => {
   // const handleClick = (event) => {
   //   stateChanger(event.target.value);
   //   stateChanger1(event.target.id);
   // };
 
-  function handleClick(event) {
-    timeChange(event.target.value);
-    activeChange(event.target.id);
+  function handleClick(props) {
+    // console.log(props.target.name);
+    timeChange(props.target.name);
+    valueChange(props.target.value);
+    activeChange(props.target.id);
   }
-
-  const active = "1";
 
   return (
     <div className={classes.container}>
       <button
-        value={"25:00"}
-        key={1}
+        value={initialData[0].value}
+        id={initialData[0].id}
+        name={initialData[0].timer} //using name attribute to hold timer value
         className={
-          active === "1"
-            ? `${classes.active} ${classes.btn_secondary}`
+          active === initialData[0].id
+            ? `${classes.btn_secondary_active}`
             : `${classes.btn_secondary}`
         }
-        id={"1"}
         onClick={handleClick}
       >
-        Pomodoro
+        {initialData[0].label}
       </button>
 
       <button
-        value={"15:00"}
-        key={2}
+        value={initialData[1].value}
+        id={initialData[1].id}
+        name={initialData[1].timer} //using name attribute to hold timer value
         className={
-          active === "2"
-            ? `${classes.active} ${classes.btn_secondary}`
+          active === initialData[1].id
+            ? `${classes.btn_secondary_active}`
             : `${classes.btn_secondary}`
         }
-        id={"2"}
         onClick={handleClick}
       >
-        Short Break
+        {initialData[1].label}
       </button>
 
       <button
-        value={"30:00"}
-        key={3}
+        value={initialData[2].value}
+        id={initialData[2].id}
+        name={initialData[2].timer} //using name attribute to hold timer value
         className={
-          active === "3"
-            ? `${classes.active} ${classes.btn_secondary}`
+          active === initialData[2].id
+            ? `${classes.btn_secondary_active}`
             : `${classes.btn_secondary}`
         }
-        id={"3"}
         onClick={handleClick}
       >
-        Long Break
+        {initialData[2].label}
       </button>
     </div>
   );
