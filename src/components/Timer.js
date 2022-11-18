@@ -3,7 +3,7 @@ import Progress from "./Progress";
 import SecondaryButtons from "./SecondaryButtons";
 import { useState } from "react";
 
-const Timer = () => {
+const Timer = ({ activeChange }) => {
   const [time, setTime] = useState("25");
   const [value, setValue] = useState("25:00");
   const [active, setActive] = useState("1");
@@ -19,6 +19,7 @@ const Timer = () => {
   const setActiveHandler = (props) => {
     setActive(props);
     console.log(props);
+    activeChange(props);
   };
 
   const setValueHandler = (props) => {

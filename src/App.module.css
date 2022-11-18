@@ -2,10 +2,39 @@
   display: flex;
   flex-grow: 1;
   flex-direction: column;
-  background-color: var(--primary-color);
   padding-bottom: 0.75rem;
   color: white;
   transition: background-color 0.5s ease-in-out 0s;
+}
+
+.pomodoro {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  padding-bottom: 0.75rem;
+  color: white;
+  transition: background-color 0.5s ease-in-out 0s;
+  background-color: var(--primary-color);
+}
+
+.short {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  padding-bottom: 0.75rem;
+  color: white;
+  transition: background-color 0.5s ease-in-out 0s;
+  background-color: var(--secondary-color);
+}
+
+.long {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  padding-bottom: 0.75rem;
+  color: white;
+  transition: background-color 0.5s ease-in-out 0s;
+  background-color: var(--tertiary-color);
 }
 
 .content {
