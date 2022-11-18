@@ -72,7 +72,7 @@ const Timer = ({ activeChange }) => {
             </button>
           </div>
         </div>
-        <div className={classes.counter}>
+        {/* <div className={classes.counter}>
           {"Current Time: " + time}
           <br />
           <br />
@@ -84,7 +84,7 @@ const Timer = ({ activeChange }) => {
           {"Timer State: " + timer}
           <br />
           <br />
-        </div>
+        </div> */}
         <footer></footer>
       </div>
     </div>
