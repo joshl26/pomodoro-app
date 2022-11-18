@@ -1,8 +1,8 @@
 .expired_notice {
   text-align: center;
   padding: 2rem;
-  border: 1px solid #ebebeb;
-  border-radius: 0.25rem;
+  /* border: 1px solid #ebebeb;
+  border-radius: 0.25rem; */
   margin: 0.5rem;
 }
 
@@ -25,14 +25,17 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  font-weight: 700;
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-  padding: 0.5rem;
+  font-size: 6.25rem;
+  line-height: 8.6875rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+  user-select: none;
+
+  /* padding: 0.5rem;
   border: 1px solid #ebebeb;
-  border-radius: 0.25rem;
+  border-radius: 0.25rem; */
   text-decoration: none;
-  color: #000;
+  color: rgb(255, 255, 255);
 }
 
 .show_counter .countdown {
