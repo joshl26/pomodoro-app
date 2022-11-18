@@ -37,7 +37,7 @@
   user-select: none;
 }
 
-.action_btn {
+.action_btn_active {
   color: var(--primary-color);
   padding: 0 0.75rem;
   box-shadow: rgb(235 235 235) 0 0.375rem 0;
@@ -50,7 +50,7 @@
   transition: color 0.5s ease-in-out 0s;
 }
 
-.action_btn_active {
+.action_btn {
   color: var(--primary-color);
   padding: 0 0.75rem;
   /* box-shadow: rgb(235 235 235) 0 0.375rem 0; */

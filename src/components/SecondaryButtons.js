@@ -13,7 +13,6 @@ const SecondaryButtons = ({
   // };
 
   function handleClick(props) {
-    // console.log(props.target.name);
     timeChange(props.target.name);
     valueChange(props.target.value);
     activeChange(props.target.id);

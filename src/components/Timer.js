@@ -65,8 +65,12 @@ const Timer = () => {
           {"Active ID: " + active}
           <br />
           <br />
+
+          {"Timer State: " + timer}
+          <br />
+          <br />
         </div>
-        <footer>Time to Focus!</footer>
+        <footer></footer>
       </div>
     </div>
   );
