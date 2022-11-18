@@ -43,6 +43,7 @@ const Timer = ({ activeChange }) => {
   return (
     <div>
       <Progress percent={progress} />
+      <div className={classes.spacer} />
       <div className={classes.container}>
         <div className={classes.content}>
           <SecondaryButtons
@@ -62,13 +63,17 @@ const Timer = ({ activeChange }) => {
           <div>
             <button
               className={
-                timer === false
-                  ? `${classes.action_btn}`
-                  : `${classes.action_btn_active}`
+                active === "1"
+                  ? `${classes.action_btn1}`
+                  : `${classes.action_btn1_active}` && active === "2"
+                  ? `${classes.action_btn2}`
+                  : `${classes.action_btn2_active}` && active === "3"
+                  ? `${classes.action_btn3}`
+                  : `${classes.action_btn3_active}`
               }
               onClick={setTimerHandler}
             >
-              {timer === false ? "START" : "STOP"}
+              {timer === false ? "START" : "RESET"}
             </button>
           </div>
         </div>
