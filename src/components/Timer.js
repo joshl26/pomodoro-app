@@ -9,6 +9,8 @@ const Timer = () => {
   const [active, setActive] = useState("1");
   const [timer, setTimer] = useState(false);
 
+  const progress = "20%";
+
   const setTimeHandler = (props) => {
     setTime(props);
     console.log(props);
@@ -24,7 +26,11 @@ const Timer = () => {
     console.log(props);
   };
 
-  const progress = "20%";
+  const setTimerHandler = (props) => {
+    console.log(props);
+    setTimer(!timer);
+    console.log(timer);
+  };
 
   return (
     <div>
@@ -39,7 +45,16 @@ const Timer = () => {
           />
           <div className={classes.time}>{value}</div>
           <div>
-            <button className={classes.action_btn}>START</button>
+            <button
+              className={
+                timer === false
+                  ? `${classes.action_btn}`
+                  : `${classes.action_btn_active}`
+              }
+              onClick={setTimerHandler}
+            >
+              {timer === false ? "START" : "STOP"}
+            </button>
           </div>
         </div>
         <div className={classes.counter}>
