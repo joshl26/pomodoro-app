@@ -2,6 +2,7 @@ import classes from "./Timer.module.css";
 import Progress from "./Progress";
 import SecondaryButtons from "./SecondaryButtons";
 import { useState } from "react";
+import CountdownTimer from "./CountDownTimer";
 
 const Timer = ({ activeChange }) => {
   const [time, setTime] = useState("25");
@@ -33,6 +34,11 @@ const Timer = ({ activeChange }) => {
     console.log(timer);
   };
 
+  const THREE_DAYS_IN_MS = 3 * 24 * 60 * 60 * 1000;
+  const NOW_IN_MS = new Date().getTime();
+
+  const dateTimeAfterThreeDays = NOW_IN_MS + THREE_DAYS_IN_MS;
+
   return (
     <div>
       <Progress percent={progress} />
@@ -45,6 +51,8 @@ const Timer = ({ activeChange }) => {
             active={active}
           />
           <div className={classes.time}>{value}</div>
+          <CountdownTimer targetDate={dateTimeAfterThreeDays} />
+
           <div>
             <button
               className={
