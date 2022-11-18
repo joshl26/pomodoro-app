@@ -22,6 +22,7 @@ function App() {
     >
       <Header />
       <div className={classes.content}>
+        <div className={classes.spacer} />
         <Timer activeChange={setActiveHandler} />
       </div>
     </div>

@@ -7,6 +7,10 @@
   transition: background-color 0.5s ease-in-out 0s;
 }
 
+.spacer {
+  height: 50px;
+}
+
 .pomodoro {
   display: flex;
   flex-grow: 1;

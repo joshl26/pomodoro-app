@@ -1,7 +1,7 @@
 .container {
   display: flex;
   color: var(--tertiary-color);
-  background-color: var(--primary-color);
+  background-color: transparent;
   height: 13vh;
   width: 100%;
 }
