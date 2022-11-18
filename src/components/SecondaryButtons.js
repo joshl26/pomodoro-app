@@ -27,7 +27,7 @@ const SecondaryButtons = ({
         name={initialData[0].timer} //using name attribute to hold timer value
         className={
           active === initialData[0].id
-            ? `${classes.btn_secondary_active}`
+            ? `${classes.btn_background_pomodoro}`
             : `${classes.btn_secondary}`
         }
         onClick={handleClick}
@@ -41,7 +41,7 @@ const SecondaryButtons = ({
         name={initialData[1].timer} //using name attribute to hold timer value
         className={
           active === initialData[1].id
-            ? `${classes.btn_secondary_active}`
+            ? `${classes.btn_background_short}`
             : `${classes.btn_secondary}`
         }
         onClick={handleClick}
@@ -55,7 +55,7 @@ const SecondaryButtons = ({
         name={initialData[2].timer} //using name attribute to hold timer value
         className={
           active === initialData[2].id
-            ? `${classes.btn_secondary_active}`
+            ? `${classes.btn_background_long}`
             : `${classes.btn_secondary}`
         }
         onClick={handleClick}

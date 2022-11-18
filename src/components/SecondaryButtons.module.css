@@ -1,18 +1,35 @@
 .btn_secondary {
-  margin: 10px;
   font-size: 1rem;
-  padding: 0.2rem 1rem;
+  padding: 0.25rem 0.75rem;
   height: 1.75rem;
   background-color: rgba(0, 0, 0, 0.1);
   color: white;
   transition: transform 0.1s ease-in-out;
 }
 
-.btn_secondary_active {
+.btn_background_pomodoro {
   font-size: 1rem;
   padding: 0.25rem 0.75rem;
   height: 2.25rem;
-  background-color: rgba(255, 0, 0, 0.4);
   transition: transform 0.2s ease-in-out;
   transform: translateY(-0.18rem);
+  background-color: var(--primary-color);
+}
+
+.btn_background_short {
+  font-size: 1rem;
+  padding: 0.25rem 0.75rem;
+  height: 2.25rem;
+  transition: transform 0.2s ease-in-out;
+  transform: translateY(-0.18rem);
+  background-color: var(--secondary-color);
+}
+
+.btn_background_long {
+  font-size: 1rem;
+  padding: 0.25rem 0.75rem;
+  height: 2.25rem;
+  transition: transform 0.2s ease-in-out;
+  transform: translateY(-0.18rem);
+  background-color: var(--tertiary-color);
 }
