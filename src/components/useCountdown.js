@@ -4,8 +4,6 @@ const useCountdown = (targetDate, time) => {
   console.log(time);
   const countDownDate = new Date(targetDate).getTime();
 
-  const NOW_IN_MS = new Date().getTime();
-
   const [countDown, setCountDown] = useState(
     countDownDate - new Date().getTime()
   );
@@ -18,14 +16,14 @@ const useCountdown = (targetDate, time) => {
     return () => clearInterval(interval);
   }, [countDownDate]);
 
-  console.log("current time" + NOW_IN_MS);
-  console.log("time" + time);
-  console.log("countdown" + countDown);
-  console.log("targetdate" + targetDate);
+  // console.log("current time" + NOW_IN_MS);
+  // console.log("time" + time);
+  // console.log("countdown" + countDown);
+  // console.log("targetdate" + targetDate);
 
-  const x = (countDown / time) * 100;
+  const x = (1 - countDown / time) * 100;
 
-  console.log(x);
+  // console.log(x);
 
   return getReturnValues(countDown, x);
 };
