@@ -18,7 +18,7 @@ const Header = () => {
           <li className={classes.nav_list}>
             <a href={logoLink}>
               <button>
-                <span>
+                <span className={classes.chart_icon}>
                   <img className={classes.chart_icon} src={chartIcon} />
                 </span>
               </button>
@@ -27,7 +27,7 @@ const Header = () => {
           <li>
             <a href={logoLink}>
               <button>
-                <span>
+                <span className={classes.chart_icon}>
                   <img className={classes.chart_icon} src={settingsIcon} />
                 </span>
               </button>
@@ -36,7 +36,7 @@ const Header = () => {
           <li>
             <a href={logoLink}>
               <button>
-                <span>
+                <span className={classes.chart_icon}>
                   <img className={classes.chart_icon} src={loginIcon} />
                 </span>
               </button>

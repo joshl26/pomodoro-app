@@ -5,9 +5,9 @@
 }
 
 .progress {
-  height: 0.1875rem;
+  height: 0.5rem;
   border-radius: 6.25rem;
   background-color: white;
-  transform: translateY(-0.0625rem);
+  transform: translateY(-0.25rem);
   width: 0%;
 }

@@ -32,6 +32,8 @@ function App() {
           countdownChange={setCountdownHandler}
         />
       </div>
+      <h1 className={classes.message}>BEST VIEWED ON LARGER SCREEN</h1>
+      <h1 className={classes.message}>RESPONSIVE STYLING TODO</h1>
     </div>
   );
 }

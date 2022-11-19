@@ -51,3 +51,7 @@
   align-self: center;
   flex-direction: column;
 }
+
+.message {
+  text-align: center;
+}

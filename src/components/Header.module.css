@@ -40,7 +40,8 @@
 }
 
 .chart_icon {
-  height: 35px;
+  height: 40px;
+  vertical-align: middle;
 }
 
 .nav_list {
