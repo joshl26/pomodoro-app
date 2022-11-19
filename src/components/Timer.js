@@ -10,8 +10,7 @@ const Timer = ({ activeChange }) => {
   const [value, setValue] = useState("25:00");
   const [active, setActive] = useState("1");
   const [timer, setTimer] = useState(false);
-
-  const progress = "20%";
+  const [countdown, setCountdown] = useState("0%");
 
   const setTimeHandler = (props) => {
     setTime(props);
@@ -35,15 +34,13 @@ const Timer = ({ activeChange }) => {
     console.log(timer);
   };
 
-  const THREE_DAYS_IN_MS = time * 60 * 1000;
+  const totalTimeMS = time * 60 * 1000;
   const NOW_IN_MS = new Date().getTime();
 
-  const dateTimeAfterThreeDays = NOW_IN_MS + THREE_DAYS_IN_MS;
+  const dateTimeAfterThreeDays = NOW_IN_MS + totalTimeMS;
 
   return (
     <div>
-      <Progress percent={progress} />
-      <div className={classes.spacer} />
       <div className={classes.container}>
         <div className={classes.content}>
           <SecondaryButtons
@@ -54,7 +51,10 @@ const Timer = ({ activeChange }) => {
           />
           <div className={classes.time}>
             {timer === true ? (
-              <CountdownTimer targetDate={dateTimeAfterThreeDays} />
+              <CountdownTimer
+                targetDate={dateTimeAfterThreeDays}
+                time={totalTimeMS}
+              />
             ) : (
               <>{value}</>
             )}
@@ -63,17 +63,21 @@ const Timer = ({ activeChange }) => {
           <div>
             <button
               className={
-                active === "1"
+                timer === false && active === "1"
                   ? `${classes.action_btn1}`
-                  : `${classes.action_btn1_active}` && active === "2"
+                  : `${classes.action_btn1_active}` &&
+                    timer === false &&
+                    active === "2"
                   ? `${classes.action_btn2}`
-                  : `${classes.action_btn2_active}` && active === "3"
+                  : `${classes.action_btn2_active}` &&
+                    timer === false &&
+                    active === "3"
                   ? `${classes.action_btn3}`
                   : `${classes.action_btn3_active}`
               }
               onClick={setTimerHandler}
             >
-              {timer === false ? "START" : "RESET"}
+              {timer === false ? "START" : "STOP"}
             </button>
           </div>
         </div>

@@ -12,6 +12,10 @@ function App() {
     console.log("Top level" + props);
   };
 
+  const setCountdownHandler = (props) => {
+    console.log(props);
+  };
+
   return (
     <div
       className={
@@ -23,7 +27,10 @@ function App() {
       <Header />
       <div className={classes.content}>
         <div className={classes.spacer} />
-        <Timer activeChange={setActiveHandler} />
+        <Timer
+          activeChange={setActiveHandler}
+          countdownChange={setCountdownHandler}
+        />
       </div>
     </div>
   );
