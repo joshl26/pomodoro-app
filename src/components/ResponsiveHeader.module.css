@@ -17,17 +17,6 @@
   color: white;
 }
 
-.logo_text {
-  padding: 0.75rem;
-  font-size: 1.25em;
-}
-
-.logo_image {
-  vertical-align: middle;
-  display: flex;
-  height: 25px;
-}
-
 .logo_link {
   color: white;
   text-decoration: none;
@@ -55,17 +44,29 @@
 @media only screen and (min-width: 768px) {
   /* For desktop: */
   .logo_image {
-    vertical-align: middle;
-    display: flex;
-    height: 7.5vh;
+    display: table-cell;
+    height: 4rem;
   }
 
   .logo_text {
-    padding: 0.75rem;
-    font-size: 2em;
+    display: table-cell;
+    font-size: 3rem;
   }
 }
 
+.logo_text {
+  display: table-cell;
+  font-size: 1.5rem;
+  vertical-align: middle;
+}
+
+.logo_image {
+  display: table-cell;
+  height: 4rem;
+}
+
 .align_left {
-  display: inline-flex;
+  vertical-align: middle;
+
+  display: table;
 }
