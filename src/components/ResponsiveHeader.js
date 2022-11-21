@@ -15,64 +15,68 @@ const linkLogin = "/login";
 
 const Header = () => {
   return (
-    <Navbar
-      className={classes.nav_bar}
-      sticky="top"
-      collapseOnSelect
-      expand="lg"
-      bg=""
-      variant="dark"
-    >
-      <Container>
-        <Navbar.Brand href="/">
-          <img
-            alt="Pomofocus App Icon"
-            className={classes.logo_image}
-            src={logoImage}
-          />
-          <h1 className={classes.logo_text}>Pomofocus Clone</h1>
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="me-auto"></Nav>
-          <Nav>
-            <Nav.Link href={linkReport}>
-              <button>
-                <span className={classes.chart_icon}>
-                  <img
-                    alt="Report Icon"
-                    className={classes.chart_icon}
-                    src={chartIcon}
-                  />
-                </span>
-              </button>
-            </Nav.Link>
-            <Nav.Link href={linkSettings}>
-              <button>
-                <span className={classes.chart_icon}>
-                  <img
-                    alt="Settings Icon"
-                    className={classes.chart_icon}
-                    src={settingsIcon}
-                  />
-                </span>
-              </button>
-            </Nav.Link>
-            <Nav.Link href={linkLogin}>
-              <button>
-                <span className={classes.chart_icon}>
-                  <img
-                    alt="Login Icon"
-                    className={classes.chart_icon}
-                    src={loginIcon}
-                  />
-                </span>
-              </button>
-            </Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+    <header>
+      <Navbar
+        className={classes.nav_bar}
+        sticky="top"
+        collapseOnSelect
+        expand="lg"
+        bg=""
+        variant="dark"
+      >
+        <Container>
+          <Navbar.Brand href="/">
+            <div className={classes.align_left}>
+              <img
+                alt="Pomofocus App Icon"
+                className={classes.logo_image}
+                src={logoImage}
+              />
+              <h1 className={classes.logo_text}>Pomofocus Clone</h1>
+            </div>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto"></Nav>
+            <Nav>
+              <Nav.Link href={linkReport}>
+                <button>
+                  <span className={classes.chart_icon}>
+                    <img
+                      alt="Report Icon"
+                      className={classes.chart_icon}
+                      src={chartIcon}
+                    />
+                  </span>
+                </button>
+              </Nav.Link>
+              <Nav.Link href={linkSettings}>
+                <button>
+                  <span className={classes.chart_icon}>
+                    <img
+                      alt="Settings Icon"
+                      className={classes.chart_icon}
+                      src={settingsIcon}
+                    />
+                  </span>
+                </button>
+              </Nav.Link>
+              <Nav.Link href={linkLogin}>
+                <button>
+                  <span className={classes.chart_icon}>
+                    <img
+                      alt="Login Icon"
+                      className={classes.chart_icon}
+                      src={loginIcon}
+                    />
+                  </span>
+                </button>
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </header>
   );
 };
 

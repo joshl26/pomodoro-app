@@ -66,6 +66,6 @@
   }
 }
 
-div.container.align-left {
-  text-align: left;
+.align_left {
+  display: inline-flex;
 }

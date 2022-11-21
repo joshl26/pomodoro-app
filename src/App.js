@@ -1,6 +1,7 @@
 import classes from "./App.module.css";
 import Timer from "./components/Timer";
 import ResponsiveHeader from "./components/ResponsiveHeader";
+import Footer from "./components/Footer";
 
 import { useState } from "react";
 
@@ -32,6 +33,7 @@ function App() {
           countdownChange={setCountdownHandler}
         />
       </div>
+      <Footer />
     </div>
   );
 }
