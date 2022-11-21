@@ -1,0 +1,71 @@
+.nav_bar {
+  background-color: transparent;
+}
+
+.container {
+  display: flex;
+  color: var(--tertiary-color);
+  background-color: transparent;
+  height: 13vh;
+  width: 100%;
+}
+
+.content {
+  justify-content: space-between;
+  display: flex;
+  width: 100%;
+  color: white;
+}
+
+.logo_text {
+  padding: 0.75rem;
+  font-size: 1.25em;
+}
+
+.logo_image {
+  vertical-align: middle;
+  display: flex;
+  height: 7.5vh;
+}
+
+.logo_link {
+  color: white;
+  text-decoration: none;
+  height: 100%;
+  display: flex;
+  padding: 1rem;
+}
+
+.nav {
+  padding-right: 1rem;
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chart_icon {
+  height: 40px;
+  vertical-align: middle;
+}
+
+.nav_list {
+  background-color: transparent;
+}
+
+@media only screen and (min-width: 768px) {
+  /* For desktop: */
+  .logo_image {
+    vertical-align: middle;
+    display: flex;
+    height: 7.5vh;
+  }
+
+  .logo_text {
+    padding: 0.75rem;
+    font-size: 2em;
+  }
+}
+
+div.container.align-left {
+  text-align: left;
+}
