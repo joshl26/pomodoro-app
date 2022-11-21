@@ -3,5 +3,10 @@
 }
 
 .footer_text {
-  font-size: 5px;
+  font-size: 1rem;
+}
+
+.footer_link {
+  text-decoration: none;
+  color: white;
 }

@@ -1,35 +1,46 @@
 .btn_secondary {
   font-size: 1rem;
-  padding: 0.25rem 0.75rem;
+  padding: 0 1rem 0 1rem;
+  margin: 0 10px 0 10px;
+
   height: 1.75rem;
   background-color: rgba(0, 0, 0, 0.1);
   color: white;
   transition: transform 0.1s ease-in-out;
+  border-radius: 5px;
 }
 
 .btn_background_pomodoro {
   font-size: 1rem;
-  padding: 0.25rem 0.75rem;
+  padding: 0 1rem 0 1rem;
+  margin: 0 10px 0 10px;
   height: 2.25rem;
   transition: transform 0.2s ease-in-out;
   transform: translateY(-0.18rem);
   background-color: var(--primary-color);
+  border-radius: 5px;
 }
 
 .btn_background_short {
   font-size: 1rem;
-  padding: 0.25rem 0.75rem;
+  padding: 0 1rem 0 1rem;
+  margin: 0 10px 0 10px;
+
   height: 2.25rem;
   transition: transform 0.2s ease-in-out;
   transform: translateY(-0.18rem);
   background-color: var(--secondary-color);
+  border-radius: 5px;
 }
 
 .btn_background_long {
   font-size: 1rem;
-  padding: 0.25rem 0.75rem;
+  padding: 0 1rem 0 1rem;
+  margin: 0 10px 0 10px;
+
   height: 2.25rem;
   transition: transform 0.2s ease-in-out;
   transform: translateY(-0.18rem);
   background-color: var(--tertiary-color);
+  border-radius: 5px;
 }

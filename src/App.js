@@ -25,9 +25,10 @@ function App() {
         `${active === "3" ? `${classes.long}` : ``}`
       }
     >
+      <div className={classes.spacer_small} />
       <ResponsiveHeader />
       <div className={classes.content}>
-        <div className={classes.spacer} />
+        <div className={classes.spacer_small} />
         <Timer
           activeChange={setActiveHandler}
           countdownChange={setCountdownHandler}

@@ -11,6 +11,10 @@
   height: 50px;
 }
 
+.spacer_small {
+  height: 25px;
+}
+
 .pomodoro {
   display: flex;
   flex-grow: 1;
