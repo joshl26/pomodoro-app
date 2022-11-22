@@ -1,9 +1,10 @@
 .btn_secondary {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  vertical-align: middle;
+  width: auto;
   font-size: 1rem;
-  padding: 0 1rem 0 1rem;
-  margin: 0 10px 0 10px;
-
-  height: 1.75rem;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.1);
   color: white;
   transition: transform 0.1s ease-in-out;
@@ -11,9 +12,9 @@
 }
 
 .btn_background_pomodoro {
+  vertical-align: middle;
+  width: 90%;
   font-size: 1rem;
-  padding: 0 1rem 0 1rem;
-  margin: 0 10px 0 10px;
   height: 2.25rem;
   transition: transform 0.2s ease-in-out;
   transform: translateY(-0.18rem);
@@ -22,10 +23,10 @@
 }
 
 .btn_background_short {
-  font-size: 1rem;
-  padding: 0 1rem 0 1rem;
-  margin: 0 10px 0 10px;
+  vertical-align: middle;
 
+  font-size: 1rem;
+  width: 90%;
   height: 2.25rem;
   transition: transform 0.2s ease-in-out;
   transform: translateY(-0.18rem);
@@ -34,13 +35,18 @@
 }
 
 .btn_background_long {
-  font-size: 1rem;
-  padding: 0 1rem 0 1rem;
-  margin: 0 10px 0 10px;
+  vertical-align: middle;
 
+  font-size: 1rem;
   height: 2.25rem;
+  width: 90%;
   transition: transform 0.2s ease-in-out;
   transform: translateY(-0.18rem);
   background-color: var(--tertiary-color);
   border-radius: 5px;
+}
+
+.button_spacer {
+  height: 2rem;
+  width: 100%;
 }

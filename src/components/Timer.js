@@ -2,6 +2,7 @@ import classes from "./Timer.module.css";
 import SecondaryButtons from "./SecondaryButtons";
 import { useState } from "react";
 import CountdownTimer from "./CountDownTimer";
+import Container from "react-bootstrap/esm/Container";
 
 const Timer = ({ activeChange }) => {
   const [time, setTime] = useState("25");
@@ -38,7 +39,7 @@ const Timer = ({ activeChange }) => {
 
   return (
     <div>
-      <div className={classes.container}>
+      <Container>
         <div className={classes.content}>
           <SecondaryButtons
             timeChange={setTimeHandler}
@@ -79,7 +80,7 @@ const Timer = ({ activeChange }) => {
           </div>
         </div>
         <footer></footer>
-      </div>
+      </Container>
     </div>
   );
 };

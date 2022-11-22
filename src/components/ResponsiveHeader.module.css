@@ -41,6 +41,19 @@
   background-color: transparent;
 }
 
+.logo_text {
+  padding: 0 10px 0 10px;
+  display: table-cell;
+  font-size: 0rem;
+  vertical-align: middle;
+}
+
+.logo_image {
+  padding-left: 0.5rem;
+  display: table-cell;
+  height: 3rem;
+}
+
 @media only screen and (min-width: 768px) {
   /* For desktop: */
   .logo_image {
@@ -50,23 +63,13 @@
 
   .logo_text {
     display: table-cell;
-    font-size: 3rem;
+    font-size: 2.5rem;
+    padding-left: 1rem;
+    padding-top: 0.5rem;
   }
-}
-
-.logo_text {
-  display: table-cell;
-  font-size: 1.5rem;
-  vertical-align: middle;
-}
-
-.logo_image {
-  display: table-cell;
-  height: 4rem;
 }
 
 .align_left {
   vertical-align: middle;
-
   display: table;
 }
