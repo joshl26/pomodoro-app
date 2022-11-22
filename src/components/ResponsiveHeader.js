@@ -40,7 +40,7 @@ const Header = () => {
             <Nav className="me-auto"></Nav>
             <Nav>
               <Nav.Link href={linkReport}>
-                <button>
+                <button className={classes.button}>
                   <span className={classes.chart_icon}>
                     <img
                       alt="Report Icon"
@@ -51,7 +51,7 @@ const Header = () => {
                 </button>
               </Nav.Link>
               <Nav.Link href={linkSettings}>
-                <button>
+                <button className={classes.button}>
                   <span className={classes.chart_icon}>
                     <img
                       alt="Settings Icon"
@@ -62,7 +62,7 @@ const Header = () => {
                 </button>
               </Nav.Link>
               <Nav.Link href={linkLogin}>
-                <button>
+                <button className={classes.button}>
                   <span className={classes.chart_icon}>
                     <img
                       alt="Login Icon"
