@@ -6,6 +6,9 @@ import Footer from "./components/Footer";
 import { Route, Switch, Redirect } from "react-router-dom";
 
 import { useState } from "react";
+import Settings from "./components/Settings";
+import Report from "./components/Report";
+import Login from "./components/Login";
 
 function App() {
   const [active, setActive] = useState("1");
@@ -36,6 +39,15 @@ function App() {
               activeChange={setActiveHandler}
               countdownChange={setCountdownHandler}
             />
+          </Route>
+          <Route path="/settings">
+            <Settings />
+          </Route>
+          <Route path="/report">
+            <Report />
+          </Route>
+          <Route path="/login">
+            <Login />
           </Route>
         </Switch>
       </div>
