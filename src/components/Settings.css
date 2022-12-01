@@ -1,0 +1,11 @@
+.btn-custom:hover {
+  background-color: rgb(157, 157, 157);
+  color: black;
+}
+
+.btn-custom {
+  padding: 0;
+  width: 40px;
+  height: 20px;
+  background-color: rgb(214, 214, 214);
+}

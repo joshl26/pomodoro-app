@@ -1,4 +1,5 @@
 import classes from "./Settings.module.css";
+import "./Settings.css";
 import { Container } from "react-bootstrap";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
@@ -20,6 +21,8 @@ const Settings = () => {
     setAutoStart(event.currentTarget.checked);
   };
 
+  const pomodoroTimeIncrement = () => {};
+
   return (
     <Container className={classes.container}>
       <div className={classes.card}>
@@ -39,26 +42,76 @@ const Settings = () => {
             <p className={classes.card_text && classes.align_center}>
               Pomodoro
             </p>
-            <div className={classes.card_time}>
-              <h4 className={classes.time_text}>25:00</h4>
-            </div>
+            <Row>
+              <Col>
+                <div className={classes.card_time}>
+                  <h4 className={classes.time_text}>25:00</h4>
+                </div>
+              </Col>
+              <Col>
+                <Row>
+                  <Button onClick={pomodoroTimeIncrement} variant="custom">
+                    <h4>+</h4>
+                  </Button>
+                </Row>
+                <Row>
+                  <Button onClick={pomodoroTimeIncrement} variant="custom">
+                    <h4>-</h4>
+                  </Button>
+                </Row>
+              </Col>
+            </Row>
           </Col>
           <Col className={classes.card_text}>
             <p className={classes.card_text && classes.align_center}>
               Short Break
             </p>
-            <div className={classes.card_time}>
-              <h4 className={classes.time_text}>5:00</h4>
-            </div>
+            <Row>
+              <Col>
+                <div className={classes.card_time}>
+                  <h4 className={classes.time_text}>5:00</h4>
+                </div>
+              </Col>
+              <Col>
+                <Row>
+                  <Button onClick={pomodoroTimeIncrement} variant="custom">
+                    <h4>+</h4>
+                  </Button>
+                </Row>
+                <Row>
+                  <Button onClick={pomodoroTimeIncrement} variant="custom">
+                    <h4>-</h4>
+                  </Button>
+                </Row>
+              </Col>
+            </Row>
           </Col>
+
           <Col className={classes.card_text}>
             <p className={classes.card_text && classes.align_center}>
               Long Break
             </p>
-            <div className={classes.card_time}>
-              <h4 className={classes.time_text}>15:00</h4>
-            </div>
+            <Row>
+              <Col>
+                <div className={classes.card_time}>
+                  <h4 className={classes.time_text}>15:00</h4>
+                </div>
+              </Col>
+              <Col>
+                <Row>
+                  <Button onClick={pomodoroTimeIncrement} variant="custom">
+                    <h4>+</h4>
+                  </Button>
+                </Row>
+                <Row>
+                  <Button onClick={pomodoroTimeIncrement} variant="custom">
+                    <h4>-</h4>
+                  </Button>
+                </Row>
+              </Col>
+            </Row>
           </Col>
+
           <div className={classes.spacer}></div>
         </Row>
         <div className={classes.divider}></div>

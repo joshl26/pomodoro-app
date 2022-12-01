@@ -49,11 +49,10 @@
 
 .card_time {
   border-radius: 5px;
-
   margin: 0 auto;
   display: flex;
   width: 80px;
-  height: 35px;
+  height: 40px;
   background-color: rgb(210, 210, 210);
 }
 
@@ -75,4 +74,9 @@
 
 .btn_save {
   width: 75px;
+}
+
+.card_increment {
+  background-color: rgb(207, 30, 30);
+  height: 20px;
 }
