@@ -9,10 +9,10 @@ const Settings = () => {
     <Container className={classes.container}>
       <div className={classes.card}>
         <Row>
-          <Col className={classes.card_text}>
-            <h3 className={classes.card_text}>SETTINGS</h3>
+          <Col>
+            <h4 className={classes.card_text}>SETTINGS</h4>
           </Col>
-          <Col className={classes.card_text && classes.align_right}>
+          <Col className={classes.align_right}>
             <Link to="/pomodor">CLOSE</Link>
           </Col>
         </Row>
@@ -22,16 +22,28 @@ const Settings = () => {
 
         <Row>
           <Col className={classes.card_text}>
-            <p className={classes.card_text}>Pomodoro</p>
-            <div className={classes.card_time}></div>
+            <p className={classes.card_text && classes.align_center}>
+              Pomodoro
+            </p>
+            <div className={classes.card_time}>
+              <h4 className={classes.time_text}>25:00</h4>
+            </div>
           </Col>
           <Col className={classes.card_text}>
-            <p className={classes.card_text}>Short Break</p>
-            <div className={classes.card_time}></div>
+            <p className={classes.card_text && classes.align_center}>
+              Short Break
+            </p>
+            <div className={classes.card_time}>
+              <h4 className={classes.time_text}>5:00</h4>
+            </div>
           </Col>
           <Col className={classes.card_text}>
-            <p className={classes.card_text}>Long Break</p>
-            <div className={classes.card_time}></div>
+            <p className={classes.card_text && classes.align_center}>
+              Long Break
+            </p>
+            <div className={classes.card_time}>
+              <h4 className={classes.time_text}>15:00</h4>
+            </div>
           </Col>
         </Row>
       </div>

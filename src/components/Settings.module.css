@@ -48,14 +48,27 @@
 }
 
 .card_time {
-  margin: 0 auto;
+  border-radius: 5px;
 
+  margin: 0 auto;
   display: flex;
-  width: 70px;
-  height: 30px;
-  background-color: gray;
+  width: 80px;
+  height: 35px;
+  background-color: rgb(210, 210, 210);
 }
 
 .align_right {
   text-align: right;
+  margin-right: 10px;
+  padding-top: 3px;
+}
+
+.align_center {
+  text-align: center;
+}
+
+.time_text {
+  padding: 5px 0 5px 0;
+  margin: 0 auto;
+  color: rgb(50, 50, 50);
 }
