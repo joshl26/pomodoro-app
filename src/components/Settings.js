@@ -3,8 +3,18 @@ import { Container } from "react-bootstrap";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import { Link } from "react-router-dom";
+import Button from "react-bootstrap/esm/Button";
+import { useState, useEffect } from "react";
+import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
+import ToggleButton from "react-bootstrap/esm/ToggleButton";
 
 const Settings = () => {
+  const [autoBreak, setAutoBreak] = useState(false);
+
+  const autoBreakButtonHandler = (event) => {
+    setAutoBreak(event.currentTarget.checked);
+  };
+
   return (
     <Container className={classes.container}>
       <div className={classes.card}>
@@ -18,8 +28,7 @@ const Settings = () => {
         </Row>
         <div className={classes.divider}></div>
         <div className={classes.spacer_small}></div>
-        <h4 className={classes.card_text}>Time (minutes) </h4>
-
+        <h4 className={classes.card_text}>Time (minutes)</h4>
         <Row>
           <Col className={classes.card_text}>
             <p className={classes.card_text && classes.align_center}>
@@ -44,6 +53,41 @@ const Settings = () => {
             <div className={classes.card_time}>
               <h4 className={classes.time_text}>15:00</h4>
             </div>
+          </Col>
+          <div className={classes.spacer}></div>
+        </Row>
+        <div className={classes.divider}></div>
+        <div className={classes.spacer}></div>
+        <h4 className={classes.card_text}>Auto start Breaks?</h4>
+        <ButtonGroup className="mb-2">
+          <ToggleButton
+            id="toggle-check"
+            type="checkbox"
+            variant="outline-secondary"
+            checked={autoBreak}
+            value="1"
+            onChange={autoBreakButtonHandler}
+          >
+            {!autoBreak && "No"}
+            {autoBreak&& "Yes"}
+          </ToggleButton>
+        </ButtonGroup>
+        <div className={classes.divider}></div>
+        <div className={classes.spacer}></div>
+        <h4 className={classes.card_text}>Auto start Pomodoros?</h4>
+        <div className={classes.divider}></div>
+        <div className={classes.spacer}></div>
+        <h4 className={classes.card_text}>Long Break interval?</h4>
+        <div className={classes.spacer_small}></div>
+
+        <div className={classes.divider}></div>
+        <div className={classes.spacer}></div>
+
+        <Row>
+          <Col className={classes.align_right}>
+            <Button variant="outline-secondary" className={classes.btn_save}>
+              Save
+            </Button>
           </Col>
         </Row>
       </div>

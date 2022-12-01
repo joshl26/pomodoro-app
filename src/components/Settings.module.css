@@ -72,3 +72,7 @@
   margin: 0 auto;
   color: rgb(50, 50, 50);
 }
+
+.btn_save {
+  width: 75px;
+}
