@@ -1,0 +1,48 @@
+.container {
+  align-items: center;
+  text-align: center;
+  display: flex;
+}
+
+.card {
+  margin: 0 auto;
+  width: 75vw;
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.card_text {
+  text-align: left;
+  padding: 0px 5px 0px 5px;
+  color: grey;
+}
+
+.divider {
+  margin: 0 auto;
+  height: 2px;
+  background-color: lightgrey;
+  width: 98%;
+}
+
+.spacer_small {
+  height: 2vh;
+}
+
+.spacer {
+  height: 4vh;
+}
+
+.spacer_large {
+  height: 6vh;
+}
+
+.flex_container {
+  justify-content: space-between;
+  display: flex;
+}
+
+.flex_cell {
+  padding: 0 10px 0 10px;
+  display: flex;
+}

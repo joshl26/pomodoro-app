@@ -34,19 +34,19 @@ function App() {
       <div className={classes.content}>
         <div className={classes.spacer_small} />
         <Switch>
-          <Route path="/" exact>
+          <Route path="/pomodor" exact>
             <Timer
               activeChange={setActiveHandler}
               countdownChange={setCountdownHandler}
             />
           </Route>
-          <Route path="/settings">
+          <Route path="/pomodor/settings">
             <Settings />
           </Route>
-          <Route path="/report">
+          <Route path="/pomodor/report">
             <Report />
           </Route>
-          <Route path="/login">
+          <Route path="/pomodor/login">
             <Login />
           </Route>
         </Switch>

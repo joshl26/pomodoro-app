@@ -27,7 +27,7 @@ const Header = () => {
       >
         <Container>
           <Navbar.Brand>
-            <Link className={classes.link} to="/">
+            <Link className={classes.link} to="/pomodor">
               <div className={classes.align_left}>
                 <img
                   alt="Pomofocus App Icon"
@@ -43,7 +43,7 @@ const Header = () => {
             <Nav className="me-auto"></Nav>
             <Nav>
               <Nav.Link>
-                <Link to="/report">
+                <Link to="/pomodor/report">
                   <button className={classes.button}>
                     <span className={classes.chart_icon}>
                       <img
@@ -56,7 +56,7 @@ const Header = () => {
                 </Link>
               </Nav.Link>
               <Nav.Link>
-                <Link to="/settings">
+                <Link to="/pomodor/settings">
                   <button className={classes.button}>
                     <span className={classes.chart_icon}>
                       <img
@@ -69,7 +69,7 @@ const Header = () => {
                 </Link>
               </Nav.Link>
               <Nav.Link>
-                <Link to="/login">
+                <Link to="/pomodor/login">
                   <button className={classes.button}>
                     <span className={classes.chart_icon}>
                       <img
