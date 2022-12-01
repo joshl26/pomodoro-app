@@ -13,6 +13,9 @@ import ToggleButton from "react-bootstrap/esm/ToggleButton";
 const Settings = () => {
   const [autoBreak, setAutoBreak] = useState(false);
   const [autoStart, setAutoStart] = useState(false);
+  const [pomodoroTime, setPomodoroTime] = useState(25);
+  const [shortBreakTime, setShortBreakTime] = useState(5);
+  const [longBreakTime, setLongBreakTime] = useState(15);
 
   const autoBreakButtonHandler = (event) => {
     setAutoBreak(event.currentTarget.checked);
@@ -22,7 +25,53 @@ const Settings = () => {
     setAutoStart(event.currentTarget.checked);
   };
 
-  const pomodoroTimeIncrement = () => {};
+  const pomodoroTimeIncrement = () => {
+    console.log("Increment Pomodoro Time");
+    console.log(pomodoroTime);
+    let count = pomodoroTime + 1;
+    setPomodoroTime(count);
+    console.log(pomodoroTime);
+  };
+
+  const pomodoroTimeDecrement = () => {
+    console.log("Increment Pomodoro Time");
+    console.log(pomodoroTime);
+    let count = pomodoroTime - 1;
+    setPomodoroTime(count);
+    console.log(pomodoroTime);
+  };
+
+  const shortBreakIncrement = () => {
+    console.log("Increment Pomodoro Time");
+    console.log(shortBreakTime);
+    let count = shortBreakTime + 1;
+    setShortBreakTime(count);
+    console.log(shortBreakTime);
+  };
+
+  const shortBreakDecrement = () => {
+    console.log("Increment Pomodoro Time");
+    console.log(shortBreakTime);
+    let count = shortBreakTime - 1;
+    setShortBreakTime(count);
+    console.log(shortBreakTime);
+  };
+
+  const longBreakIncrement = () => {
+    console.log("Increment Pomodoro Time");
+    console.log(longBreakTime);
+    let count = longBreakTime + 1;
+    setLongBreakTime(count);
+    console.log(longBreakTime);
+  };
+
+  const longBreakDecrement = () => {
+    console.log("Increment Pomodoro Time");
+    console.log(longBreakTime);
+    let count = longBreakTime - 1;
+    setLongBreakTime(count);
+    console.log(longBreakTime);
+  };
 
   return (
     <Container className={classes.container}>
@@ -39,48 +88,44 @@ const Settings = () => {
         <div className={classes.spacer_small}></div>
         <h4 className={classes.card_text}>Time (minutes)</h4>
         <Row>
-          <Col className={classes.card_text}>
-            <p className={classes.card_text && classes.align_center}>
-              Pomodoro
-            </p>
+          <Col md={4} className={classes.card_text}>
+            <p className={classes.timer_text}>Pomodoro</p>
             <Row>
-              <Col>
+              <Col className={classes.padding_left}>
                 <div className={classes.card_time}>
-                  <h4 className={classes.time_text}>25:00</h4>
+                  <h4 className={classes.time_text}>{pomodoroTime}:00</h4>
                 </div>
               </Col>
-              <Col>
+              <Col className={classes.padding_right}>
                 <Row>
                   <Button onClick={pomodoroTimeIncrement} variant="custom">
                     <h4 className={classes.text_increment}>+</h4>
                   </Button>
                 </Row>
                 <Row>
-                  <Button onClick={pomodoroTimeIncrement} variant="custom">
+                  <Button onClick={pomodoroTimeDecrement} variant="custom">
                     <h4 className={classes.text_increment}>-</h4>
                   </Button>
                 </Row>
               </Col>
             </Row>
           </Col>
-          <Col className={classes.card_text}>
-            <p className={classes.card_text && classes.align_center}>
-              Short Break
-            </p>
+          <Col md={4} className={classes.card_text}>
+            <p className={classes.timer_text}>Short Break</p>
             <Row>
-              <Col>
+              <Col className={classes.padding_left}>
                 <div className={classes.card_time}>
-                  <h4 className={classes.time_text}>5:00</h4>
+                  <h4 className={classes.time_text}>{shortBreakTime}:00</h4>
                 </div>
               </Col>
-              <Col>
+              <Col className={classes.padding_right}>
                 <Row>
-                  <Button onClick={pomodoroTimeIncrement} variant="custom">
+                  <Button onClick={shortBreakIncrement} variant="custom">
                     <h4 className={classes.text_increment}>+</h4>
                   </Button>
                 </Row>
                 <Row>
-                  <Button onClick={pomodoroTimeIncrement} variant="custom">
+                  <Button onClick={shortBreakDecrement} variant="custom">
                     <h4 className={classes.text_increment}>-</h4>
                   </Button>
                 </Row>
@@ -88,24 +133,26 @@ const Settings = () => {
             </Row>
           </Col>
 
-          <Col className={classes.card_text}>
-            <p className={classes.card_text && classes.align_center}>
-              Long Break
-            </p>
+          <Col md={4} className={classes.card_text}>
+            <p className={classes.timer_text}>Long Break</p>
             <Row>
-              <Col>
+              <Col className={classes.padding_left}>
                 <div className={classes.card_time}>
-                  <h4 className={classes.time_text}>15:00</h4>
+                  <h4 className={classes.time_text}>{longBreakTime}:00</h4>
                 </div>
               </Col>
-              <Col>
+              <Col className={classes.padding_right}>
                 <Row>
-                  <Button onClick={pomodoroTimeIncrement} variant="custom">
+                  <Button onClick={longBreakIncrement} variant="custom">
                     <h4 className={classes.text_increment}>+</h4>
                   </Button>
                 </Row>
                 <Row>
-                  <Button onClick={pomodoroTimeIncrement} variant="custom">
+                  <Button
+                    onClick={longBreakDecrement}
+                    value="negative"
+                    variant="custom"
+                  >
                     <h4 className={classes.text_increment}>-</h4>
                   </Button>
                 </Row>
