@@ -9,6 +9,8 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import classes from "./ResponsiveHeader.module.css";
 import { Link } from "react-router-dom";
+import Row from "react-bootstrap";
+import Col from "react-bootstrap";
 
 const linkSettings = "/settings";
 const linkReport = "/report";
@@ -54,6 +56,7 @@ const Header = () => {
                     </span>
                   </button>
                 </Link>
+                <h4>Report</h4>
               </Nav.Link>
               <Nav.Link>
                 <Link to="/pomodor/settings">
@@ -67,6 +70,7 @@ const Header = () => {
                     </span>
                   </button>
                 </Link>
+                <h4>Settings</h4>
               </Nav.Link>
               <Nav.Link>
                 <Link to="/pomodor/login">
@@ -80,6 +84,7 @@ const Header = () => {
                     </span>
                   </button>
                 </Link>
+                <h4>Login</h4>
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>
