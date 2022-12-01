@@ -1,29 +1,41 @@
 import classes from "./Settings.module.css";
+import { Container } from "react-bootstrap";
+import Row from "react-bootstrap/esm/Row";
+import Col from "react-bootstrap/esm/Col";
+import { Link } from "react-router-dom";
 
 const Settings = () => {
   return (
-    <div className={classes.container}>
+    <Container className={classes.container}>
       <div className={classes.card}>
-        <h3 className={classes.card_text}>SETTINGS</h3>
-
+        <Row>
+          <Col className={classes.card_text}>
+            <h3 className={classes.card_text}>SETTINGS</h3>
+          </Col>
+          <Col className={classes.card_text && classes.align_right}>
+            <Link to="/pomodor">CLOSE</Link>
+          </Col>
+        </Row>
         <div className={classes.divider}></div>
         <div className={classes.spacer_small}></div>
         <h4 className={classes.card_text}>Time (minutes) </h4>
-        <div className={classes.flex_container}>
-          <div className={classes.flex_cell}>
+
+        <Row>
+          <Col className={classes.card_text}>
             <p className={classes.card_text}>Pomodoro</p>
-            <div></div>
-          </div>
-          <div className={classes.flex_cell}>
+            <div className={classes.card_time}></div>
+          </Col>
+          <Col className={classes.card_text}>
             <p className={classes.card_text}>Short Break</p>
-          </div>
-          <div className={classes.flex_cell}>
+            <div className={classes.card_time}></div>
+          </Col>
+          <Col className={classes.card_text}>
             <p className={classes.card_text}>Long Break</p>
-          </div>
-        </div>
-        <div className={classes.divider}></div>
+            <div className={classes.card_time}></div>
+          </Col>
+        </Row>
       </div>
-    </div>
+    </Container>
   );
 };
 

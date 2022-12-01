@@ -46,3 +46,16 @@
   padding: 0 10px 0 10px;
   display: flex;
 }
+
+.card_time {
+  margin: 0 auto;
+
+  display: flex;
+  width: 70px;
+  height: 30px;
+  background-color: gray;
+}
+
+.align_right {
+  text-align: right;
+}
