@@ -53,7 +53,7 @@
   display: flex;
   width: 80px;
   height: 40px;
-  background-color: rgb(210, 210, 210);
+  background-color: rgb(220, 220, 220);
 }
 
 .align_right {
@@ -79,4 +79,8 @@
 .card_increment {
   background-color: rgb(207, 30, 30);
   height: 20px;
+}
+
+.text_increment {
+  line-height: 1;
 }

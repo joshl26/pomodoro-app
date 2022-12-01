@@ -1,5 +1,6 @@
-import classes from "./Settings.module.css";
 import "./Settings.css";
+import classes from "./Settings.module.css";
+
 import { Container } from "react-bootstrap";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
@@ -51,12 +52,12 @@ const Settings = () => {
               <Col>
                 <Row>
                   <Button onClick={pomodoroTimeIncrement} variant="custom">
-                    <h4>+</h4>
+                    <h4 className={classes.text_increment}>+</h4>
                   </Button>
                 </Row>
                 <Row>
                   <Button onClick={pomodoroTimeIncrement} variant="custom">
-                    <h4>-</h4>
+                    <h4 className={classes.text_increment}>-</h4>
                   </Button>
                 </Row>
               </Col>
@@ -75,12 +76,12 @@ const Settings = () => {
               <Col>
                 <Row>
                   <Button onClick={pomodoroTimeIncrement} variant="custom">
-                    <h4>+</h4>
+                    <h4 className={classes.text_increment}>+</h4>
                   </Button>
                 </Row>
                 <Row>
                   <Button onClick={pomodoroTimeIncrement} variant="custom">
-                    <h4>-</h4>
+                    <h4 className={classes.text_increment}>-</h4>
                   </Button>
                 </Row>
               </Col>
@@ -100,12 +101,12 @@ const Settings = () => {
               <Col>
                 <Row>
                   <Button onClick={pomodoroTimeIncrement} variant="custom">
-                    <h4>+</h4>
+                    <h4 className={classes.text_increment}>+</h4>
                   </Button>
                 </Row>
                 <Row>
                   <Button onClick={pomodoroTimeIncrement} variant="custom">
-                    <h4>-</h4>
+                    <h4 className={classes.text_increment}>-</h4>
                   </Button>
                 </Row>
               </Col>

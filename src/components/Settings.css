@@ -1,11 +1,12 @@
 .btn-custom:hover {
-  background-color: rgb(157, 157, 157);
-  color: black;
+  background-color: rgb(157, 157, 157) !important;
+  color: black !important;
 }
 
 .btn-custom {
-  padding: 0;
-  width: 40px;
-  height: 20px;
-  background-color: rgb(214, 214, 214);
+  margin: 2px auto !important;
+  padding: 0 !important;
+  width: 40px !important;
+  height: 20px !important;
+  background-color: rgb(220, 220, 220) !important;
 }
