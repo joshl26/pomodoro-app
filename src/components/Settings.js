@@ -10,9 +10,14 @@ import ToggleButton from "react-bootstrap/esm/ToggleButton";
 
 const Settings = () => {
   const [autoBreak, setAutoBreak] = useState(false);
+  const [autoStart, setAutoStart] = useState(false);
 
   const autoBreakButtonHandler = (event) => {
     setAutoBreak(event.currentTarget.checked);
+  };
+
+  const autoStartButtonHandler = (event) => {
+    setAutoStart(event.currentTarget.checked);
   };
 
   return (
@@ -69,12 +74,26 @@ const Settings = () => {
             onChange={autoBreakButtonHandler}
           >
             {!autoBreak && "No"}
-            {autoBreak&& "Yes"}
+            {autoBreak && "Yes"}
           </ToggleButton>
         </ButtonGroup>
         <div className={classes.divider}></div>
         <div className={classes.spacer}></div>
         <h4 className={classes.card_text}>Auto start Pomodoros?</h4>
+        <ButtonGroup className="mb-2">
+          <ToggleButton
+            id="toggle-check2"
+            type="checkbox"
+            variant="outline-secondary"
+            checked={autoStart}
+            value="1"
+            onChange={autoStartButtonHandler}
+          >
+            {!autoStart && "No"}
+            {autoStart && "Yes"}
+          </ToggleButton>
+        </ButtonGroup>
+
         <div className={classes.divider}></div>
         <div className={classes.spacer}></div>
         <h4 className={classes.card_text}>Long Break interval?</h4>
