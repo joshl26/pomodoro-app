@@ -6,9 +6,14 @@ import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/esm/Button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import ToggleButton from "react-bootstrap/esm/ToggleButton";
+
+import { useSelector, useDispatch } from "react-redux";
+import { pomodoroDecrement, pomodoroIncrement } from "../store/pomodoroTimeSlice";
+import { shortDecrement, shortIncrement } from "../store/shortTimeSlice";
+
 
 const Settings = () => {
   const [autoBreak, setAutoBreak] = useState(false);
@@ -16,6 +21,10 @@ const Settings = () => {
   const [pomodoroTime, setPomodoroTime] = useState(25);
   const [shortBreakTime, setShortBreakTime] = useState(5);
   const [longBreakTime, setLongBreakTime] = useState(15);
+
+  const pomodoroCount = useSelector((state) => state.pomodoro.value);
+  const shortCount =  useSelector((state) => state.short.value);
+  const dispatch = useDispatch();
 
   const autoBreakButtonHandler = (event) => {
     setAutoBreak(event.currentTarget.checked);
@@ -25,21 +34,21 @@ const Settings = () => {
     setAutoStart(event.currentTarget.checked);
   };
 
-  const pomodoroTimeIncrement = () => {
-    console.log("Increment Pomodoro Time");
-    console.log(pomodoroTime);
-    let count = pomodoroTime + 1;
-    setPomodoroTime(count);
-    console.log(pomodoroTime);
-  };
+  // const pomodoroTimeIncrement = () => {
+  //   console.log("Increment Pomodoro Time");
+  //   console.log(pomodoroTime);
+  //   let count = pomodoroTime + 1;
+  //   setPomodoroTime(count);
+  //   console.log(pomodoroTime);
+  // };
 
-  const pomodoroTimeDecrement = () => {
-    console.log("Increment Pomodoro Time");
-    console.log(pomodoroTime);
-    let count = pomodoroTime - 1;
-    setPomodoroTime(count);
-    console.log(pomodoroTime);
-  };
+  // const pomodoroTimeDecrement = () => {
+  //   console.log("Increment Pomodoro Time");
+  //   console.log(pomodoroTime);
+  //   let count = pomodoroTime - 1;
+  //   setPomodoroTime(count);
+  //   console.log(pomodoroTime);
+  // };
 
   const shortBreakIncrement = () => {
     console.log("Increment Pomodoro Time");
@@ -93,17 +102,23 @@ const Settings = () => {
             <Row>
               <Col className={classes.padding_left}>
                 <div className={classes.card_time}>
-                  <h4 className={classes.time_text}>{pomodoroTime}:00</h4>
+                  <h4 className={classes.time_text}>{pomodoroCount}:00</h4>
                 </div>
               </Col>
               <Col className={classes.padding_right}>
                 <Row>
-                  <Button onClick={pomodoroTimeIncrement} variant="custom">
+                  <Button
+                    onClick={() => dispatch(pomodoroIncrement())}
+                    variant="custom"
+                  >
                     <h4 className={classes.text_increment}>+</h4>
                   </Button>
                 </Row>
                 <Row>
-                  <Button onClick={pomodoroTimeDecrement} variant="custom">
+                  <Button
+                    onClick={() => dispatch(pomodoroDecrement())}
+                    variant="custom"
+                  >
                     <h4 className={classes.text_increment}>-</h4>
                   </Button>
                 </Row>
@@ -115,17 +130,17 @@ const Settings = () => {
             <Row>
               <Col className={classes.padding_left}>
                 <div className={classes.card_time}>
-                  <h4 className={classes.time_text}>{shortBreakTime}:00</h4>
+                  <h4 className={classes.time_text}>{shortCount}:00</h4>
                 </div>
               </Col>
               <Col className={classes.padding_right}>
                 <Row>
-                  <Button onClick={shortBreakIncrement} variant="custom">
+                  <Button onClick={() => dispatch(shortIncrement())} variant="custom">
                     <h4 className={classes.text_increment}>+</h4>
                   </Button>
                 </Row>
                 <Row>
-                  <Button onClick={shortBreakDecrement} variant="custom">
+                  <Button onClick={() => dispatch(shortDecrement())} variant="custom">
                     <h4 className={classes.text_increment}>-</h4>
                   </Button>
                 </Row>

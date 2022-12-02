@@ -10,6 +10,8 @@ import Settings from "./components/Settings";
 import Report from "./components/Report";
 import Login from "./components/Login";
 
+import { Counter } from "./features/counter/Counter";
+
 function App() {
   const [active, setActive] = useState("1");
 
@@ -31,6 +33,7 @@ function App() {
     <div className={activeClass}>
       <div className={classes.spacer_small} />
       <ResponsiveHeader />
+      <Counter />
       <div className={classes.content}>
         <div className={classes.spacer_small} />
         <Switch>
