@@ -52,6 +52,12 @@ export const settingsSlice = createSlice({
     longDecrementByAmount: (state, action) => {
       state.long += action.payload;
     },
+    autoPomo: (state) => {
+      state.autopomo = !state.autopomo;
+    },
+    autoBreak: (state) => {
+      state.autobreak = !state.autobreak;
+    },
   },
 });
 
@@ -66,6 +72,8 @@ export const {
   longIncrement,
   longDecrement,
   longDecrementByAmount,
+  autoBreak,
+  autoPomo,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

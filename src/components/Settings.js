@@ -6,7 +6,6 @@ import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/esm/Button";
-import { useState } from "react";
 import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import ToggleButton from "react-bootstrap/esm/ToggleButton";
 
@@ -18,76 +17,18 @@ import {
   shortDecrement,
   longIncrement,
   longDecrement,
+  autoBreak,
+  autoPomo,
 } from "../store/settingsSlice";
 
 const Settings = () => {
-  const [autoBreak, setAutoBreak] = useState(false);
-  const [autoStart, setAutoStart] = useState(false);
-  // const [pomodoroTime, setPomodoroTime] = useState(25);
-  // const [shortBreakTime, setShortBreakTime] = useState(5);
-  // const [longBreakTime, setLongBreakTime] = useState(15);
-
   const pomodoroCount = useSelector((state) => state.settings.pomodoro);
   const shortCount = useSelector((state) => state.settings.short);
   const longCount = useSelector((state) => state.settings.long);
+  const autoBreakBool = useSelector((state) => state.settings.autobreak);
+  const autoPomoBool = useSelector((state) => state.settings.autopomo);
 
   const dispatch = useDispatch();
-
-  const autoBreakButtonHandler = (event) => {
-    setAutoBreak(event.currentTarget.checked);
-  };
-
-  const autoStartButtonHandler = (event) => {
-    setAutoStart(event.currentTarget.checked);
-  };
-
-  // const pomodoroTimeIncrement = () => {
-  //   console.log("Increment Pomodoro Time");
-  //   console.log(pomodoroTime);
-  //   let count = pomodoroTime + 1;
-  //   setPomodoroTime(count);
-  //   console.log(pomodoroTime);
-  // };
-
-  // const pomodoroTimeDecrement = () => {
-  //   console.log("Increment Pomodoro Time");
-  //   console.log(pomodoroTime);
-  //   let count = pomodoroTime - 1;
-  //   setPomodoroTime(count);
-  //   console.log(pomodoroTime);
-  // };
-
-  // const shortBreakIncrement = () => {
-  //   console.log("Increment Pomodoro Time");
-  //   console.log(shortBreakTime);
-  //   let count = shortBreakTime + 1;
-  //   setShortBreakTime(count);
-  //   console.log(shortBreakTime);
-  // };
-
-  // const shortBreakDecrement = () => {
-  //   console.log("Increment Pomodoro Time");
-  //   console.log(shortBreakTime);
-  //   let count = shortBreakTime - 1;
-  //   setShortBreakTime(count);
-  //   console.log(shortBreakTime);
-  // };
-
-  // const longBreakIncrement = () => {
-  //   console.log("Increment Pomodoro Time");
-  //   console.log(longBreakTime);
-  //   let count = longBreakTime + 1;
-  //   setLongBreakTime(count);
-  //   console.log(longBreakTime);
-  // };
-
-  // const longBreakDecrement = () => {
-  //   console.log("Increment Pomodoro Time");
-  //   console.log(longBreakTime);
-  //   let count = longBreakTime - 1;
-  //   setLongBreakTime(count);
-  //   console.log(longBreakTime);
-  // };
 
   return (
     <Container className={classes.container}>
@@ -203,10 +144,10 @@ const Settings = () => {
             variant="outline-secondary"
             checked={autoBreak}
             value="1"
-            onChange={autoBreakButtonHandler}
+            onChange={() => dispatch(autoBreak())}
           >
-            {!autoBreak && "No"}
-            {autoBreak && "Yes"}
+            {!autoBreakBool && "No"}
+            {autoBreakBool && "Yes"}
           </ToggleButton>
         </ButtonGroup>
         <div className={classes.divider}></div>
@@ -217,12 +158,12 @@ const Settings = () => {
             id="toggle-check2"
             type="checkbox"
             variant="outline-secondary"
-            checked={autoStart}
+            checked={autoPomo}
             value="1"
-            onChange={autoStartButtonHandler}
+            onChange={() => dispatch(autoPomo())}
           >
-            {!autoStart && "No"}
-            {autoStart && "Yes"}
+            {!autoPomoBool && "No"}
+            {autoPomoBool && "Yes"}
           </ToggleButton>
         </ButtonGroup>
 
