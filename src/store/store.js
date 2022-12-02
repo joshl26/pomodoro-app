@@ -1,12 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import counterReducer from "../features/counter/counterSlice";
-import pomodoroReducer from "../store/pomodoroTimeSlice";
-import shortReducer from "../store/shortTimeSlice";
+import settingsReducer from "./settingsSlice";
 
 export default configureStore({
   reducer: {
     counter: counterReducer,
-    pomodoro: pomodoroReducer,
-    short: shortReducer,
+    settings: settingsReducer,
   },
 });

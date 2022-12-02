@@ -11,19 +11,26 @@ import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import ToggleButton from "react-bootstrap/esm/ToggleButton";
 
 import { useSelector, useDispatch } from "react-redux";
-import { pomodoroDecrement, pomodoroIncrement } from "../store/pomodoroTimeSlice";
-import { shortDecrement, shortIncrement } from "../store/shortTimeSlice";
-
+import {
+  pomoIncrement,
+  pomoDecrement,
+  shortIncrement,
+  shortDecrement,
+  longIncrement,
+  longDecrement,
+} from "../store/settingsSlice";
 
 const Settings = () => {
   const [autoBreak, setAutoBreak] = useState(false);
   const [autoStart, setAutoStart] = useState(false);
-  const [pomodoroTime, setPomodoroTime] = useState(25);
-  const [shortBreakTime, setShortBreakTime] = useState(5);
-  const [longBreakTime, setLongBreakTime] = useState(15);
+  // const [pomodoroTime, setPomodoroTime] = useState(25);
+  // const [shortBreakTime, setShortBreakTime] = useState(5);
+  // const [longBreakTime, setLongBreakTime] = useState(15);
 
-  const pomodoroCount = useSelector((state) => state.pomodoro.value);
-  const shortCount =  useSelector((state) => state.short.value);
+  const pomodoroCount = useSelector((state) => state.settings.pomodoro);
+  const shortCount = useSelector((state) => state.settings.short);
+  const longCount = useSelector((state) => state.settings.long);
+
   const dispatch = useDispatch();
 
   const autoBreakButtonHandler = (event) => {
@@ -50,37 +57,37 @@ const Settings = () => {
   //   console.log(pomodoroTime);
   // };
 
-  const shortBreakIncrement = () => {
-    console.log("Increment Pomodoro Time");
-    console.log(shortBreakTime);
-    let count = shortBreakTime + 1;
-    setShortBreakTime(count);
-    console.log(shortBreakTime);
-  };
+  // const shortBreakIncrement = () => {
+  //   console.log("Increment Pomodoro Time");
+  //   console.log(shortBreakTime);
+  //   let count = shortBreakTime + 1;
+  //   setShortBreakTime(count);
+  //   console.log(shortBreakTime);
+  // };
 
-  const shortBreakDecrement = () => {
-    console.log("Increment Pomodoro Time");
-    console.log(shortBreakTime);
-    let count = shortBreakTime - 1;
-    setShortBreakTime(count);
-    console.log(shortBreakTime);
-  };
+  // const shortBreakDecrement = () => {
+  //   console.log("Increment Pomodoro Time");
+  //   console.log(shortBreakTime);
+  //   let count = shortBreakTime - 1;
+  //   setShortBreakTime(count);
+  //   console.log(shortBreakTime);
+  // };
 
-  const longBreakIncrement = () => {
-    console.log("Increment Pomodoro Time");
-    console.log(longBreakTime);
-    let count = longBreakTime + 1;
-    setLongBreakTime(count);
-    console.log(longBreakTime);
-  };
+  // const longBreakIncrement = () => {
+  //   console.log("Increment Pomodoro Time");
+  //   console.log(longBreakTime);
+  //   let count = longBreakTime + 1;
+  //   setLongBreakTime(count);
+  //   console.log(longBreakTime);
+  // };
 
-  const longBreakDecrement = () => {
-    console.log("Increment Pomodoro Time");
-    console.log(longBreakTime);
-    let count = longBreakTime - 1;
-    setLongBreakTime(count);
-    console.log(longBreakTime);
-  };
+  // const longBreakDecrement = () => {
+  //   console.log("Increment Pomodoro Time");
+  //   console.log(longBreakTime);
+  //   let count = longBreakTime - 1;
+  //   setLongBreakTime(count);
+  //   console.log(longBreakTime);
+  // };
 
   return (
     <Container className={classes.container}>
@@ -108,7 +115,7 @@ const Settings = () => {
               <Col className={classes.padding_right}>
                 <Row>
                   <Button
-                    onClick={() => dispatch(pomodoroIncrement())}
+                    onClick={() => dispatch(pomoIncrement())}
                     variant="custom"
                   >
                     <h4 className={classes.text_increment}>+</h4>
@@ -116,7 +123,7 @@ const Settings = () => {
                 </Row>
                 <Row>
                   <Button
-                    onClick={() => dispatch(pomodoroDecrement())}
+                    onClick={() => dispatch(pomoDecrement())}
                     variant="custom"
                   >
                     <h4 className={classes.text_increment}>-</h4>
@@ -135,12 +142,18 @@ const Settings = () => {
               </Col>
               <Col className={classes.padding_right}>
                 <Row>
-                  <Button onClick={() => dispatch(shortIncrement())} variant="custom">
+                  <Button
+                    onClick={() => dispatch(shortIncrement())}
+                    variant="custom"
+                  >
                     <h4 className={classes.text_increment}>+</h4>
                   </Button>
                 </Row>
                 <Row>
-                  <Button onClick={() => dispatch(shortDecrement())} variant="custom">
+                  <Button
+                    onClick={() => dispatch(shortDecrement())}
+                    variant="custom"
+                  >
                     <h4 className={classes.text_increment}>-</h4>
                   </Button>
                 </Row>
@@ -153,18 +166,21 @@ const Settings = () => {
             <Row>
               <Col className={classes.padding_left}>
                 <div className={classes.card_time}>
-                  <h4 className={classes.time_text}>{longBreakTime}:00</h4>
+                  <h4 className={classes.time_text}>{longCount}:00</h4>
                 </div>
               </Col>
               <Col className={classes.padding_right}>
                 <Row>
-                  <Button onClick={longBreakIncrement} variant="custom">
+                  <Button
+                    onClick={() => dispatch(longIncrement())}
+                    variant="custom"
+                  >
                     <h4 className={classes.text_increment}>+</h4>
                   </Button>
                 </Row>
                 <Row>
                   <Button
-                    onClick={longBreakDecrement}
+                    onClick={() => dispatch(longDecrement())}
                     value="negative"
                     variant="custom"
                   >
