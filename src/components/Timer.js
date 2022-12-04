@@ -4,21 +4,20 @@ import { useState } from "react";
 import CountdownTimer from "./CountDownTimer";
 import Container from "react-bootstrap/esm/Container";
 
-const Timer = ({ activeChange }) => {
+import { useSelector } from "react-redux";
+
+const Timer = () => {
   const [time, setTime] = useState("25");
   const [value, setValue] = useState("25:00");
-  const [active, setActive] = useState("1");
   const [timer, setTimer] = useState(false);
+
+  const timeMode = useSelector((state) => state.settings.timermode);
+
+  // const dispatch = useDispatch();
 
   const setTimeHandler = (props) => {
     setTime(props);
     // console.log(props);
-  };
-
-  const setActiveHandler = (props) => {
-    setActive(props);
-    // console.log(props);
-    activeChange(props);
   };
 
   const setValueHandler = (props) => {
@@ -44,8 +43,7 @@ const Timer = ({ activeChange }) => {
           <SecondaryButtons
             timeChange={setTimeHandler}
             valueChange={setValueHandler}
-            activeChange={setActiveHandler}
-            active={active}
+            active={timeMode}
           />
           <div className={classes.time}>
             {timer === true ? (
@@ -61,15 +59,15 @@ const Timer = ({ activeChange }) => {
           <div>
             <button
               className={
-                timer === false && active === "1"
+                timer === false && timeMode === "1"
                   ? `${classes.action_btn1}`
                   : `${classes.action_btn1_active}` &&
                     timer === false &&
-                    active === "2"
+                    timeMode === "2"
                   ? `${classes.action_btn2}`
                   : `${classes.action_btn2_active}` &&
                     timer === false &&
-                    active === "3"
+                    timeMode === "3"
                   ? `${classes.action_btn3}`
                   : `${classes.action_btn3_active}`
               }

@@ -9,7 +9,7 @@ export const settingsSlice = createSlice({
     autobreak: false,
     autopomo: false,
     longinterval: 15,
-    timermode: 1
+    timermode: 1,
   },
   reducers: {
     pomoIncrement: (state) => {
@@ -60,15 +60,14 @@ export const settingsSlice = createSlice({
       state.autobreak = !state.autobreak;
     },
     longIntervalIncrement: (state) => {
-      state.longinterval += 1; 
+      state.longinterval += 1;
     },
     longIntervalDecrement: (state) => {
-      state.longinterval -= 1; 
+      state.longinterval -= 1;
     },
     timerMode: (state, action) => {
-      state.long = action.payload;
+      state.timermode = action.payload;
     },
-
   },
 });
 
@@ -87,7 +86,7 @@ export const {
   autoPomo,
   longIntervalIncrement,
   longIntervalDecrement,
-  timerMode
+  timerMode,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;
