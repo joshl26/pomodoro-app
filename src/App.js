@@ -15,12 +15,7 @@ function App() {
 
   const setActiveHandler = (props) => {
     setActive(props);
-    // console.log("Top level" + props);
-  };
-
-  const setCountdownHandler = (props) => {
-    // console.log(props);
-  };
+  };  
 
   const activeClass =
     `${active === "1" ? `${classes.pomodoro}` : ``}` +
@@ -37,7 +32,6 @@ function App() {
           <Route path="/pomodor" exact>
             <Timer
               activeChange={setActiveHandler}
-              countdownChange={setCountdownHandler}
             />
           </Route>
           <Route path="/pomodor/settings">
