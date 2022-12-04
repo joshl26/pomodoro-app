@@ -48,9 +48,9 @@ const Timer = () => {
               />
             ) : (
               <>
-                {timeMode == 1 ? <p>{pomoTime}:00</p> : ""}
-                {timeMode == 2 ? <p>{shortTime}:00</p> : ""}
-                {timeMode == 3 ? <p>{longTime}:00</p> : ""}
+                {Number(timeMode) === 1 ? <p>{pomoTime}:00</p> : ""}
+                {Number(timeMode) === 2 ? <p>{shortTime}:00</p> : ""}
+                {Number(timeMode) === 3 ? <p>{longTime}:00</p> : ""}
               </>
             )}
           </div>

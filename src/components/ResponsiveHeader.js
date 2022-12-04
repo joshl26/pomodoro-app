@@ -16,7 +16,7 @@ const linkSettings = "/settings";
 const linkReport = "/report";
 const linkLogin = "/login";
 
-const Header = () => {
+const ResponsiveHeader = () => {
   return (
     <header>
       <Navbar
@@ -94,4 +94,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default ResponsiveHeader;

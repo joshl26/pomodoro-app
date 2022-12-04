@@ -76,21 +76,21 @@ export const settingsSlice = createSlice({
     setCurrentTime: (state) => {
       // console.log("timer mode: " + state.timermode);
       //Check timermode and set current time accordingly
-      if (state.timermode > 3) {
+      if (Number(state.timermode) > 3) {
         return;
       }
-      if (state.timermode <= 0) {
+      if (Number(state.timermode) <= 0) {
         return;
       }
-      if (state.timermode == 1) {
+      if (Number(state.timermode) === 1) {
         state.currenttime = state.pomodoro;
         // console.log(state.currenttime);
       }
-      if (state.timermode == 2) {
+      if (Number(state.timermode) === 2) {
         state.currenttime = state.short;
         // console.log(state.currenttime);
       }
-      if (state.timermode == 3) {
+      if (Number(state.timermode) === 3) {
         state.currenttime = state.long;
         // console.log(state.currenttime);
       }

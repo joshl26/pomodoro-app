@@ -1,12 +1,11 @@
+import { useSelector, useDispatch } from "react-redux";
+import { timerMode, setCurrentTime } from "../store/settingsSlice";
+
 import classes from "./SecondaryButtons.module.css";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-
-import { useSelector, useDispatch } from "react-redux";
-
-import { timerMode, setCurrentTime } from "../store/settingsSlice";
 
 const SecondaryButtons = () => {
   const pomoTime = useSelector((state) => state.settings.pomodoro);
@@ -31,7 +30,7 @@ const SecondaryButtons = () => {
               id={1}
               name={"Pomodoro"}
               className={
-                timeMode == 1
+                Number(timeMode) === 1
                   ? `${classes.btn_background_pomodoro}`
                   : `${classes.btn_secondary}`
               }
@@ -49,7 +48,7 @@ const SecondaryButtons = () => {
               id={2}
               name={"Short Break"}
               className={
-                timeMode == 2
+                Number(timeMode) === 2
                   ? `${classes.btn_background_short}`
                   : `${classes.btn_secondary}`
               }
@@ -67,7 +66,7 @@ const SecondaryButtons = () => {
               id={3}
               name={"Long Break"}
               className={
-                timeMode == 3
+                Number(timeMode) === 3
                   ? `${classes.btn_background_long}`
                   : `${classes.btn_secondary}`
               }
