@@ -19,6 +19,7 @@ import {
   longDecrement,
   autoBreak,
   autoPomo,
+  setCurrentTime,
 } from "../store/settingsSlice";
 
 const Settings = () => {
@@ -38,7 +39,14 @@ const Settings = () => {
             <h4 className={classes.card_text}>SETTINGS</h4>
           </Col>
           <Col className={classes.align_right}>
-            <Link to="/pomodor">CLOSE</Link>
+            <Link
+              onClick={() => {
+                dispatch(setCurrentTime());
+              }}
+              to="/pomodor"
+            >
+              CLOSE
+            </Link>
           </Col>
         </Row>
         <div className={classes.divider}></div>

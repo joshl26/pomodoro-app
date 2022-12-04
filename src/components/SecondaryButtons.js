@@ -6,9 +6,9 @@ import Col from "react-bootstrap/Col";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { timerMode } from "../store/settingsSlice";
+import { timerMode, setCurrentTime } from "../store/settingsSlice";
 
-const SecondaryButtons = ({ timeChange, valueChange }) => {
+const SecondaryButtons = () => {
   const pomoTime = useSelector((state) => state.settings.pomodoro);
   const shortTime = useSelector((state) => state.settings.short);
   const longTime = useSelector((state) => state.settings.long);
@@ -17,11 +17,8 @@ const SecondaryButtons = ({ timeChange, valueChange }) => {
   const dispatch = useDispatch();
 
   function handleClick(props) {
-    timeChange(props.target.name);
-    valueChange(props.target.value);
-    // activeChange(props.target.id);
-
     dispatch(timerMode(props.target.id));
+    dispatch(setCurrentTime());
   }
 
   return (
@@ -32,9 +29,9 @@ const SecondaryButtons = ({ timeChange, valueChange }) => {
             <button
               value={`${pomoTime}:00`}
               id={1}
-              name={"Pomodoro"} //using name attribute to hold timer value
+              name={"Pomodoro"}
               className={
-                timeMode === 1
+                timeMode == 1
                   ? `${classes.btn_background_pomodoro}`
                   : `${classes.btn_secondary}`
               }
@@ -50,9 +47,9 @@ const SecondaryButtons = ({ timeChange, valueChange }) => {
             <button
               value={`${shortTime}:00`}
               id={2}
-              name={"Short Break"} //using name attribute to hold timer value
+              name={"Short Break"}
               className={
-                timeMode === 2
+                timeMode == 2
                   ? `${classes.btn_background_short}`
                   : `${classes.btn_secondary}`
               }
@@ -70,7 +67,7 @@ const SecondaryButtons = ({ timeChange, valueChange }) => {
               id={3}
               name={"Long Break"}
               className={
-                timeMode === 3
+                timeMode == 3
                   ? `${classes.btn_background_long}`
                   : `${classes.btn_secondary}`
               }

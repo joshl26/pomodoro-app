@@ -10,6 +10,8 @@ export const settingsSlice = createSlice({
     autopomo: false,
     longinterval: 15,
     timermode: 1,
+    timerenabled: false,
+    currenttime: 25,
   },
   reducers: {
     pomoIncrement: (state) => {
@@ -68,6 +70,31 @@ export const settingsSlice = createSlice({
     timerMode: (state, action) => {
       state.timermode = action.payload;
     },
+    timerEnabled: (state) => {
+      state.timerenabled = !state.timerenabled;
+    },
+    setCurrentTime: (state) => {
+      // console.log("timer mode: " + state.timermode);
+      //Check timermode and set current time accordingly
+      if (state.timermode > 3) {
+        return;
+      }
+      if (state.timermode <= 0) {
+        return;
+      }
+      if (state.timermode == 1) {
+        state.currenttime = state.pomodoro;
+        // console.log(state.currenttime);
+      }
+      if (state.timermode == 2) {
+        state.currenttime = state.short;
+        // console.log(state.currenttime);
+      }
+      if (state.timermode == 3) {
+        state.currenttime = state.long;
+        // console.log(state.currenttime);
+      }
+    },
   },
 });
 
@@ -87,6 +114,8 @@ export const {
   longIntervalIncrement,
   longIntervalDecrement,
   timerMode,
+  timerEnabled,
+  setCurrentTime,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;
