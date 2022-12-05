@@ -8,10 +8,11 @@ export const settingsSlice = createSlice({
     long: 15,
     autobreak: false,
     autopomo: false,
-    longinterval: 15,
     timermode: 1,
     timerenabled: false,
     currenttime: 25,
+    cycle: [1, 2, 1, 2, 1, 2, 1, 2, 3],
+    counter: 0,
   },
   reducers: {
     pomoIncrement: (state) => {
@@ -79,12 +80,6 @@ export const settingsSlice = createSlice({
     autoBreak: (state) => {
       state.autobreak = !state.autobreak;
     },
-    longIntervalIncrement: (state) => {
-      state.longinterval += 1;
-    },
-    longIntervalDecrement: (state) => {
-      state.longinterval -= 1;
-    },
     timerMode: (state, action) => {
       state.timermode = action.payload;
     },
@@ -115,10 +110,24 @@ export const settingsSlice = createSlice({
       state.long = 15;
       state.autobreak = false;
       state.autopomo = false;
-      state.longinterval = 15;
       state.timermode = 1;
       state.timerenabled = false;
       state.currenttime = 25;
+      state.cycle = [1, 2, 1, 2, 1, 2, 1, 2, 3];
+      state.counter = 0;
+    },
+    counterIncrement: (state) => {
+      if (Number(state.counter) <= 9) {
+        state.counter += 1;
+        if (Number(state.counter) === 9) {
+          state.counter = 0;
+        }
+      }
+    },
+    counterDecrement: (state) => {
+      if (Number(state.counter) > 0) {
+        state.counter -= 1;
+      }
     },
   },
 });
@@ -134,10 +143,8 @@ export const {
   longIncrement,
   longDecrement,
   longDecrementByAmount,
-  autoBreak,
   autoPomo,
-  longIntervalIncrement,
-  longIntervalDecrement,
+  autoBreak,
   timerMode,
   timerEnabled,
   setCurrentTime,

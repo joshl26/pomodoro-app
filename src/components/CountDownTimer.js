@@ -7,8 +7,8 @@ import Progress from "./Progress";
 const ExpiredNotice = () => {
   return (
     <div className={classes.expired_notice}>
-      <span>Expired!!!</span>
-      <p>Please select a future date and time.</p>
+      <span>TIMER FINISHED!!</span>
+      <p> Please select your next timer or break...</p>
     </div>
   );
 };

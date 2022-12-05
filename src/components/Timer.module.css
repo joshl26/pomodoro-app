@@ -184,3 +184,7 @@
 .spacer {
   height: 25px;
 }
+
+.align_center {
+  text-align: center;
+}
