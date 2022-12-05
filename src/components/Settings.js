@@ -20,6 +20,7 @@ import {
   autoBreak,
   autoPomo,
   setCurrentTime,
+  setDefault,
 } from "../store/settingsSlice";
 
 const Settings = () => {
@@ -188,10 +189,15 @@ const Settings = () => {
 
         <Row>
           <Col className={classes.align_center}>
-            
-              <Button variant="outline-secondary" className="btn_save">
-                Defaults
-              </Button>
+            <Button
+              onClick={() => {
+                dispatch(setDefault());
+              }}
+              variant="outline-secondary"
+              className="btn_save"
+            >
+              Defaults
+            </Button>
           </Col>
         </Row>
       </div>

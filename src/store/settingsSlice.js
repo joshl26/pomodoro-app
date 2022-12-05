@@ -109,6 +109,17 @@ export const settingsSlice = createSlice({
         state.currenttime = state.long;
       }
     },
+    setDefault: (state) => {
+      state.pomodoro = 25;
+      state.short = 5;
+      state.long = 15;
+      state.autobreak = false;
+      state.autopomo = false;
+      state.longinterval = 15;
+      state.timermode = 1;
+      state.timerenabled = false;
+      state.currenttime = 25;
+    },
   },
 });
 
@@ -130,6 +141,7 @@ export const {
   timerMode,
   timerEnabled,
   setCurrentTime,
+  setDefault,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

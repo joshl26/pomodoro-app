@@ -49,7 +49,7 @@
   background-color: white;
   text-transform: uppercase;
   transition: color 0.5s ease-in-out 0s;
-  border-radius: 10rem;
+  border-radius: 1rem;
 }
 
 .action_btn1 {
