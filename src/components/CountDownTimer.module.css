@@ -1,9 +1,11 @@
 .expired_notice {
+  background-color: #ebebeb;
+  opacity: 0.6;
   text-align: center;
   padding: 2rem;
-  /* border: 1px solid #ebebeb;
-  border-radius: 0.25rem; */
-  margin: 0.5rem;
+  border-radius: 0.25rem;
+  margin: 1rem;
+  height: 25vh;
 }
 
 .expired_notice > span {

@@ -97,18 +97,11 @@ const Timer = () => {
       </div>
       <Container>
         <Row>
-          <Col sm={6} className={classes.align_center}>
+          <Col sm={12} className={classes.align_center}>
             {autoBreak ? (
-              <p>Auto Start Break: ENABLED</p>
+              <p>Auto Start Breaks: ENABLED</p>
             ) : (
-              <p>Auto Start Break: DISABLED</p>
-            )}
-          </Col>
-          <Col sm={6} className={classes.align_center}>
-            {autoPomo ? (
-              <p>Auto Start Pomo: ENABLED</p>
-            ) : (
-              <p>Auto Start Pomo: DISABLED</p>
+              <p>Auto Start Breaks: DISABLED</p>
             )}
           </Col>
         </Row>

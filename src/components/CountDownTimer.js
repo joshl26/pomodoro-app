@@ -4,19 +4,36 @@ import DateTimeDisplay from "./DateTimeDisplay";
 import classes from "./CountDownTimer.module.css";
 import Progress from "./Progress";
 import { useSelector, useDispatch } from "react-redux";
+import Container from "react-bootstrap/esm/Container";
+import { Row, Col } from "react-bootstrap";
 
 import { counterIncrement, timerMode } from "../store/settingsSlice";
+import Button from "react-bootstrap/esm/Button";
 
 const ExpiredNotice = () => {
   return (
-    <div className={classes.expired_notice}>
-      <span>TIMER FINISHED!!</span>
-      <p> Please select your next timer or break...</p>
-    </div>
+    <Container>
+      <div className={classes.expired_notice}>
+        <Row>
+          <Col>
+            <Button>RESET</Button>
+          </Col>
+          <Col>
+            <Button>CONTINUE</Button>
+          </Col>
+        </Row>
+      </div>
+    </Container>
   );
 };
 
 const ShowCounter = ({ days, hours, minutes, seconds, x }) => {
+  function paddedSeconds() {
+    if (seconds < 10) {
+      return `0${seconds}`;
+    } else return seconds;
+  }
+
   return (
     <div>
       <Progress percent={x} />
@@ -29,7 +46,11 @@ const ShowCounter = ({ days, hours, minutes, seconds, x }) => {
         >
           <DateTimeDisplay value={minutes} type={"Mins"} isDanger={false} />
           <p>:</p>
-          <DateTimeDisplay value={seconds} type={"Seconds"} isDanger={false} />
+          <DateTimeDisplay
+            value={paddedSeconds()}
+            type={"Seconds"}
+            isDanger={false}
+          />
         </a>
       </div>
     </div>
@@ -41,14 +62,14 @@ const CountdownTimer = ({ targetDate, time }) => {
 
   const autoBreak = useSelector((state) => state.settings.autobreak);
   const counter = useSelector((state) => state.settings.counter);
-  const cycle = [useSelector((state) => state.settings.cycle[counter])]
+  const cycle = [useSelector((state) => state.settings.cycle[counter])];
 
   const dispatch = useDispatch();
 
   if (days + hours + minutes + seconds <= 0) {
     if (autoBreak === true) {
       dispatch(counterIncrement());
-      dispatch(timerMode(cycle))
+      dispatch(timerMode(cycle));
     } else return <ExpiredNotice />;
   } else {
     return (

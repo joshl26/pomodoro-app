@@ -164,7 +164,7 @@ const Settings = () => {
             {autoBreakBool && "Yes"}
           </ToggleButton>
         </ButtonGroup>
-        <div className={classes.divider}></div>
+        {/* <div className={classes.divider}></div>
         <div className={classes.spacer}></div>
         <h4 className={classes.card_text}>Auto start Pomodoros?</h4>
         <ButtonGroup className="mb-2">
@@ -180,7 +180,7 @@ const Settings = () => {
             {!autoPomoBool && "No"}
             {autoPomoBool && "Yes"}
           </ToggleButton>
-        </ButtonGroup>
+        </ButtonGroup> */}
 
         <div className={classes.spacer_small}></div>
 
