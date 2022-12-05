@@ -18,10 +18,6 @@
   font-size: 1.5rem;
 }
 
-.show_counter {
-  /* padding: 0.5rem; */
-}
-
 .show_counter .countdown_link {
   display: flex;
   flex-direction: row;
@@ -60,4 +56,8 @@
   text-transform: uppercase;
   font-size: 0.75rem;
   line-height: 1rem;
+}
+
+.spacer {
+  height: 25px;
 }

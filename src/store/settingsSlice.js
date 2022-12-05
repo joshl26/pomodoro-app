@@ -13,6 +13,7 @@ export const settingsSlice = createSlice({
     currenttime: 1,
     cycle: [1, 2, 1, 2, 1, 2, 1, 2, 3],
     counter: 0,
+    cyclecomplete: false,
   },
   reducers: {
     pomoIncrement: (state) => {
@@ -86,6 +87,9 @@ export const settingsSlice = createSlice({
     timerEnabled: (state) => {
       state.timerenabled = !state.timerenabled;
     },
+    setTimerEnabled: (state, action) => {
+      state.timerenabled = action.payload;
+    },
     setCurrentTime: (state) => {
       //Check timermode and set current time accordingly
       if (Number(state.timermode) > 3) {
@@ -129,6 +133,9 @@ export const settingsSlice = createSlice({
         state.counter -= 1;
       }
     },
+    setCycleComplete: (state, action) => {
+      state.cyclecomplete = action.payload;
+    },
   },
 });
 
@@ -147,9 +154,11 @@ export const {
   autoBreak,
   timerMode,
   timerEnabled,
+  setTimerEnabled,
   setCurrentTime,
   setDefault,
   counterIncrement,
+  setCycleComplete,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

@@ -18,7 +18,6 @@ import {
   longIncrement,
   longDecrement,
   autoBreak,
-  autoPomo,
   setCurrentTime,
   setDefault,
 } from "../store/settingsSlice";
@@ -28,8 +27,6 @@ const Settings = () => {
   const shortCount = useSelector((state) => state.settings.short);
   const longCount = useSelector((state) => state.settings.long);
   const autoBreakBool = useSelector((state) => state.settings.autobreak);
-  const autoPomoBool = useSelector((state) => state.settings.autopomo);
-
   const dispatch = useDispatch();
 
   return (

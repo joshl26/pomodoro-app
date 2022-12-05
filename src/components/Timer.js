@@ -16,7 +16,6 @@ const Timer = () => {
   const timeEnabled = useSelector((state) => state.settings.timerenabled);
   const currentTime = useSelector((state) => state.settings.currenttime);
   const autoBreak = useSelector((state) => state.settings.autobreak);
-  const autoPomo = useSelector((state) => state.settings.autopomo);
   const counter = useSelector((state) => state.settings.counter);
 
   const dispatch = useDispatch();
@@ -70,30 +69,32 @@ const Timer = () => {
           <div className={classes.spacer} />
         </Row>
         <SecondaryButtons />
-        <div className={classes.time}>
-          {timeEnabled === true ? (
-            <CountdownTimer
-              targetDate={dateTimeAfterThreeDays}
-              time={totalTimeMS}
-            />
-          ) : (
-            <>
-              {Number(timeMode) === 1 ? <p>{pomoTime}:00</p> : ""}
-              {Number(timeMode) === 2 ? <p>{shortTime}:00</p> : ""}
-              {Number(timeMode) === 3 ? <p>{longTime}:00</p> : ""}
-            </>
-          )}
-        </div>
-        <div>
-          <button
-            className={buttonStyle()}
-            onClick={() => {
-              dispatch(timerEnabled());
-            }}
-          >
-            {timeEnabled === false ? "START" : "STOP"}
-          </button>
-        </div>
+        <Container>
+          <div className={classes.time}>
+            {timeEnabled === true ? (
+              <CountdownTimer
+                targetDate={dateTimeAfterThreeDays}
+                time={totalTimeMS}
+              />
+            ) : (
+              <>
+                {Number(timeMode) === 1 ? <p>{pomoTime}:00</p> : ""}
+                {Number(timeMode) === 2 ? <p>{shortTime}:00</p> : ""}
+                {Number(timeMode) === 3 ? <p>{longTime}:00</p> : ""}
+              </>
+            )}
+          </div>
+          <div>
+            <button
+              className={buttonStyle()}
+              onClick={() => {
+                dispatch(timerEnabled());
+              }}
+            >
+              {timeEnabled === false ? "START" : "STOP"}
+            </button>
+          </div>
+        </Container>
       </div>
       <Container>
         <Row>

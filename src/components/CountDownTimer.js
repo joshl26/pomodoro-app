@@ -7,7 +7,12 @@ import { useSelector, useDispatch } from "react-redux";
 import Container from "react-bootstrap/esm/Container";
 import { Row, Col } from "react-bootstrap";
 
-import { counterIncrement, timerMode } from "../store/settingsSlice";
+import {
+  counterIncrement,
+  timerMode,
+  setCycleComplete,
+} from "../store/settingsSlice";
+
 import Button from "react-bootstrap/esm/Button";
 
 const ExpiredNotice = () => {
@@ -36,6 +41,7 @@ const ShowCounter = ({ days, hours, minutes, seconds, x }) => {
 
   return (
     <div>
+      <div className={classes.spacer} />
       <Progress percent={x} />
       <div className={classes.show_counter}>
         <a
@@ -62,11 +68,13 @@ const CountdownTimer = ({ targetDate, time }) => {
 
   const autoBreak = useSelector((state) => state.settings.autobreak);
   const counter = useSelector((state) => state.settings.counter);
-  const cycle = [useSelector((state) => state.settings.cycle[counter])];
+  const cycle = useSelector((state) => state.settings.cycle[counter]);
 
   const dispatch = useDispatch();
 
   if (days + hours + minutes + seconds <= 0) {
+    dispatch(setCycleComplete());
+
     if (autoBreak === true) {
       dispatch(counterIncrement());
       dispatch(timerMode(cycle));
