@@ -3,14 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 export const settingsSlice = createSlice({
   name: "settings",
   initialState: {
-    pomodoro: 25,
-    short: 5,
-    long: 15,
+    pomodoro: 1,
+    short: 1,
+    long: 1,
     autobreak: false,
     autopomo: false,
     timermode: 1,
     timerenabled: false,
-    currenttime: 25,
+    currenttime: 1,
     cycle: [1, 2, 1, 2, 1, 2, 1, 2, 3],
     counter: 0,
   },
@@ -25,8 +25,8 @@ export const settingsSlice = createSlice({
     },
     pomoDecrement: (state) => {
       //limit pomodoro state to 20 minutes (min)
-      if (Number(state.pomodoro) <= 20) {
-        state.pomodoro = 20;
+      if (Number(state.pomodoro) <= 1) {
+        state.pomodoro = 1;
       } else {
         state.pomodoro -= 1;
       }
@@ -45,8 +45,8 @@ export const settingsSlice = createSlice({
     },
     shortDecrement: (state) => {
       //limit short state to 5 minutes (min)
-      if (Number(state.short) <= 5) {
-        state.short = 5;
+      if (Number(state.short) <= 1) {
+        state.short = 1;
       } else {
         state.short -= 1;
       }
@@ -65,8 +65,8 @@ export const settingsSlice = createSlice({
     },
     longDecrement: (state) => {
       //limit short state to 10 minutes (min)
-      if (Number(state.long) <= 10) {
-        state.long = 10;
+      if (Number(state.long) <= 1) {
+        state.long = 1;
       } else {
         state.long -= 1;
       }
@@ -117,9 +117,9 @@ export const settingsSlice = createSlice({
       state.counter = 0;
     },
     counterIncrement: (state) => {
-      if (Number(state.counter) <= 9) {
+      if (Number(state.counter) <= 8) {
         state.counter += 1;
-        if (Number(state.counter) === 9) {
+        if (Number(state.counter) === 8) {
           state.counter = 0;
         }
       }
@@ -149,6 +149,7 @@ export const {
   timerEnabled,
   setCurrentTime,
   setDefault,
+  counterIncrement,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

@@ -16,7 +16,7 @@ const SecondaryButtons = () => {
   const dispatch = useDispatch();
 
   function handleClick(props) {
-    dispatch(timerMode(props.target.id));
+    dispatch(timerMode(Number(props.target.id)));
     dispatch(setCurrentTime());
   }
 

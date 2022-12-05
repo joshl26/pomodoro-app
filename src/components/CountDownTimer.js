@@ -3,6 +3,9 @@ import { useCountdown } from "./useCountdown";
 import DateTimeDisplay from "./DateTimeDisplay";
 import classes from "./CountDownTimer.module.css";
 import Progress from "./Progress";
+import { useSelector, useDispatch } from "react-redux";
+
+import { counterIncrement, timerMode } from "../store/settingsSlice";
 
 const ExpiredNotice = () => {
   return (
@@ -35,8 +38,18 @@ const ShowCounter = ({ days, hours, minutes, seconds, x }) => {
 
 const CountdownTimer = ({ targetDate, time }) => {
   const [days, hours, minutes, seconds, x] = useCountdown(targetDate, time);
+
+  const autoBreak = useSelector((state) => state.settings.autobreak);
+  const counter = useSelector((state) => state.settings.counter);
+  const cycle = [useSelector((state) => state.settings.cycle[counter])]
+
+  const dispatch = useDispatch();
+
   if (days + hours + minutes + seconds <= 0) {
-    return <ExpiredNotice />;
+    if (autoBreak === true) {
+      dispatch(counterIncrement());
+      dispatch(timerMode(cycle))
+    } else return <ExpiredNotice />;
   } else {
     return (
       <ShowCounter

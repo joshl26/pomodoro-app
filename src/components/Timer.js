@@ -17,6 +17,7 @@ const Timer = () => {
   const currentTime = useSelector((state) => state.settings.currenttime);
   const autoBreak = useSelector((state) => state.settings.autobreak);
   const autoPomo = useSelector((state) => state.settings.autopomo);
+  const counter = useSelector((state) => state.settings.counter);
 
   const dispatch = useDispatch();
 
@@ -58,6 +59,16 @@ const Timer = () => {
   return (
     <Container>
       <div className={classes.content}>
+        <Row>
+          <Col className={classes.align_center}>
+            {Number(counter) !== 0 ? (
+              <p>Pomodoro Cycle: {Number(counter)}</p>
+            ) : (
+              ""
+            )}
+          </Col>
+          <div className={classes.spacer} />
+        </Row>
         <SecondaryButtons />
         <div className={classes.time}>
           {timeEnabled === true ? (
@@ -86,14 +97,14 @@ const Timer = () => {
       </div>
       <Container>
         <Row>
-          <Col className={classes.align_center}>
+          <Col sm={6} className={classes.align_center}>
             {autoBreak ? (
               <p>Auto Start Break: ENABLED</p>
             ) : (
               <p>Auto Start Break: DISABLED</p>
             )}
           </Col>
-          <Col className={classes.align_center}>
+          <Col sm={6} className={classes.align_center}>
             {autoPomo ? (
               <p>Auto Start Pomo: ENABLED</p>
             ) : (
