@@ -119,8 +119,10 @@ export const settingsSlice = createSlice({
       state.currenttime = 1;
       state.cycle = [1, 2, 1, 2, 1, 2, 1, 2, 3];
       state.counter = 0;
+      state.cyclecomplete = false;
     },
     counterIncrement: (state) => {
+      console.log("counterIncrement");
       if (Number(state.counter) <= 8) {
         state.counter += 1;
         if (Number(state.counter) === 8) {
@@ -133,8 +135,25 @@ export const settingsSlice = createSlice({
         state.counter -= 1;
       }
     },
-    setCycleComplete: (state, action) => {
-      state.cyclecomplete = action.payload;
+    setCycleComplete: (state) => {
+      console.log("setCycleComplete");
+      state.cyclecomplete = true;
+
+      //Increment counter automatically if autobreak is true
+      if ((state.autobreak = true)) {
+        console.log("Increment Counter...");
+
+        //set max counter increment = cycle state array overall length
+        if (Number(state.counter) <= 8) {
+          console.log("Counter: " + state.counter);
+          state.counter += 1;
+          if (Number(state.counter) === 9) {
+            console.log("Counter Reset: " + state.counter);
+            state.counter = 0;
+          }
+        }
+        state.timermode = state.cycle[state.counter];
+      }
     },
   },
 });

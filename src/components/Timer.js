@@ -85,9 +85,8 @@ const Timer = () => {
               </>
             )}
           </div>
-
-          {!cycleComplete && (
-            <div>
+          <div>
+            {!cycleComplete ? (
               <button
                 className={buttonStyle()}
                 onClick={() => {
@@ -96,8 +95,10 @@ const Timer = () => {
               >
                 {timeEnabled === false ? "START" : "STOP"}
               </button>
-            </div>
-          )}
+            ) : (
+              ""
+            )}
+          </div>
         </Container>
       </div>
       <Container>

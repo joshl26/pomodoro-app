@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { useCountdown } from "./useCountdown";
 import DateTimeDisplay from "./DateTimeDisplay";
 import classes from "./CountDownTimer.module.css";
@@ -16,6 +17,12 @@ import {
 import Button from "react-bootstrap/esm/Button";
 
 const ExpiredNotice = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setCycleComplete());
+  }, []);
+
   return (
     <Container>
       <div className={classes.expired_notice}>
@@ -71,17 +78,8 @@ const CountdownTimer = ({ targetDate, time }) => {
   const cycle = useSelector((state) => state.settings.cycle[counter]);
   const cycleComplete = useSelector((state) => state.settings.cyclecomplete);
 
-  const dispatch = useDispatch();
-
   if (days + hours + minutes + seconds <= 0) {
-    if (cycleComplete === false) {
-      dispatch(setCycleComplete(true));
-    }
-
-    if (autoBreak === true) {
-      dispatch(counterIncrement());
-      dispatch(timerMode(cycle));
-    } else return <ExpiredNotice />;
+    return <ExpiredNotice />;
   } else {
     return (
       <ShowCounter
