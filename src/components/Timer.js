@@ -17,6 +17,7 @@ const Timer = () => {
   const currentTime = useSelector((state) => state.settings.currenttime);
   const autoBreak = useSelector((state) => state.settings.autobreak);
   const counter = useSelector((state) => state.settings.counter);
+  const cycleComplete = useSelector((state) => state.settings.cyclecomplete);
 
   const dispatch = useDispatch();
 
@@ -84,16 +85,19 @@ const Timer = () => {
               </>
             )}
           </div>
-          <div>
-            <button
-              className={buttonStyle()}
-              onClick={() => {
-                dispatch(timerEnabled());
-              }}
-            >
-              {timeEnabled === false ? "START" : "STOP"}
-            </button>
-          </div>
+
+          {!cycleComplete && (
+            <div>
+              <button
+                className={buttonStyle()}
+                onClick={() => {
+                  dispatch(timerEnabled());
+                }}
+              >
+                {timeEnabled === false ? "START" : "STOP"}
+              </button>
+            </div>
+          )}
         </Container>
       </div>
       <Container>

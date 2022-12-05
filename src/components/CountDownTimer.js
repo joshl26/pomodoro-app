@@ -69,11 +69,14 @@ const CountdownTimer = ({ targetDate, time }) => {
   const autoBreak = useSelector((state) => state.settings.autobreak);
   const counter = useSelector((state) => state.settings.counter);
   const cycle = useSelector((state) => state.settings.cycle[counter]);
+  const cycleComplete = useSelector((state) => state.settings.cyclecomplete);
 
   const dispatch = useDispatch();
 
   if (days + hours + minutes + seconds <= 0) {
-    dispatch(setCycleComplete());
+    if (cycleComplete === false) {
+      dispatch(setCycleComplete(true));
+    }
 
     if (autoBreak === true) {
       dispatch(counterIncrement());

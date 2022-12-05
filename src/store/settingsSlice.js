@@ -3,14 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 export const settingsSlice = createSlice({
   name: "settings",
   initialState: {
-    pomodoro: 1,
-    short: 1,
-    long: 1,
+    pomodoro: 25,
+    short: 5,
+    long: 15,
     autobreak: false,
     autopomo: false,
     timermode: 1,
     timerenabled: false,
-    currenttime: 1,
+    currenttime: 25,
     cycle: [1, 2, 1, 2, 1, 2, 1, 2, 3],
     counter: 0,
     cyclecomplete: false,
@@ -109,14 +109,14 @@ export const settingsSlice = createSlice({
       }
     },
     setDefault: (state) => {
-      state.pomodoro = 25;
-      state.short = 5;
-      state.long = 15;
+      state.pomodoro = 1;
+      state.short = 1;
+      state.long = 1;
       state.autobreak = false;
       state.autopomo = false;
       state.timermode = 1;
       state.timerenabled = false;
-      state.currenttime = 25;
+      state.currenttime = 1;
       state.cycle = [1, 2, 1, 2, 1, 2, 1, 2, 3];
       state.counter = 0;
     },
