@@ -49,32 +49,9 @@ const Timer = () => {
       btnStyle = `${classes.action_btn3_active}`;
     }
 
-    // if (timeEnabled === false && Number(timeMode) === 2) {
-    //   btnStyle = `${classes.action_btn2}`;
-    // } else {
-    //   btnStyle = `${classes.action_btn2_active}`;
-    // }
-
-    // if (timeEnabled === false && Number(timeMode) === 3) {
-    //   btnStyle = `${classes.action_btn3}`;
-    // } else {
-    //   btnStyle = `${classes.action_btn3_active}`;
-    // }
 
     return btnStyle;
   }
-
-  // timeEnabled === false && Number(timeMode) === 1
-  //   ? `${classes.action_btn1}`
-  //   : `${classes.action_btn1_active}` &&
-  //     timeEnabled === false &&
-  //     Number(timeMode) === 2
-  //   ? `${classes.action_btn2}`
-  //   : `${classes.action_btn2_active}` &&
-  //     timeEnabled === false &&
-  //     Number(timeMode) === 3
-  //   ? `${classes.action_btn3}`
-  //   : `${classes.action_btn3_active}`;
 
   return (
     <div>
