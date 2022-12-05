@@ -1,7 +1,10 @@
 .btn_secondary {
-  opacity: 0.8;
+  margin-bottom: 15px;
+
+  opacity: 0.6;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
+  margin-bottom: 25px;
   vertical-align: middle;
   font-size: 1rem;
   background-color: rgba(0, 0, 0, 0.1);
@@ -11,6 +14,8 @@
 }
 
 .btn_background_pomodoro {
+  margin-bottom: 15px;
+
   padding-left: 1rem;
   padding-right: 1rem;
   padding-top: 0.5rem;
@@ -24,6 +29,8 @@
 }
 
 .btn_background_short {
+  margin-bottom: 15px;
+
   padding-left: 1rem;
   padding-right: 1rem;
   padding-top: 0.5rem;
@@ -37,6 +44,7 @@
 }
 
 .btn_background_long {
+  margin-bottom: 15px;
   padding-left: 1rem;
   padding-right: 1rem;
   padding-top: 0.5rem;

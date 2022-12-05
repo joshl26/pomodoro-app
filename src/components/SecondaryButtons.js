@@ -12,19 +12,22 @@ const SecondaryButtons = () => {
   const shortTime = useSelector((state) => state.settings.short);
   const longTime = useSelector((state) => state.settings.long);
   const timeMode = useSelector((state) => state.settings.timermode);
+  const autoBreak = useSelector((state) => state.settings.autobreak);
 
   const dispatch = useDispatch();
 
   function handleClick(props) {
-    dispatch(timerMode(Number(props.target.id)));
-    dispatch(setCurrentTime());
+    if (!autoBreak) {
+      dispatch(timerMode(Number(props.target.id)));
+      dispatch(setCurrentTime());
+    }
   }
 
   return (
     <div className={classes.container}>
       <Container>
         <Row>
-          <Col sm={3}>
+          <Col sm={4}>
             <button
               value={`${pomoTime}:00`}
               id={1}
@@ -39,10 +42,7 @@ const SecondaryButtons = () => {
               Pomodoro
             </button>
           </Col>
-          <Col>
-            <div className={classes.button_spacer}></div>
-          </Col>
-          <Col sm={3}>
+          <Col sm={4}>
             <button
               value={`${shortTime}:00`}
               id={2}
@@ -57,10 +57,7 @@ const SecondaryButtons = () => {
               Short Break
             </button>
           </Col>
-          <Col>
-            <div className={classes.button_spacer} />
-          </Col>
-          <Col sm={3}>
+          <Col sm={4}>
             <button
               value={`${longTime}:00`}
               id={3}

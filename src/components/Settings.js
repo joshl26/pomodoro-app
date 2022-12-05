@@ -10,6 +10,7 @@ import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import ToggleButton from "react-bootstrap/esm/ToggleButton";
 
 import { useSelector, useDispatch } from "react-redux";
+
 import {
   pomoIncrement,
   pomoDecrement,
@@ -20,6 +21,7 @@ import {
   autoBreak,
   setCurrentTime,
   setDefault,
+  autoBreakBoolean,
 } from "../store/settingsSlice";
 
 const Settings = () => {
@@ -155,35 +157,15 @@ const Settings = () => {
             variant="outline-secondary"
             checked={autoBreakBool}
             value="1"
-            onChange={() => dispatch(autoBreak())}
+            onClick={() => dispatch(autoBreakBoolean())}
           >
             {!autoBreakBool && "No"}
             {autoBreakBool && "Yes"}
           </ToggleButton>
         </ButtonGroup>
-        {/* <div className={classes.divider}></div>
-        <div className={classes.spacer}></div>
-        <h4 className={classes.card_text}>Auto start Pomodoros?</h4>
-        <ButtonGroup className="mb-2">
-          <ToggleButton
-            className="btn_break"
-            id="toggle-check2"
-            type="checkbox"
-            variant="outline-secondary"
-            checked={autoPomoBool}
-            value="1"
-            onChange={() => dispatch(autoPomo())}
-          >
-            {!autoPomoBool && "No"}
-            {autoPomoBool && "Yes"}
-          </ToggleButton>
-        </ButtonGroup> */}
-
         <div className={classes.spacer_small}></div>
-
         <div className={classes.divider}></div>
         <div className={classes.spacer}></div>
-
         <Row>
           <Col className={classes.align_center}>
             <Button

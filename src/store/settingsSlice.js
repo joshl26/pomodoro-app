@@ -3,20 +3,21 @@ import { createSlice } from "@reduxjs/toolkit";
 export const settingsSlice = createSlice({
   name: "settings",
   initialState: {
-    pomodoro: 25,
-    short: 5,
-    long: 15,
+    pomodoro: 1,
+    short: 1,
+    long: 1,
     autobreak: false,
     autopomo: false,
     timermode: 1,
     timerenabled: false,
-    currenttime: 25,
+    currenttime: 1,
     cycle: [1, 2, 1, 2, 1, 2, 1, 2, 3],
     counter: 0,
     cyclecomplete: false,
   },
   reducers: {
     pomoIncrement: (state) => {
+      console.log("Pomo increment...");
       //limit pomodoro state to 40 minutes (max)
       if (Number(state.pomodoro) >= 40) {
         state.pomodoro = 40;
@@ -25,6 +26,7 @@ export const settingsSlice = createSlice({
       }
     },
     pomoDecrement: (state) => {
+      console.log("Pomo decrement...");
       //limit pomodoro state to 20 minutes (min)
       if (Number(state.pomodoro) <= 1) {
         state.pomodoro = 1;
@@ -33,10 +35,13 @@ export const settingsSlice = createSlice({
       }
     },
     pomoIncrementByAmount: (state, action) => {
+      console.log("Pomo increment by amount...");
+
       state.pomodoro += action.payload;
     },
 
     shortIncrement: (state) => {
+      console.log("Short increment...");
       //limit short state to 10 minutes (max)
       if (Number(state.short) >= 10) {
         state.short = 10;
@@ -45,6 +50,7 @@ export const settingsSlice = createSlice({
       }
     },
     shortDecrement: (state) => {
+      console.log("Short decrement...");
       //limit short state to 5 minutes (min)
       if (Number(state.short) <= 1) {
         state.short = 1;
@@ -53,10 +59,12 @@ export const settingsSlice = createSlice({
       }
     },
     shortIncrementByAmount: (state, action) => {
+      console.log("Short increment by amount...");
       state.short += action.payload;
     },
 
     longIncrement: (state) => {
+      console.log("Long increment...");
       //limit long state to 25 minutes (max)
       if (Number(state.long) >= 30) {
         state.long = 30;
@@ -65,6 +73,7 @@ export const settingsSlice = createSlice({
       }
     },
     longDecrement: (state) => {
+      console.log("Long decrement...");
       //limit short state to 10 minutes (min)
       if (Number(state.long) <= 1) {
         state.long = 1;
@@ -73,24 +82,35 @@ export const settingsSlice = createSlice({
       }
     },
     longDecrementByAmount: (state, action) => {
+      console.log("Long decrement by amount...");
       state.long += action.payload;
     },
     autoPomo: (state) => {
+      console.log("Auto pomo state flip...");
       state.autopomo = !state.autopomo;
     },
-    autoBreak: (state) => {
+    autoBreakBoolean: (state) => {
+      console.log("Auto break state flip...");
       state.autobreak = !state.autobreak;
     },
+    autoBreak: (state, action) => {
+      console.log("Auto break state set...");
+      state.autobreak = action.payload;
+    },
     timerMode: (state, action) => {
+      console.log("Timer mode state set...");
       state.timermode = action.payload;
     },
     timerEnabled: (state) => {
+      console.log("Timer enabled state flip...");
       state.timerenabled = !state.timerenabled;
     },
     setTimerEnabled: (state, action) => {
+      console.log("Timer enabled state set...");
       state.timerenabled = action.payload;
     },
     setCurrentTime: (state) => {
+      console.log("Current time state set...");
       //Check timermode and set current time accordingly
       if (Number(state.timermode) > 3) {
         return;
@@ -109,6 +129,7 @@ export const settingsSlice = createSlice({
       }
     },
     setDefault: (state) => {
+      console.log("Reset to defaults...");
       state.pomodoro = 1;
       state.short = 1;
       state.long = 1;
@@ -122,7 +143,7 @@ export const settingsSlice = createSlice({
       state.cyclecomplete = false;
     },
     counterIncrement: (state) => {
-      console.log("counterIncrement");
+      console.log("Counter increment...");
       if (Number(state.counter) <= 8) {
         state.counter += 1;
         if (Number(state.counter) === 8) {
@@ -131,6 +152,7 @@ export const settingsSlice = createSlice({
       }
     },
     counterDecrement: (state) => {
+      console.log("Counter decrement...");
       if (Number(state.counter) > 0) {
         state.counter -= 1;
       }
@@ -140,7 +162,7 @@ export const settingsSlice = createSlice({
       state.cyclecomplete = true;
 
       //Increment counter automatically if autobreak is true
-      if ((state.autobreak = true)) {
+      if (state.autobreak === true) {
         console.log("Increment Counter...");
 
         //set max counter increment = cycle state array overall length
@@ -152,7 +174,15 @@ export const settingsSlice = createSlice({
             state.counter = 0;
           }
         }
-        state.timermode = state.cycle[state.counter];
+      } else {
+        state.timerenabled = false;
+      }
+      state.timermode = state.cycle[state.counter];
+    },
+    setCycleStart: (state) => {
+      if (state.cyclecomplete && !state.timerenabled) {
+        state.cyclecomplete = false;
+        state.timerenabled = true;
       }
     },
   },
@@ -171,6 +201,7 @@ export const {
   longDecrementByAmount,
   autoPomo,
   autoBreak,
+  autoBreakBoolean,
   timerMode,
   timerEnabled,
   setTimerEnabled,
@@ -178,6 +209,7 @@ export const {
   setDefault,
   counterIncrement,
   setCycleComplete,
+  setCycleStart,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

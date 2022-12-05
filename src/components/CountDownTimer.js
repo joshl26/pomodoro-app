@@ -11,6 +11,7 @@ import { Row, Col } from "react-bootstrap";
 import {
   counterIncrement,
   timerMode,
+  autoBreak,
   setCycleComplete,
 } from "../store/settingsSlice";
 
@@ -20,6 +21,7 @@ const ExpiredNotice = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log("countdown timer useEffect run");
     dispatch(setCycleComplete());
   }, []);
 
@@ -52,7 +54,6 @@ const ShowCounter = ({ days, hours, minutes, seconds, x }) => {
       <Progress percent={x} />
       <div className={classes.show_counter}>
         <a
-          href="/"
           target="_blank"
           rel="noopener noreferrer"
           className={classes.countdown_link}
