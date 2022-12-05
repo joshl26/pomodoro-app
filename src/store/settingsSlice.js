@@ -15,42 +15,60 @@ export const settingsSlice = createSlice({
   },
   reducers: {
     pomoIncrement: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.pomodoro += 1;
+      //limit pomodoro state to 40 minutes (max)
+      if (Number(state.pomodoro) >= 40) {
+        state.pomodoro = 40;
+      } else {
+        state.pomodoro += 1;
+      }
     },
     pomoDecrement: (state) => {
-      state.pomodoro -= 1;
+      //limit pomodoro state to 20 minutes (min)
+      if (Number(state.pomodoro) <= 20) {
+        state.pomodoro = 20;
+      } else {
+        state.pomodoro -= 1;
+      }
     },
     pomoIncrementByAmount: (state, action) => {
       state.pomodoro += action.payload;
     },
 
     shortIncrement: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.short += 1;
+      //limit short state to 10 minutes (max)
+      if (Number(state.short) >= 10) {
+        state.short = 10;
+      } else {
+        state.short += 1;
+      }
     },
     shortDecrement: (state) => {
-      state.short -= 1;
+      //limit short state to 5 minutes (min)
+      if (Number(state.short) <= 5) {
+        state.short = 5;
+      } else {
+        state.short -= 1;
+      }
     },
     shortIncrementByAmount: (state, action) => {
       state.short += action.payload;
     },
 
     longIncrement: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.long += 1;
+      //limit long state to 25 minutes (max)
+      if (Number(state.long) >= 30) {
+        state.long = 30;
+      } else {
+        state.long += 1;
+      }
     },
     longDecrement: (state) => {
-      state.long -= 1;
+      //limit short state to 10 minutes (min)
+      if (Number(state.long) <= 10) {
+        state.long = 10;
+      } else {
+        state.long -= 1;
+      }
     },
     longDecrementByAmount: (state, action) => {
       state.long += action.payload;
@@ -74,7 +92,6 @@ export const settingsSlice = createSlice({
       state.timerenabled = !state.timerenabled;
     },
     setCurrentTime: (state) => {
-      // console.log("timer mode: " + state.timermode);
       //Check timermode and set current time accordingly
       if (Number(state.timermode) > 3) {
         return;
@@ -84,15 +101,12 @@ export const settingsSlice = createSlice({
       }
       if (Number(state.timermode) === 1) {
         state.currenttime = state.pomodoro;
-        // console.log(state.currenttime);
       }
       if (Number(state.timermode) === 2) {
         state.currenttime = state.short;
-        // console.log(state.currenttime);
       }
       if (Number(state.timermode) === 3) {
         state.currenttime = state.long;
-        // console.log(state.currenttime);
       }
     },
   },

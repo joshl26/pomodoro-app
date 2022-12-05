@@ -39,6 +39,8 @@ function App() {
           </Route>
         </Switch>
       </div>
+      <div className={classes.spacer_small} />
+
       <Footer />
     </div>
   );

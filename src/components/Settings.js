@@ -45,10 +45,14 @@ const Settings = () => {
               }}
               to="/pomodor"
             >
-              CLOSE
+              <Button variant="outline-secondary" className={classes.btn_save}>
+                Save
+              </Button>
             </Link>
           </Col>
         </Row>
+        <div className={classes.spacer_small}></div>
+
         <div className={classes.divider}></div>
         <div className={classes.spacer_small}></div>
         <h4 className={classes.card_text}>Time (minutes)</h4>
@@ -147,10 +151,11 @@ const Settings = () => {
         <h4 className={classes.card_text}>Auto start Breaks?</h4>
         <ButtonGroup className="mb-2">
           <ToggleButton
+            className="btn_break"
             id="toggle-check"
             type="checkbox"
             variant="outline-secondary"
-            checked={autoBreak}
+            checked={autoBreakBool}
             value="1"
             onChange={() => dispatch(autoBreak())}
           >
@@ -163,10 +168,11 @@ const Settings = () => {
         <h4 className={classes.card_text}>Auto start Pomodoros?</h4>
         <ButtonGroup className="mb-2">
           <ToggleButton
+            className="btn_break"
             id="toggle-check2"
             type="checkbox"
             variant="outline-secondary"
-            checked={autoPomo}
+            checked={autoPomoBool}
             value="1"
             onChange={() => dispatch(autoPomo())}
           >
@@ -175,19 +181,17 @@ const Settings = () => {
           </ToggleButton>
         </ButtonGroup>
 
-        <div className={classes.divider}></div>
-        <div className={classes.spacer}></div>
-        <h4 className={classes.card_text}>Long Break interval?</h4>
         <div className={classes.spacer_small}></div>
 
         <div className={classes.divider}></div>
         <div className={classes.spacer}></div>
 
         <Row>
-          <Col className={classes.align_right}>
-            <Button variant="outline-secondary" className={classes.btn_save}>
-              Save
-            </Button>
+          <Col className={classes.align_center}>
+            
+              <Button variant="outline-secondary" className="btn_save">
+                Defaults
+              </Button>
           </Col>
         </Row>
       </div>

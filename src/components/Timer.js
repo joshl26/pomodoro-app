@@ -22,18 +22,59 @@ const Timer = () => {
 
   const dateTimeAfterThreeDays = NOW_IN_MS + totalTimeMS;
 
-  const buttonStyle =
-    timeEnabled === false && timeMode === 1
-      ? `${classes.action_btn1}`
-      : `${classes.action_btn1_active}` &&
-        timeEnabled === false &&
-        timeMode === 2
-      ? `${classes.action_btn2}`
-      : `${classes.action_btn2_active}` &&
-        timeEnabled === false &&
-        timeMode === 3
-      ? `${classes.action_btn3}`
-      : `${classes.action_btn3_active}`;
+  function buttonStyle() {
+    let btnStyle = `${classes.action_btn1}`;
+
+    if (timeEnabled === false && Number(timeMode) === 1) {
+      btnStyle = `${classes.action_btn1}`;
+    }
+
+    if (timeEnabled === true && Number(timeMode) === 1) {
+      btnStyle = `${classes.action_btn1_active}`;
+    }
+
+    if (timeEnabled === false && Number(timeMode) === 2) {
+      btnStyle = `${classes.action_btn2}`;
+    }
+
+    if (timeEnabled === true && Number(timeMode) === 2) {
+      btnStyle = `${classes.action_btn2_active}`;
+    }
+
+    if (timeEnabled === false && Number(timeMode) === 3) {
+      btnStyle = `${classes.action_btn3}`;
+    }
+
+    if (timeEnabled === true && Number(timeMode) === 3) {
+      btnStyle = `${classes.action_btn3_active}`;
+    }
+
+    // if (timeEnabled === false && Number(timeMode) === 2) {
+    //   btnStyle = `${classes.action_btn2}`;
+    // } else {
+    //   btnStyle = `${classes.action_btn2_active}`;
+    // }
+
+    // if (timeEnabled === false && Number(timeMode) === 3) {
+    //   btnStyle = `${classes.action_btn3}`;
+    // } else {
+    //   btnStyle = `${classes.action_btn3_active}`;
+    // }
+
+    return btnStyle;
+  }
+
+  // timeEnabled === false && Number(timeMode) === 1
+  //   ? `${classes.action_btn1}`
+  //   : `${classes.action_btn1_active}` &&
+  //     timeEnabled === false &&
+  //     Number(timeMode) === 2
+  //   ? `${classes.action_btn2}`
+  //   : `${classes.action_btn2_active}` &&
+  //     timeEnabled === false &&
+  //     Number(timeMode) === 3
+  //   ? `${classes.action_btn3}`
+  //   : `${classes.action_btn3_active}`;
 
   return (
     <div>
@@ -56,7 +97,7 @@ const Timer = () => {
           </div>
           <div>
             <button
-              className={buttonStyle}
+              className={buttonStyle()}
               onClick={() => {
                 dispatch(timerEnabled());
               }}

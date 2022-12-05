@@ -6,7 +6,7 @@
 
 .card {
   margin: 0 auto;
-  width: 75vw;
+  /* width: 75vw; */
   background-color: white;
   border-radius: 10px;
   padding: 10px;
@@ -14,7 +14,7 @@
 
 .card_text {
   text-align: left;
-  padding: 0px 5px 0px 5px;
+  /* padding: 0px 5px 0px 5px; */
   color: grey;
 }
 
