@@ -17,17 +17,18 @@ import {
 import Button from "react-bootstrap/esm/Button";
 
 const ExpiredNotice = () => {
-  const autoBreak = useSelector((state) => state.settings.autobreak);
+  // const counter = useSelector((state) => state.settings.counter);
+
+  // const autoBreak = useSelector((state) => state.settings.autobreak);
+  // const cycle = useSelector((state) => state.settings.cycle[counter]);
+  // const cycleComplete = useSelector((state) => state.settings.cyclecomplete);
 
   const dispatch = useDispatch();
 
-  console.log("countdown timer");
-
-  if (autoBreak === true) {
-        dispatch(setTimerEnabled(true));
-      } else {
-        dispatch(setTimerEnabled(false));
-      }
+  // useEffect(() => {
+  //   dispatch(setCycle(true));
+  //   dispatch(setTimerEnabled(false));
+  // }, []);
 
   return (
     <Container>
@@ -87,23 +88,10 @@ const ShowCounter = ({ days, hours, minutes, seconds, x }) => {
 const CountdownTimer = ({ targetDate, time }) => {
   const [days, hours, minutes, seconds, x] = useCountdown(targetDate, time);
 
-  const autoBreak = useSelector((state) => state.settings.autobreak);
-  const counter = useSelector((state) => state.settings.counter);
-  const cycle = useSelector((state) => state.settings.cycle[counter]);
-  const cycleComplete = useSelector((state) => state.settings.cyclecomplete);
-
   if (days + hours + minutes + seconds <= 0) {
     return <ExpiredNotice />;
   } else {
-    return (
-      <ShowCounter
-        days={days}
-        hours={hours}
-        minutes={minutes}
-        seconds={seconds}
-        x={x}
-      />
-    );
+    return <ShowCounter minutes={minutes} seconds={seconds} x={x} />;
   }
 };
 
