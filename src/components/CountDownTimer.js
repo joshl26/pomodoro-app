@@ -9,9 +9,7 @@ import Container from "react-bootstrap/esm/Container";
 import { Row, Col } from "react-bootstrap";
 
 import {
-  setCycle,
   setTimerEnabled,
-  timerEnabled,
   timerMode,
   counterIncrement,
 } from "../store/settingsSlice";
@@ -40,7 +38,7 @@ const ExpiredNotice = () => {
     }
 
     console.log("Use effect");
-  }, []);
+  });
 
   return (
     <Container>
@@ -75,11 +73,7 @@ const ShowCounter = ({ days, hours, minutes, seconds, x }) => {
       <div className={classes.spacer} />
       <Progress percent={x} />
       <div className={classes.show_counter}>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          className={classes.countdown_link}
-        >
+        <div className={classes.countdown_link}>
           <DateTimeDisplay
             value={paddedMinutes()}
             type={"Mins"}
@@ -91,7 +85,7 @@ const ShowCounter = ({ days, hours, minutes, seconds, x }) => {
             type={"Seconds"}
             isDanger={false}
           />
-        </a>
+        </div>
       </div>
     </div>
   );
