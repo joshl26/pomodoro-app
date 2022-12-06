@@ -17,16 +17,23 @@ import {
 import Button from "react-bootstrap/esm/Button";
 
 const ExpiredNotice = () => {
-  // const counter = useSelector((state) => state.settings.counter);
-  // const autoBreak = useSelector((state) => state.settings.autobreak);
-  // const cycle = useSelector((state) => state.settings.cycle[counter]);
+  const counter = useSelector((state) => state.settings.counter);
+  const autoBreak = useSelector((state) => state.settings.autobreak);
+  const cycle = useSelector((state) => state.settings.cycle[counter]);
   // const cycleComplete = useSelector((state) => state.settings.cyclecomplete);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setCycle(true));
-    // dispatch(setTimerEnabled(false));
+    if (autoBreak === false) {
+      dispatch(setTimerEnabled(false));
+    }
+
+    if (autoBreak === true) {
+      dispatch(setCycle(true));
+      dispatch(setTimerEnabled(true));
+    }
+
     console.log("Use effect");
   }, [dispatch]);
 
