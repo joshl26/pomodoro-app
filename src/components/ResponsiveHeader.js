@@ -44,7 +44,6 @@ const ResponsiveHeader = () => {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto"></Nav>
             <Nav>
-              <Nav.Link>
                 <Link to="/pomodor/report">
                   <button className={classes.button}>
                     <span className={classes.chart_icon}>
@@ -57,8 +56,6 @@ const ResponsiveHeader = () => {
                   </button>
                 </Link>
                 <h4>Report</h4>
-              </Nav.Link>
-              <Nav.Link>
                 <Link to="/pomodor/settings">
                   <button className={classes.button}>
                     <span className={classes.chart_icon}>
@@ -71,8 +68,6 @@ const ResponsiveHeader = () => {
                   </button>
                 </Link>
                 <h4>Settings</h4>
-              </Nav.Link>
-              <Nav.Link>
                 <Link to="/pomodor/login">
                   <button className={classes.button}>
                     <span className={classes.chart_icon}>
@@ -85,7 +80,6 @@ const ResponsiveHeader = () => {
                   </button>
                 </Link>
                 <h4>Login</h4>
-              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
