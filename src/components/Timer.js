@@ -86,7 +86,7 @@ const Timer = () => {
             )}
           </div>
           <div>
-            {!cycleComplete ? (
+            {cycleComplete === false ? (
               <button
                 className={buttonStyle()}
                 onClick={() => {

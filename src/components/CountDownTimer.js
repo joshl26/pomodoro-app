@@ -9,21 +9,25 @@ import Container from "react-bootstrap/esm/Container";
 import { Row, Col } from "react-bootstrap";
 
 import {
-  counterIncrement,
-  timerMode,
-  autoBreak,
-  setCycleComplete,
+  setCycle,
+  setTimerEnabled,
+  timerEnabled,
 } from "../store/settingsSlice";
 
 import Button from "react-bootstrap/esm/Button";
 
 const ExpiredNotice = () => {
+  const autoBreak = useSelector((state) => state.settings.autobreak);
+
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log("countdown timer useEffect run");
-    dispatch(setCycleComplete());
-  }, []);
+  console.log("countdown timer");
+
+  if (autoBreak === true) {
+        dispatch(setTimerEnabled(true));
+      } else {
+        dispatch(setTimerEnabled(false));
+      }
 
   return (
     <Container>
@@ -47,6 +51,11 @@ const ShowCounter = ({ days, hours, minutes, seconds, x }) => {
       return `0${seconds}`;
     } else return seconds;
   }
+  function paddedMinutes() {
+    if (minutes < 10) {
+      return `0${minutes}`;
+    } else return minutes;
+  }
 
   return (
     <div>
@@ -58,7 +67,11 @@ const ShowCounter = ({ days, hours, minutes, seconds, x }) => {
           rel="noopener noreferrer"
           className={classes.countdown_link}
         >
-          <DateTimeDisplay value={minutes} type={"Mins"} isDanger={false} />
+          <DateTimeDisplay
+            value={paddedMinutes()}
+            type={"Mins"}
+            isDanger={false}
+          />
           <p>:</p>
           <DateTimeDisplay
             value={paddedSeconds()}

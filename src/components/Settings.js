@@ -18,10 +18,12 @@ import {
   shortDecrement,
   longIncrement,
   longDecrement,
-  autoBreak,
   setCurrentTime,
   setDefault,
   autoBreakBoolean,
+  setCounter,
+  timerMode,
+  setTimerEnabled,
 } from "../store/settingsSlice";
 
 const Settings = () => {
@@ -31,6 +33,16 @@ const Settings = () => {
   const autoBreakBool = useSelector((state) => state.settings.autobreak);
   const dispatch = useDispatch();
 
+  const saveClickHandler = () => {
+    dispatch(setCurrentTime());
+    dispatch(setCounter(0));
+    dispatch(setTimerEnabled(false));
+
+    if (autoBreakBool === true) {
+      dispatch(timerMode(1));
+    }
+  };
+
   return (
     <Container className={classes.container}>
       <div className={classes.card}>
@@ -39,12 +51,7 @@ const Settings = () => {
             <h4 className={classes.card_text}>SETTINGS</h4>
           </Col>
           <Col className={classes.align_right}>
-            <Link
-              onClick={() => {
-                dispatch(setCurrentTime());
-              }}
-              to="/pomodor"
-            >
+            <Link onClick={saveClickHandler} to="/pomodor">
               <Button variant="outline-secondary" className={classes.btn_save}>
                 Save
               </Button>

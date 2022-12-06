@@ -13,11 +13,12 @@ const SecondaryButtons = () => {
   const longTime = useSelector((state) => state.settings.long);
   const timeMode = useSelector((state) => state.settings.timermode);
   const autoBreak = useSelector((state) => state.settings.autobreak);
+  const timerEnabled = useSelector((state) => state.settings.timerenabled);
 
   const dispatch = useDispatch();
 
   function handleClick(props) {
-    if (!autoBreak) {
+    if (autoBreak === false) {
       dispatch(timerMode(Number(props.target.id)));
       dispatch(setCurrentTime());
     }

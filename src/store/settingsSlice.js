@@ -35,7 +35,7 @@ export const settingsSlice = createSlice({
       }
     },
     pomoIncrementByAmount: (state, action) => {
-      console.log("Pomo increment by amount...");
+      console.log("Pomo increment by amount: " + action.payload);
 
       state.pomodoro += action.payload;
     },
@@ -59,7 +59,7 @@ export const settingsSlice = createSlice({
       }
     },
     shortIncrementByAmount: (state, action) => {
-      console.log("Short increment by amount...");
+      console.log("Short increment by amount: " + action.payload);
       state.short += action.payload;
     },
 
@@ -82,7 +82,7 @@ export const settingsSlice = createSlice({
       }
     },
     longDecrementByAmount: (state, action) => {
-      console.log("Long decrement by amount...");
+      console.log("Long decrement by amount: " + action.payload);
       state.long += action.payload;
     },
     autoPomo: (state) => {
@@ -94,11 +94,11 @@ export const settingsSlice = createSlice({
       state.autobreak = !state.autobreak;
     },
     autoBreak: (state, action) => {
-      console.log("Auto break state set...");
+      console.log("Auto break state set: " + action.payload);
       state.autobreak = action.payload;
     },
     timerMode: (state, action) => {
-      console.log("Timer mode state set...");
+      console.log("Timer mode state set: " + action.payload);
       state.timermode = action.payload;
     },
     timerEnabled: (state) => {
@@ -106,7 +106,7 @@ export const settingsSlice = createSlice({
       state.timerenabled = !state.timerenabled;
     },
     setTimerEnabled: (state, action) => {
-      console.log("Timer enabled state set...");
+      console.log("Timer enabled state set: " + action.payload);
       state.timerenabled = action.payload;
     },
     setCurrentTime: (state) => {
@@ -157,6 +157,10 @@ export const settingsSlice = createSlice({
         state.counter -= 1;
       }
     },
+    setCounter: (state, action) => {
+      console.log("Set Counter: " + action.payload);
+      state.counter = action.payload;
+    },
     setCycleComplete: (state) => {
       console.log("setCycleComplete");
       state.cyclecomplete = true;
@@ -185,6 +189,11 @@ export const settingsSlice = createSlice({
         state.timerenabled = true;
       }
     },
+    setCycle: (state, action) => {
+      console.log("Set Cycle Complete: " + action.payload);
+
+      state.cyclecomplete = action.payload;
+    },
   },
 });
 
@@ -208,8 +217,11 @@ export const {
   setCurrentTime,
   setDefault,
   counterIncrement,
+  counterDecrement,
+  setCounter,
   setCycleComplete,
   setCycleStart,
+  setCycle,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;
