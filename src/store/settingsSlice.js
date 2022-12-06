@@ -144,11 +144,20 @@ export const settingsSlice = createSlice({
     },
     counterIncrement: (state) => {
       console.log("Counter increment...");
-      if (Number(state.counter) <= 8) {
+
+      if (Number(state.counter) < 0) {
+        return;
+      }
+
+      if (Number(state.counter) <= 7) {
         state.counter += 1;
-        if (Number(state.counter) === 8) {
-          state.counter = 0;
-        }
+        return;
+      }
+      if (Number(state.counter) === 8) {
+        state.counter = 0;
+        return;
+      } else {
+        return;
       }
     },
     counterDecrement: (state) => {

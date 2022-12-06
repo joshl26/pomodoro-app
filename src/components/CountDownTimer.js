@@ -12,6 +12,8 @@ import {
   setCycle,
   setTimerEnabled,
   timerEnabled,
+  timerMode,
+  counterIncrement,
 } from "../store/settingsSlice";
 
 import Button from "react-bootstrap/esm/Button";
@@ -27,15 +29,18 @@ const ExpiredNotice = () => {
   useEffect(() => {
     if (autoBreak === false) {
       dispatch(setTimerEnabled(false));
+      // dispatch(setCycle(true));
     }
 
     if (autoBreak === true) {
-      dispatch(setCycle(true));
+      dispatch(setTimerEnabled(false));
+      dispatch(counterIncrement());
+      dispatch(timerMode(cycle));
       dispatch(setTimerEnabled(true));
     }
 
     console.log("Use effect");
-  }, [dispatch]);
+  }, []);
 
   return (
     <Container>
