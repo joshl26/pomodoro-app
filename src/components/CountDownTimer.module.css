@@ -61,3 +61,7 @@
 .spacer {
   height: 25px;
 }
+
+.spacer_large {
+  height: 50px;
+}

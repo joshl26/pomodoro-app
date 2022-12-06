@@ -38,20 +38,14 @@ const ExpiredNotice = () => {
     }
 
     console.log("Use effect");
-  });
+  }, []);
 
   return (
     <Container>
-      <div className={classes.expired_notice}>
-        <Row>
-          <Col>
-            <Button>RESET</Button>
-          </Col>
-          <Col>
-            <Button>CONTINUE</Button>
-          </Col>
-        </Row>
-      </div>
+      <Row>
+        <h1>Loading Next Round...</h1>
+        <div className={classes.spacer_large} />
+      </Row>
     </Container>
   );
 };

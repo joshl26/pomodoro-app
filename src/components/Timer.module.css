@@ -188,3 +188,12 @@
 .align_center {
   text-align: center;
 }
+
+.autobreak_btn:hover {
+  outline: solid white 2px !important;
+  border-radius: 5px !important;
+}
+
+.autobreak_btn {
+  background-color: transparent;
+}

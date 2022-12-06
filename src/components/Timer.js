@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 
-import { timerEnabled } from "../store/settingsSlice";
+import { timerEnabled, autoBreakBoolean } from "../store/settingsSlice";
 
 import classes from "./Timer.module.css";
 import SecondaryButtons from "./SecondaryButtons";
@@ -105,9 +105,19 @@ const Timer = () => {
         <Row>
           <Col sm={12} className={classes.align_center}>
             {autoBreak ? (
-              <p>Auto Start Breaks: ENABLED</p>
+              <p>
+                <button onClick={() => {dispatch(autoBreakBoolean())}} className={classes.autobreak_btn}>
+                  Auto Start Breaks:
+                </button>{" "}
+                ENABLED
+              </p>
             ) : (
-              <p>Auto Start Breaks: DISABLED</p>
+              <p>
+                <button onClick={() => {dispatch(autoBreakBoolean())}} className={classes.autobreak_btn}>
+                  Auto Start Breaks:
+                </button>{" "}
+                DISABLED
+              </p>
             )}
           </Col>
         </Row>
