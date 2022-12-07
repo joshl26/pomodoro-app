@@ -31,10 +31,10 @@ const Settings = () => {
   const shortCount = useSelector((state) => state.settings.short);
   const longCount = useSelector((state) => state.settings.long);
   const autoBreakBool = useSelector((state) => state.settings.autobreak);
+
   const dispatch = useDispatch();
 
   const saveClickHandler = () => {
-    dispatch(setCurrentTime());
     dispatch(setTimerEnabled(false));
 
     if (autoBreakBool === true) {
@@ -79,7 +79,10 @@ const Settings = () => {
               <Col className={classes.padding_right}>
                 <Row>
                   <Button
-                    onClick={() => dispatch(pomoIncrement())}
+                    onClick={() => {
+                      dispatch(pomoIncrement());
+                      dispatch(setCurrentTime());
+                    }}
                     variant="custom"
                   >
                     <h4 className={classes.text_increment}>+</h4>
@@ -107,7 +110,10 @@ const Settings = () => {
               <Col className={classes.padding_right}>
                 <Row>
                   <Button
-                    onClick={() => dispatch(shortIncrement())}
+                    onClick={() => {
+                      dispatch(shortIncrement());
+                      dispatch(setCurrentTime());
+                    }}
                     variant="custom"
                   >
                     <h4 className={classes.text_increment}>+</h4>
@@ -115,7 +121,10 @@ const Settings = () => {
                 </Row>
                 <Row>
                   <Button
-                    onClick={() => dispatch(shortDecrement())}
+                    onClick={() => {
+                      dispatch(shortDecrement());
+                      dispatch(setCurrentTime());
+                    }}
                     variant="custom"
                   >
                     <h4 className={classes.text_increment}>-</h4>
@@ -135,7 +144,10 @@ const Settings = () => {
               <Col className={classes.padding_right}>
                 <Row>
                   <Button
-                    onClick={() => dispatch(longIncrement())}
+                    onClick={() => {
+                      dispatch(longIncrement());
+                      dispatch(setCurrentTime());
+                    }}
                     variant="custom"
                   >
                     <h4 className={classes.text_increment}>+</h4>
@@ -143,7 +155,10 @@ const Settings = () => {
                 </Row>
                 <Row>
                   <Button
-                    onClick={() => dispatch(longDecrement())}
+                    onClick={() => {
+                      dispatch(longDecrement());
+                      dispatch(setCurrentTime());
+                    }}
                     value="negative"
                     variant="custom"
                   >

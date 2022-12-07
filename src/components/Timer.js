@@ -5,6 +5,7 @@ import {
   setCounter,
   autoBreak,
   timerMode,
+  setCurrentTime,
 } from "../store/settingsSlice";
 
 import classes from "./Timer.module.css";
@@ -129,6 +130,7 @@ const Timer = () => {
                     dispatch(autoBreak(true));
                     dispatch(setCounter(1));
                     dispatch(timerMode(1));
+                    dispatch(setCurrentTime(pomoTime));
                   }}
                   className={classes.autobreak_btn}
                 >

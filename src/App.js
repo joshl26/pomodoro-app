@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import Settings from "./components/Settings";
 import Report from "./components/Report";
 import Login from "./components/Login";
+import Help from "./components/Help";
 
 function App() {
   const timerMode = useSelector((state) => state.settings.timermode);
@@ -36,6 +37,9 @@ function App() {
           </Route>
           <Route path="/pomodor/login">
             <Login />
+          </Route>
+          <Route path="/pomodor/help">
+            <Help />
           </Route>
         </Switch>
       </div>

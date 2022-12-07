@@ -25,7 +25,6 @@ const ExpiredNotice = () => {
   useEffect(() => {
     if (autoBreak === false) {
       dispatch(setTimerEnabled(false));
-
       // dispatch(setCycle(true));
     }
 

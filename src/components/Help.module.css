@@ -1,0 +1,18 @@
+.howto_image {
+  width: 100%;
+}
+
+.align_center {
+  text-align: center;
+  background-color: white;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.textalign_center {
+  text-align: center;
+}
+
+.spacer {
+  height: 8vh;
+}
