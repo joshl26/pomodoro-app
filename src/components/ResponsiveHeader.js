@@ -92,7 +92,7 @@ const ResponsiveHeader = () => {
                 className={classes.logo_image}
                 src={logoImage}
               />
-              <h1 className={classes.logo_text}>Pomodoro Timer</h1>
+              <h1 className={classes.logo_text}>PomoBreak</h1>
             </div>
           </Link>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />

@@ -1,6 +1,6 @@
 .btn-custom:hover {
-  background-color: rgb(157, 157, 157) !important;
-  color: rgb(255, 255, 255) !important;
+  background-color: rgb(255, 255, 255) !important;
+  color: rgb(0, 0, 0) !important;
 }
 
 .btn-custom {
@@ -8,7 +8,8 @@
   padding: 0 !important;
   width: 40px !important;
   height: 20px !important;
-  background-color: rgb(255, 255, 255) !important;
+  border: 1px solid white !important;
+  color: white !important;
 }
 
 .btn_save {
@@ -16,6 +17,6 @@
 }
 
 .btn_break:hover {
-  background-color: rgb(157, 157, 157) !important;
-  color: rgb(255, 255, 255) !important;
+  background-color: rgb(255, 255, 255) !important;
+  color: rgb(0, 0, 0) !important;
 }

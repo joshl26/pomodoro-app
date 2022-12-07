@@ -21,6 +21,7 @@ import {
   setCurrentTime,
   setDefault,
   autoBreakBoolean,
+  autoBreak,
   setCounter,
   timerMode,
   setTimerEnabled,
@@ -39,9 +40,11 @@ const Settings = () => {
 
     if (autoBreakBool === true) {
       dispatch(timerMode(1));
-      dispatch(setCounter(1));
-    } else {
       dispatch(setCounter(0));
+      dispatch(autoBreak(false));
+    } else {
+      dispatch(setCounter(1));
+      dispatch(autoBreak(true));
     }
   };
 
@@ -53,12 +56,9 @@ const Settings = () => {
             <h4 className={classes.card_text}>SETTINGS</h4>
           </Col>
           <Col className={classes.align_right}>
-            <Link
-              onClick={saveClickHandler}
-              to="/pomodor/"
-            >
+            <Link to="/pomodor/">
               <Button variant="outline-light" className={classes.btn_save}>
-                Save
+                Back
               </Button>
             </Link>
           </Col>
@@ -166,7 +166,7 @@ const Settings = () => {
             variant="outline-light"
             checked={autoBreakBool}
             value="1"
-            onClick={() => dispatch(autoBreakBoolean())}
+            onClick={saveClickHandler}
           >
             {!autoBreakBool && "No"}
             {autoBreakBool && "Yes"}
@@ -184,7 +184,7 @@ const Settings = () => {
               variant="outline-light"
               className="btn_save"
             >
-              Defaults
+              Restore Defaults
             </Button>
           </Col>
         </Row>

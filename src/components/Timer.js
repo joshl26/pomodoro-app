@@ -4,6 +4,7 @@ import {
   timerEnabled,
   setCounter,
   autoBreak,
+  timerMode,
 } from "../store/settingsSlice";
 
 import classes from "./Timer.module.css";
@@ -127,6 +128,7 @@ const Timer = () => {
                   onClick={() => {
                     dispatch(autoBreak(true));
                     dispatch(setCounter(1));
+                    dispatch(timerMode(1));
                   }}
                   className={classes.autobreak_btn}
                 >

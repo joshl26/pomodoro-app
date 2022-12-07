@@ -12,7 +12,7 @@ import {
   setTimerEnabled,
   timerMode,
   counterIncrement,
-  setCycle,
+  setCounter,
 } from "../store/settingsSlice";
 
 const ExpiredNotice = () => {
@@ -35,10 +35,13 @@ const ExpiredNotice = () => {
         dispatch(counterIncrement());
         dispatch(timerMode(cycle));
         dispatch(setTimerEnabled(true));
-      } else {
+      }
+
+      if (counter > 8) {
         dispatch(setTimerEnabled(false));
-        dispatch(setCycle(1));
-        dispatch(timerMode(cycle));
+        // dispatch(setCycle());
+        dispatch(setCounter(1));
+        dispatch(timerMode(1));
         dispatch(setTimerEnabled(true));
       }
     }
