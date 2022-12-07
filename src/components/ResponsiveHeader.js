@@ -1,8 +1,8 @@
 // import classes from "./Header.module.css";
 import logoImage from "../assets/tomato.svg";
-import chartIcon from "../assets/bar-chart.svg";
-import settingsIcon from "../assets/settings.svg";
-import loginIcon from "../assets/login.svg";
+// import chartIcon from "../assets/bar-chart.svg";
+// import settingsIcon from "../assets/settings.svg";
+// import loginIcon from "../assets/login.svg";
 
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -85,38 +85,42 @@ const ResponsiveHeader = () => {
         variant="dark"
       > */}
         <Container>
-          <Link className={classes.link} to="/pomodor">
+          <Link className={classes.link} to="/pomodor/">
             <div className={classes.align_left}>
               <img
                 alt="Pomofocus App Icon"
                 className={classes.logo_image}
                 src={logoImage}
               />
-              <h1 className={classes.logo_text}>Pomo Focus</h1>
+              <h1 className={classes.logo_text}>Pomodoro Timer</h1>
             </div>
           </Link>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto"></Nav>
-            <Nav>
+            <Nav defaultActiveKey="/pomodor/">
               <Nav.Link as={Link} eventKey="/pomodor/" to="/pomodor/">
                 Home
               </Nav.Link>
 
-              <Nav.Link as={Link} eventKey="/pomodor/login" to="/pomodor/login">
+              <Nav.Link
+                as={Link}
+                eventKey="/pomodor/login/"
+                to="/pomodor/login/"
+              >
                 Login
               </Nav.Link>
               <Nav.Link
                 as={Link}
-                eventKey="/pomodor/report"
-                to="/pomodor/report"
+                eventKey="/pomodor/report/"
+                to="/pomodor/report/"
               >
                 Charts
               </Nav.Link>
               <Nav.Link
                 as={Link}
-                eventKey="/pomodor/settings"
-                to="/pomodor/settings"
+                eventKey="/pomodor/settings/"
+                to="/pomodor/settings/"
               >
                 Settings
               </Nav.Link>

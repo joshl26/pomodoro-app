@@ -12,6 +12,7 @@ const Login = () => {
       <br />
       <br />
       <br />
+      <br />
 
       <Row>
         <h1>Feature to be completed...</h1>

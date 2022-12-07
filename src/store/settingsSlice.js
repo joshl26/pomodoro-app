@@ -12,7 +12,7 @@ export const settingsSlice = createSlice({
     timerenabled: false,
     currenttime: 1,
     cycle: [1, 2, 1, 2, 1, 2, 1, 2, 3],
-    counter: 1,
+    counter: 0,
     cyclecomplete: false,
   },
   reducers: {
@@ -139,7 +139,7 @@ export const settingsSlice = createSlice({
       state.timerenabled = false;
       state.currenttime = 1;
       state.cycle = [1, 2, 1, 2, 1, 2, 1, 2, 3];
-      state.counter = 1;
+      state.counter = 0;
       state.cyclecomplete = false;
     },
     counterIncrement: (state) => {

@@ -35,7 +35,6 @@ const Settings = () => {
 
   const saveClickHandler = () => {
     dispatch(setCurrentTime());
-    dispatch(setCounter(0));
     dispatch(setTimerEnabled(false));
 
     if (autoBreakBool === true) {
@@ -51,7 +50,11 @@ const Settings = () => {
             <h4 className={classes.card_text}>SETTINGS</h4>
           </Col>
           <Col className={classes.align_right}>
-            <Link onClick={saveClickHandler} to="/pomodor">
+            <Link
+              onClick={saveClickHandler}
+              to="/pomodor/"
+              eventKey="/pomodor/"
+            >
               <Button variant="outline-light" className={classes.btn_save}>
                 Save
               </Button>

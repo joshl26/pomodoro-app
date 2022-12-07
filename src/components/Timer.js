@@ -1,12 +1,18 @@
 import { useSelector, useDispatch } from "react-redux";
 
-import { timerEnabled, autoBreakBoolean } from "../store/settingsSlice";
+import {
+  timerEnabled,
+  autoBreakBoolean,
+  setCounter,
+  autoBreak,
+} from "../store/settingsSlice";
 
 import classes from "./Timer.module.css";
 import SecondaryButtons from "./SecondaryButtons";
 import CountdownTimer from "./CountDownTimer";
 import Container from "react-bootstrap/esm/Container";
 import { Row, Col } from "react-bootstrap";
+import { useEffect } from "react";
 
 const Timer = () => {
   const pomoTime = useSelector((state) => state.settings.pomodoro);
@@ -15,11 +21,13 @@ const Timer = () => {
   const timeMode = useSelector((state) => state.settings.timermode);
   const timeEnabled = useSelector((state) => state.settings.timerenabled);
   const currentTime = useSelector((state) => state.settings.currenttime);
-  const autoBreak = useSelector((state) => state.settings.autobreak);
+  const autoBreaks = useSelector((state) => state.settings.autobreak);
   const counter = useSelector((state) => state.settings.counter);
   const cycleComplete = useSelector((state) => state.settings.cyclecomplete);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {}, [autoBreaks]);
 
   const totalTimeMS = currentTime * 60 * 1000;
   const NOW_IN_MS = new Date().getTime();
@@ -61,10 +69,10 @@ const Timer = () => {
       <div className={classes.content}>
         <Row>
           <Col className={classes.align_center}>
-            {Number(counter) !== 0 ? (
-              <p>Pomodoro Cycle: {Number(counter)}</p>
+            {autoBreaks === true ? (
+              <h3>Pomodoro Cycle: {Number(counter)}</h3>
             ) : (
-              ""
+              <h3> </h3>
             )}
           </Col>
           <div className={classes.spacer} />
@@ -104,16 +112,32 @@ const Timer = () => {
       <Container>
         <Row>
           <Col sm={12} className={classes.align_center}>
-            {autoBreak ? (
+            {autoBreaks ? (
               <p>
-                <button onClick={() => {dispatch(autoBreakBoolean())}} className={classes.autobreak_btn}>
+                <button
+                  onClick={() => {
+                    dispatch(autoBreakBoolean());
+                  }}
+                  className={classes.autobreak_btn}
+                >
                   Auto Start Breaks:
                 </button>{" "}
                 ENABLED
               </p>
             ) : (
               <p>
-                <button onClick={() => {dispatch(autoBreakBoolean())}} className={classes.autobreak_btn}>
+                <button
+                  onClick={() => {
+                    if (autoBreaks === true) {
+                      dispatch(autoBreak(false));
+                      dispatch(setCounter(0));
+                    } else {
+                      dispatch(autoBreak(true));
+                      dispatch(setCounter(1));
+                    }
+                  }}
+                  className={classes.autobreak_btn}
+                >
                   Auto Start Breaks:
                 </button>{" "}
                 DISABLED

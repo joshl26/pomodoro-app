@@ -6,39 +6,45 @@ import classes from "./CountDownTimer.module.css";
 import Progress from "./Progress";
 import { useSelector, useDispatch } from "react-redux";
 import Container from "react-bootstrap/esm/Container";
-import { Row, Col } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 
 import {
   setTimerEnabled,
   timerMode,
   counterIncrement,
+  setCycle,
 } from "../store/settingsSlice";
-
-import Button from "react-bootstrap/esm/Button";
 
 const ExpiredNotice = () => {
   const counter = useSelector((state) => state.settings.counter);
   const autoBreak = useSelector((state) => state.settings.autobreak);
   const cycle = useSelector((state) => state.settings.cycle[counter]);
-  // const cycleComplete = useSelector((state) => state.settings.cyclecomplete);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (autoBreak === false) {
       dispatch(setTimerEnabled(false));
+
       // dispatch(setCycle(true));
     }
 
     if (autoBreak === true) {
-      dispatch(setTimerEnabled(false));
-      dispatch(counterIncrement());
-      dispatch(timerMode(cycle));
-      dispatch(setTimerEnabled(true));
+      if (counter <= 8) {
+        dispatch(setTimerEnabled(false));
+        dispatch(counterIncrement());
+        dispatch(timerMode(cycle));
+        dispatch(setTimerEnabled(true));
+      } else {
+        dispatch(setTimerEnabled(false));
+        dispatch(setCycle(1));
+        dispatch(timerMode(cycle));
+        dispatch(setTimerEnabled(true));
+      }
     }
 
     console.log("Use effect");
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Container>
