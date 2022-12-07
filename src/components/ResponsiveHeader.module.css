@@ -53,14 +53,14 @@
 .logo_image {
   padding-left: 0.5rem;
   display: table-cell;
-  height: 3rem;
+  height: 2.5rem;
 }
 
 @media only screen and (min-width: 768px) {
   /* For desktop: */
   .logo_image {
     display: table-cell;
-    height: 4rem;
+    height: 3.5rem;
   }
 
   .logo_text {

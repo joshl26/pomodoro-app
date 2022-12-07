@@ -7,7 +7,7 @@
 .card {
   margin: 0 auto;
   /* width: 75vw; */
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   padding: 10px;
 }
@@ -15,7 +15,7 @@
 .card_text {
   text-align: left;
   /* padding: 0px 5px 0px 5px; */
-  color: grey;
+  color: rgb(255, 255, 255);
 }
 
 .timer_text {
@@ -23,13 +23,13 @@
   margin-top: 1rem;
   text-align: left;
   padding: 0px 5px 0px 5px;
-  color: grey;
+  color: rgb(255, 255, 255);
 }
 
 .divider {
   margin: 0 auto;
   height: 2px;
-  background-color: lightgrey;
+  background-color: rgb(255, 255, 255);
   width: 98%;
 }
 
@@ -62,7 +62,7 @@
   margin: 0 auto;
   display: flex;
   width: 80px;
-  background-color: rgb(220, 220, 220);
+  background-color: rgb(255, 255, 255);
 }
 
 .align_right {
@@ -78,7 +78,7 @@
 .time_text {
   padding: 5px 0 5px 0;
   margin: 0 auto;
-  color: rgb(50, 50, 50);
+  color: rgb(0, 0, 0);
 }
 
 .btn_save {

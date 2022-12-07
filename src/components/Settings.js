@@ -52,7 +52,7 @@ const Settings = () => {
           </Col>
           <Col className={classes.align_right}>
             <Link onClick={saveClickHandler} to="/pomodor">
-              <Button variant="outline-secondary" className={classes.btn_save}>
+              <Button variant="outline-light" className={classes.btn_save}>
                 Save
               </Button>
             </Link>
@@ -161,7 +161,7 @@ const Settings = () => {
             className="btn_break"
             id="toggle-check"
             type="checkbox"
-            variant="outline-secondary"
+            variant="outline-light"
             checked={autoBreakBool}
             value="1"
             onClick={() => dispatch(autoBreakBoolean())}
@@ -179,7 +179,7 @@ const Settings = () => {
               onClick={() => {
                 dispatch(setDefault());
               }}
-              variant="outline-secondary"
+              variant="outline-light"
               className="btn_save"
             >
               Defaults

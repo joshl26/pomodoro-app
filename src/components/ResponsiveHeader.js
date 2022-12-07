@@ -21,7 +21,7 @@ const ResponsiveHeader = () => {
         bg=""
         variant="dark"
       >
-        <Container>
+        {/* <Container>
           <Navbar.Brand>
             <Link className={classes.link} to="/pomodor">
               <div className={classes.align_left}>
@@ -73,6 +73,53 @@ const ResponsiveHeader = () => {
                 </button>
               </Link>
               <h4>Login</h4>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      <Navbar
+        className={classes.nav_bar}
+        collapseOnSelect
+        expand="lg"
+        bg=""
+        variant="dark"
+      > */}
+        <Container>
+          <Link className={classes.link} to="/pomodor">
+            <div className={classes.align_left}>
+              <img
+                alt="Pomofocus App Icon"
+                className={classes.logo_image}
+                src={logoImage}
+              />
+              <h1 className={classes.logo_text}>Pomo Focus</h1>
+            </div>
+          </Link>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto"></Nav>
+            <Nav>
+              <Nav.Link as={Link} eventKey="/pomodor/" to="/pomodor/">
+                Home
+              </Nav.Link>
+
+              <Nav.Link as={Link} eventKey="/pomodor/login" to="/pomodor/login">
+                Login
+              </Nav.Link>
+              <Nav.Link
+                as={Link}
+                eventKey="/pomodor/report"
+                to="/pomodor/report"
+              >
+                Charts
+              </Nav.Link>
+              <Nav.Link
+                as={Link}
+                eventKey="/pomodor/settings"
+                to="/pomodor/settings"
+              >
+                Settings
+              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
