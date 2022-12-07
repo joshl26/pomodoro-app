@@ -39,6 +39,9 @@ const Settings = () => {
 
     if (autoBreakBool === true) {
       dispatch(timerMode(1));
+      dispatch(setCounter(1));
+    } else {
+      dispatch(setCounter(0));
     }
   };
 

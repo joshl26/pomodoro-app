@@ -64,11 +64,12 @@
   }
 
   .logo_text {
+    width: 120%;
     text-decoration: none;
     display: table-cell;
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     padding-left: 1rem;
-    padding-top: 0.5rem;
+    padding-top: 0.4rem;
   }
 }
 

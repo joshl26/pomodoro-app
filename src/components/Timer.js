@@ -27,8 +27,6 @@ const Timer = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {}, [autoBreaks]);
-
   const totalTimeMS = currentTime * 60 * 1000;
   const NOW_IN_MS = new Date().getTime();
 
@@ -116,7 +114,8 @@ const Timer = () => {
               <p>
                 <button
                   onClick={() => {
-                    dispatch(autoBreakBoolean());
+                    dispatch(autoBreak(false));
+                    dispatch(setCounter(0));
                   }}
                   className={classes.autobreak_btn}
                 >
@@ -128,13 +127,8 @@ const Timer = () => {
               <p>
                 <button
                   onClick={() => {
-                    if (autoBreaks === true) {
-                      dispatch(autoBreak(false));
-                      dispatch(setCounter(0));
-                    } else {
-                      dispatch(autoBreak(true));
-                      dispatch(setCounter(1));
-                    }
+                    dispatch(autoBreak(true));
+                    dispatch(setCounter(1));
                   }}
                   className={classes.autobreak_btn}
                 >
