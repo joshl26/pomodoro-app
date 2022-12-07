@@ -10,7 +10,7 @@ export const settingsSlice = createSlice({
     autopomo: false,
     timermode: 1,
     timerenabled: false,
-    currenttime: 1,
+    currenttime: 25,
     cycle: [1, 2, 1, 2, 1, 2, 1, 2, 3],
     counter: 0,
     cyclecomplete: false,
@@ -137,7 +137,7 @@ export const settingsSlice = createSlice({
       state.autopomo = false;
       state.timermode = 1;
       state.timerenabled = false;
-      state.currenttime = 1;
+      state.currenttime = 25;
       state.cycle = [1, 2, 1, 2, 1, 2, 1, 2, 3];
       state.counter = 0;
       state.cyclecomplete = false;
