@@ -56,7 +56,6 @@ const Settings = () => {
             <Link
               onClick={saveClickHandler}
               to="/pomodor/"
-              eventKey="/pomodor/"
             >
               <Button variant="outline-light" className={classes.btn_save}>
                 Save
@@ -65,7 +64,6 @@ const Settings = () => {
           </Col>
         </Row>
         <div className={classes.spacer_small}></div>
-
         <div className={classes.divider}></div>
         <div className={classes.spacer_small}></div>
         <h4 className={classes.card_text}>Time (minutes)</h4>
@@ -126,7 +124,6 @@ const Settings = () => {
               </Col>
             </Row>
           </Col>
-
           <Col md={4} className={classes.card_text}>
             <p className={classes.timer_text}>Long Break</p>
             <Row>
@@ -156,7 +153,6 @@ const Settings = () => {
               </Col>
             </Row>
           </Col>
-
           <div className={classes.spacer}></div>
         </Row>
         <div className={classes.divider}></div>

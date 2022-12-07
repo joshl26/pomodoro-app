@@ -2,7 +2,6 @@ import { useSelector, useDispatch } from "react-redux";
 
 import {
   timerEnabled,
-  autoBreakBoolean,
   setCounter,
   autoBreak,
 } from "../store/settingsSlice";
@@ -12,7 +11,6 @@ import SecondaryButtons from "./SecondaryButtons";
 import CountdownTimer from "./CountDownTimer";
 import Container from "react-bootstrap/esm/Container";
 import { Row, Col } from "react-bootstrap";
-import { useEffect } from "react";
 
 const Timer = () => {
   const pomoTime = useSelector((state) => state.settings.pomodoro);
