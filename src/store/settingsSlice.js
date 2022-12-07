@@ -3,9 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 export const settingsSlice = createSlice({
   name: "settings",
   initialState: {
-    pomodoro: 1,
-    short: 1,
-    long: 1,
+    pomodoro: 25,
+    short: 5,
+    long: 15,
     autobreak: false,
     autopomo: false,
     timermode: 1,
@@ -130,9 +130,9 @@ export const settingsSlice = createSlice({
     },
     setDefault: (state) => {
       console.log("Reset to defaults...");
-      state.pomodoro = 1;
-      state.short = 1;
-      state.long = 1;
+      state.pomodoro = 25;
+      state.short = 5;
+      state.long = 15;
       state.autobreak = false;
       state.autopomo = false;
       state.timermode = 1;

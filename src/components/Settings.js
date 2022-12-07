@@ -20,7 +20,6 @@ import {
   longDecrement,
   setCurrentTime,
   setDefault,
-  autoBreakBoolean,
   autoBreak,
   setCounter,
   timerMode,
@@ -45,6 +44,7 @@ const Settings = () => {
     } else {
       dispatch(setCounter(1));
       dispatch(autoBreak(true));
+      dispatch(timerMode(1));
     }
   };
 

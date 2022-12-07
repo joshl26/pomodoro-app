@@ -14,9 +14,9 @@ function App() {
   const timerMode = useSelector((state) => state.settings.timermode);
 
   const activeClass =
-    `${timerMode == 1 ? `${classes.pomodoro}` : ``}` +
-    `${timerMode == 2 ? `${classes.short}` : ``}` +
-    `${timerMode == 3 ? `${classes.long}` : ``}`;
+    `${Number(timerMode) === 1 ? `${classes.pomodoro}` : ``}` +
+    `${Number(timerMode) === 2 ? `${classes.short}` : ``}` +
+    `${Number(timerMode) === 3 ? `${classes.long}` : ``}`;
 
   return (
     <div className={activeClass}>
