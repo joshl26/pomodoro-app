@@ -11,7 +11,21 @@ import Report from "./components/Report";
 import Login from "./components/Login";
 import Help from "./components/Help";
 
+function getFaviconEl() {
+  return document.getElementById("favicon");
+}
+
 function App() {
+  const handleGoogle = () => {
+    const favicon = getFaviconEl(); // Accessing favicon element
+    favicon.href = "https://www.google.com/favicon.ico";
+  };
+
+  const handleYoutube = () => {
+    const favicon = getFaviconEl();
+    favicon.href = " https://s.ytimg.com/yts/img/favicon-vfl8qSV2F.ico";
+  };
+
   const timerMode = useSelector((state) => state.settings.timermode);
 
   const activeClass =
@@ -21,6 +35,8 @@ function App() {
 
   return (
     <div className={activeClass}>
+      <button onClick={handleGoogle}>Google</button>
+      <button onClick={handleYoutube}>YouTube</button>
       <div className={classes.spacer_small} />
       <ResponsiveHeader />
       <div className={classes.content}>
