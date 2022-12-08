@@ -36,7 +36,7 @@ const ResponsiveHeader = () => {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto"></Nav>
             <Nav defaultActiveKey="/pomodor/">
-              <Nav.Link as={Link} eventKey="/pomodor/" to="/pomodor/">
+              <Nav.Link id="home_nav" as={Link} eventKey="/pomodor/" to="/pomodor/">
                 Home
               </Nav.Link>
 

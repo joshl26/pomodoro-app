@@ -26,6 +26,10 @@ import {
   setTimerEnabled,
 } from "../store/settingsSlice";
 
+function getNavBarHomeLink() {
+  return document.getElementById("home_nav");
+}
+
 const Settings = () => {
   const pomodoroCount = useSelector((state) => state.settings.pomodoro);
   const shortCount = useSelector((state) => state.settings.short);
@@ -33,6 +37,11 @@ const Settings = () => {
   const autoBreakBool = useSelector((state) => state.settings.autobreak);
 
   const dispatch = useDispatch();
+
+  const backClickHandler = () => {
+    getNavBarHomeLink().click();
+    // console.log(getFaviconEl().click());
+  };
 
   const saveClickHandler = () => {
     dispatch(setTimerEnabled(false));
@@ -57,7 +66,12 @@ const Settings = () => {
           </Col>
           <Col className={classes.align_right}>
             <Link to="/pomodor/">
-              <Button variant="outline-light" className={classes.btn_save}>
+              <Button
+                id="back_btn"
+                onClick={backClickHandler}
+                variant="outline-light"
+                className={classes.btn_save}
+              >
                 Back
               </Button>
             </Link>
