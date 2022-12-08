@@ -1,6 +1,8 @@
 import { Route, Switch } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+import { useEffect } from "react";
+
 import classes from "./App.module.css";
 
 import Timer from "./components/Timer";
@@ -16,17 +18,34 @@ function getFaviconEl() {
 }
 
 function App() {
-  const handleGoogle = () => {
-    const favicon = getFaviconEl(); // Accessing favicon element
-    favicon.href = "https://www.google.com/favicon.ico";
-  };
-
-  const handleYoutube = () => {
-    const favicon = getFaviconEl();
-    favicon.href = " https://s.ytimg.com/yts/img/favicon-vfl8qSV2F.ico";
-  };
-
   const timerMode = useSelector((state) => state.settings.timermode);
+
+  if (Number(timerMode) === 1) {
+    const favicon = getFaviconEl();
+    favicon.href =
+      "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/pomo/favicon.ico";
+
+  }
+
+  if (Number(timerMode) === 2) {
+    const favicon = getFaviconEl();
+    favicon.href =
+      "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/short/favicon.ico";
+
+  }
+
+  if (Number(timerMode) === 3) {
+    const favicon = getFaviconEl();
+    favicon.href =
+      "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/long/favicon.ico";
+
+  }
+
+  useEffect(() => {
+    const favicon = getFaviconEl();
+    favicon.href =
+      "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/pomo/favicon.ico";
+  }, []);
 
   const activeClass =
     `${Number(timerMode) === 1 ? `${classes.pomodoro}` : ``}` +
@@ -35,8 +54,6 @@ function App() {
 
   return (
     <div className={activeClass}>
-      <button onClick={handleGoogle}>Google</button>
-      <button onClick={handleYoutube}>YouTube</button>
       <div className={classes.spacer_small} />
       <ResponsiveHeader />
       <div className={classes.content}>

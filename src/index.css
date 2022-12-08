@@ -19,6 +19,10 @@ body {
   /* overflow: hidden; */
 }
 
+html {
+  overflow-x: hidden;
+  margin-right: calc(-1 * (100vw - 100%));
+}
 #root {
   min-height: 100vh;
   display: flex;
