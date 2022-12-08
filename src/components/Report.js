@@ -14,7 +14,8 @@ const Report = () => {
       <br />
 
       <Row>
-        <h1>Feature to be completed...</h1>
+        <h1>Development in progress</h1>
+        <h3>Feature to be included in future release</h3>
       </Row>
     </Container>
   );

@@ -90,7 +90,10 @@ const Settings = () => {
                 </Row>
                 <Row>
                   <Button
-                    onClick={() => dispatch(pomoDecrement())}
+                    onClick={() => {
+                      dispatch(pomoDecrement());
+                      dispatch(setCurrentTime());
+                    }}
                     variant="custom"
                   >
                     <h4 className={classes.text_increment}>-</h4>
