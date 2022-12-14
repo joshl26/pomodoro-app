@@ -115,8 +115,11 @@ export const settingsSlice = createSlice({
       if (Number(state.timermode) > 3) {
         return;
       }
-      if (Number(state.timermode) <= 0) {
+      if (Number(state.timermode) < 0) {
         return;
+      }
+      if (Number(state.timermode) === 0) {
+        state.currenttime = state.pomodoro;
       }
       if (Number(state.timermode) === 1) {
         state.currenttime = state.pomodoro;

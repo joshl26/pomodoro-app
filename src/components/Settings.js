@@ -47,13 +47,15 @@ const Settings = () => {
     dispatch(setTimerEnabled(false));
 
     if (autoBreakBool === true) {
-      dispatch(timerMode(1));
+      // dispatch(timerMode(1));
       dispatch(setCounter(0));
       dispatch(autoBreak(false));
+      dispatch(setCurrentTime());
     } else {
       dispatch(setCounter(1));
       dispatch(autoBreak(true));
       dispatch(timerMode(1));
+      dispatch(setCurrentTime());
     }
   };
 
