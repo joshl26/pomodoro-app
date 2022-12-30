@@ -105,3 +105,12 @@
 p {
   margin-top: 1rem;
 }
+
+.cover {
+  position: fixed;
+  z-index: 200000;
+  width: 100%;
+  height: 115px;
+  top: 0px;
+  left: 0px;
+}

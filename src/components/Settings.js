@@ -28,7 +28,15 @@ import {
   setCounter,
   timerMode,
   setTimerEnabled,
+  setAlarmState,
+  setAlarmVolume,
+  setAlarmSound,
 } from "../store/settingsSlice";
+import { useEffect } from "react";
+import { Fragment } from "react";
+
+import sound from "../assets/button-press.wav";
+import { player } from "../utilities/util";
 
 function getNavBarHomeLink() {
   return document.getElementById("home_nav");
@@ -39,26 +47,23 @@ const Settings = () => {
   const shortCount = useSelector((state) => state.settings.short);
   const longCount = useSelector((state) => state.settings.long);
   const autoBreakBool = useSelector((state) => state.settings.autobreak);
+  const alarmVolumeState = useSelector((state) => state.settings.alarmvolume);
+  const alarmSoundState = useSelector((state) => state.settings.alarmsound);
 
-  const [volume, setVolume] = useState(50);
+  const [volume, setVolume] = useState(alarmVolumeState);
 
-  const BELL_SOUND = "./assets/alarm-bell.mp3";
-  const DIGITAL_SOUND = "./assets/alarm-digital.mp3";
+  const adjustedVolume = volume / 100;
 
-  const alarmSounds = [
-    {
-      value: BELL_SOUND,
-      label: "Bell",
-    },
-    {
-      value: DIGITAL_SOUND,
-      label: "Digital",
-    },
-  ];
+  const alarmAudio = player({ asset: sound, volume: adjustedVolume });
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    setVolume(alarmVolumeState);
+  }, [alarmVolumeState]);
+
   const backClickHandler = () => {
+    dispatch(setAlarmVolume(volume));
     getNavBarHomeLink().click();
     // console.log(getFaviconEl().click());
   };
@@ -79,210 +84,248 @@ const Settings = () => {
     }
   };
 
-  const Label = ({ children }) => (
-    <label className={classes.label}>{children}</label>
-  );
+  const alarmClickHandler = (e) => {
+    console.log("Event target value" + e.target.outerText);
+
+    dispatch(setAlarmSound(e.target.outerText));
+
+    if (e.target.outerText === "No Sound") {
+      dispatch(setAlarmState(false));
+    } else {
+      dispatch(setAlarmState(true));
+    }
+  };
+
+  const defaultSettingsClickHandler = () => {
+    setVolume(50);
+    dispatch(setDefault());
+  };
+
+  const sliderClickHandler = (e) => {
+    setVolume(e.target.value);
+    dispatch(setAlarmVolume(e.target.value));
+    alarmAudio.play({ volume: "0.2" });
+
+    console.log("slider click handler");
+  };
 
   return (
-    <Container className={classes.container}>
-      <div className={classes.card}>
-        <Row>
-          <Col>
-            <h4 className={classes.card_text}>SETTINGS</h4>
-          </Col>
-          <Col className={classes.align_right}>
-            <Link to="/pomodor/">
-              <Button
-                id="back_btn"
-                onClick={backClickHandler}
-                variant="outline-light"
-                className={classes.btn_save}
-              >
-                Back
-              </Button>
-            </Link>
-          </Col>
-        </Row>
-        <div className={classes.spacer_small}></div>
-        <div className={classes.divider}></div>
-        <div className={classes.spacer_small}></div>
-        <h4 className={classes.card_text}>Time (minutes)</h4>
-        <Row>
-          <Col md={4} className={classes.card_text}>
-            <p className={classes.timer_text}>Pomodoro</p>
-            <Row>
-              <Col className={classes.padding_left}>
-                <div className={classes.card_time}>
-                  <h4 className={classes.time_text}>{pomodoroCount}:00</h4>
-                </div>
-              </Col>
-              <Col className={classes.padding_right}>
-                <Row>
-                  <Button
-                    onClick={() => {
-                      dispatch(pomoIncrement());
-                      dispatch(setCurrentTime());
-                    }}
-                    variant="custom"
-                  >
-                    <h4 className={classes.text_increment}>+</h4>
-                  </Button>
-                </Row>
-                <Row>
-                  <Button
-                    onClick={() => {
-                      dispatch(pomoDecrement());
-                      dispatch(setCurrentTime());
-                    }}
-                    variant="custom"
-                  >
-                    <h4 className={classes.text_increment}>-</h4>
-                  </Button>
-                </Row>
-              </Col>
-            </Row>
-          </Col>
-          <Col md={4} className={classes.card_text}>
-            <p className={classes.timer_text}>Short Break</p>
-            <Row>
-              <Col className={classes.padding_left}>
-                <div className={classes.card_time}>
-                  <h4 className={classes.time_text}>{shortCount}:00</h4>
-                </div>
-              </Col>
-              <Col className={classes.padding_right}>
-                <Row>
-                  <Button
-                    onClick={() => {
-                      dispatch(shortIncrement());
-                      dispatch(setCurrentTime());
-                    }}
-                    variant="custom"
-                  >
-                    <h4 className={classes.text_increment}>+</h4>
-                  </Button>
-                </Row>
-                <Row>
-                  <Button
-                    onClick={() => {
-                      dispatch(shortDecrement());
-                      dispatch(setCurrentTime());
-                    }}
-                    variant="custom"
-                  >
-                    <h4 className={classes.text_increment}>-</h4>
-                  </Button>
-                </Row>
-              </Col>
-            </Row>
-          </Col>
-          <Col md={4} className={classes.card_text}>
-            <p className={classes.timer_text}>Long Break</p>
-            <Row>
-              <Col className={classes.padding_left}>
-                <div className={classes.card_time}>
-                  <h4 className={classes.time_text}>{longCount}:00</h4>
-                </div>
-              </Col>
-              <Col className={classes.padding_right}>
-                <Row>
-                  <Button
-                    onClick={() => {
-                      dispatch(longIncrement());
-                      dispatch(setCurrentTime());
-                    }}
-                    variant="custom"
-                  >
-                    <h4 className={classes.text_increment}>+</h4>
-                  </Button>
-                </Row>
-                <Row>
-                  <Button
-                    onClick={() => {
-                      dispatch(longDecrement());
-                      dispatch(setCurrentTime());
-                    }}
-                    value="negative"
-                    variant="custom"
-                  >
-                    <h4 className={classes.text_increment}>-</h4>
-                  </Button>
-                </Row>
-              </Col>
-            </Row>
-          </Col>
+    <Fragment>
+      <div className={classes.cover} />
+      <Container className={classes.container}>
+        <div className={classes.card}>
+          <Row>
+            <Col>
+              <h4 className={classes.card_text}>SETTINGS</h4>
+            </Col>
+            <Col className={classes.align_right}>
+              <Link to="/pomodor/">
+                <Button
+                  id="back_btn"
+                  onClick={backClickHandler}
+                  variant="outline-light"
+                  className={classes.btn_save}
+                >
+                  Back
+                </Button>
+              </Link>
+            </Col>
+          </Row>
+          <div className={classes.spacer_small}></div>
+          <div className={classes.divider}></div>
+          <div className={classes.spacer_small}></div>
+          <h4 className={classes.card_text}>Time (minutes)</h4>
+          <Row>
+            <Col md={4} className={classes.card_text}>
+              <p className={classes.timer_text}>Pomodoro</p>
+              <Row>
+                <Col className={classes.padding_left}>
+                  <div className={classes.card_time}>
+                    <h4 className={classes.time_text}>{pomodoroCount}:00</h4>
+                  </div>
+                </Col>
+                <Col className={classes.padding_right}>
+                  <Row>
+                    <Button
+                      onClick={() => {
+                        dispatch(pomoIncrement());
+                        dispatch(setCurrentTime());
+                      }}
+                      variant="custom"
+                    >
+                      <h4 className={classes.text_increment}>+</h4>
+                    </Button>
+                  </Row>
+                  <Row>
+                    <Button
+                      onClick={() => {
+                        dispatch(pomoDecrement());
+                        dispatch(setCurrentTime());
+                      }}
+                      variant="custom"
+                    >
+                      <h4 className={classes.text_increment}>-</h4>
+                    </Button>
+                  </Row>
+                </Col>
+              </Row>
+            </Col>
+            <Col md={4} className={classes.card_text}>
+              <p className={classes.timer_text}>Short Break</p>
+              <Row>
+                <Col className={classes.padding_left}>
+                  <div className={classes.card_time}>
+                    <h4 className={classes.time_text}>{shortCount}:00</h4>
+                  </div>
+                </Col>
+                <Col className={classes.padding_right}>
+                  <Row>
+                    <Button
+                      onClick={() => {
+                        dispatch(shortIncrement());
+                        dispatch(setCurrentTime());
+                      }}
+                      variant="custom"
+                    >
+                      <h4 className={classes.text_increment}>+</h4>
+                    </Button>
+                  </Row>
+                  <Row>
+                    <Button
+                      onClick={() => {
+                        dispatch(shortDecrement());
+                        dispatch(setCurrentTime());
+                      }}
+                      variant="custom"
+                    >
+                      <h4 className={classes.text_increment}>-</h4>
+                    </Button>
+                  </Row>
+                </Col>
+              </Row>
+            </Col>
+            <Col md={4} className={classes.card_text}>
+              <p className={classes.timer_text}>Long Break</p>
+              <Row>
+                <Col className={classes.padding_left}>
+                  <div className={classes.card_time}>
+                    <h4 className={classes.time_text}>{longCount}:00</h4>
+                  </div>
+                </Col>
+                <Col className={classes.padding_right}>
+                  <Row>
+                    <Button
+                      onClick={() => {
+                        dispatch(longIncrement());
+                        dispatch(setCurrentTime());
+                      }}
+                      variant="custom"
+                    >
+                      <h4 className={classes.text_increment}>+</h4>
+                    </Button>
+                  </Row>
+                  <Row>
+                    <Button
+                      onClick={() => {
+                        dispatch(longDecrement());
+                        dispatch(setCurrentTime());
+                      }}
+                      value="negative"
+                      variant="custom"
+                    >
+                      <h4 className={classes.text_increment}>-</h4>
+                    </Button>
+                  </Row>
+                </Col>
+              </Row>
+            </Col>
+            <div className={classes.spacer}></div>
+          </Row>
+          <div className={classes.divider}></div>
           <div className={classes.spacer}></div>
-        </Row>
-        <div className={classes.divider}></div>
-        <div className={classes.spacer}></div>
-        <h4 className={classes.card_text}>Auto start Breaks?</h4>
-        <ToggleButton
-          className="btn_break"
-          id="toggle-check"
-          type="checkbox"
-          variant="outline-light"
-          checked={autoBreakBool}
-          value="1"
-          onClick={saveClickHandler}
-        >
-          {!autoBreakBool && "No"}
-          {autoBreakBool && "Yes"}
-        </ToggleButton>
-        <div className={classes.spacer_small}></div>
-        <div className={classes.divider}></div>
-        <div className={classes.spacer}></div>
-        <Row>
-          <Col>
-            <h4 className={classes.card_text}>Alarm Sounds</h4>
-          </Col>
-          <Col>
-            <Dropdown>
-              <Dropdown.Toggle variant="custom-sounds" id="dropdown-basic">
-                Bell
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item value="Bell">Bell</Dropdown.Item>
-                <Dropdown.Item value="Digital">Digital</Dropdown.Item>
-                <Dropdown.Item value="Kitchen">Kitchen</Dropdown.Item>
-                <Dropdown.Item value="No Sound">No Sound</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Col>
-          <Col></Col>
-        </Row>
-        <div className={classes.spacer_small}></div>
-        <div className={classes.divider}></div>
-        <div className={classes.spacer}></div>
-        <Row>
-          <Col>
-            <h4 className={classes.card_text}>Alarm Volume</h4>
-          </Col>
-          <Col>
-            <Slider onChange={(e) => setVolume(e.target.value)} />
-          </Col>
-          <Col>
-            <h2>{volume}</h2>
-          </Col>
-        </Row>
-        <div className={classes.spacer_small}></div>
-        <div className={classes.divider}></div>
-        <div className={classes.spacer}></div>
+          <h4 className={classes.card_text}>Auto start Breaks?</h4>
+          <ToggleButton
+            className="btn_break"
+            id="toggle-check"
+            type="checkbox"
+            variant="outline-light"
+            checked={autoBreakBool}
+            value="1"
+            onClick={saveClickHandler}
+          >
+            {!autoBreakBool && "No"}
+            {autoBreakBool && "Yes"}
+          </ToggleButton>
+          <div className={classes.spacer}></div>
+          <div className={classes.divider}></div>
+          <div className={classes.spacer}></div>
+          <Row>
+            <Col>
+              <h4 className={classes.card_text}>Alarm Sounds</h4>
+            </Col>
+            <Col>
+              <Dropdown>
+                <Dropdown.Toggle variant="custom-sounds" id="dropdown-basic">
+                  {alarmSoundState}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item value="Bell" onClick={alarmClickHandler}>
+                    Bell
+                  </Dropdown.Item>
+                  <Dropdown.Item value="Digital" onClick={alarmClickHandler}>
+                    Digital
+                  </Dropdown.Item>
+                  <Dropdown.Item value="Kitchen" onClick={alarmClickHandler}>
+                    Kitchen
+                  </Dropdown.Item>
+                  <Dropdown.Item value="No Sound" onClick={alarmClickHandler}>
+                    No Sound
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Col>
+            <Col></Col>
+          </Row>
+          <div className={classes.spacer}></div>
+          <div className={classes.divider}></div>
+          <div className={classes.spacer}></div>
+          <Row>
+            <Col>
+              <h4 className={classes.card_text}>Alarm Volume</h4>
+            </Col>
+            <Col>
+              <Row style={{ height: "25%" }}></Row>
+              <Row>
+                <Slider
+                  value={alarmVolumeState}
+                  onChange={sliderClickHandler}
+                  onClick={sliderClickHandler}
+                />
+              </Row>
+              <Row></Row>
+            </Col>
+            <Col>
+              <h2>{alarmVolumeState}</h2>
+            </Col>
+          </Row>
+          <div className={classes.spacer_small}></div>
+          <div className={classes.divider}></div>
+          <div className={classes.spacer}></div>
 
-        <Row>
-          <Col className={classes.align_center}>
-            <Button
-              onClick={() => {
-                dispatch(setDefault());
-              }}
-              variant="outline-light"
-              className="btn_save"
-            >
-              Restore Defaults
-            </Button>
-          </Col>
-        </Row>
-      </div>
-    </Container>
+          <Row>
+            <Col className={classes.align_center}>
+              <Button
+                onClick={defaultSettingsClickHandler}
+                variant="outline-light"
+                className="btn_save"
+              >
+                Restore Defaults
+              </Button>
+            </Col>
+          </Row>
+        </div>
+      </Container>
+    </Fragment>
   );
 };
 
