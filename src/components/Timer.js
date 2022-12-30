@@ -15,6 +15,7 @@ import Container from "react-bootstrap/esm/Container";
 import { Row, Col } from "react-bootstrap";
 import sound from "../assets/button-press.wav";
 
+
 const Timer = () => {
   const pomoTime = useSelector((state) => state.settings.pomodoro);
   const shortTime = useSelector((state) => state.settings.short);

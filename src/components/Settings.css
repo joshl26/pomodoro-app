@@ -12,6 +12,19 @@
   color: white !important;
 }
 
+.btn-custom-sounds:hover {
+  background-color: rgb(255, 255, 255) !important;
+  color: rgb(0, 0, 0) !important;
+}
+
+.btn-custom-sounds {
+  padding: 0 !important;
+  width: 5em !important;
+  height: 2em !important;
+  border: 1px solid white !important;
+  color: white !important;
+}
+
 .btn_save {
   width: auto;
 }

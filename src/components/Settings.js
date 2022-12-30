@@ -6,10 +6,14 @@ import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/esm/Button";
-import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import ToggleButton from "react-bootstrap/esm/ToggleButton";
+import Slider from "../components/Slider";
+
+import Dropdown from "react-bootstrap/esm/Dropdown";
 
 import { useSelector, useDispatch } from "react-redux";
+
+import { useState } from "react";
 
 import {
   pomoIncrement,
@@ -36,6 +40,22 @@ const Settings = () => {
   const longCount = useSelector((state) => state.settings.long);
   const autoBreakBool = useSelector((state) => state.settings.autobreak);
 
+  const [volume, setVolume] = useState(50);
+
+  const BELL_SOUND = "./assets/alarm-bell.mp3";
+  const DIGITAL_SOUND = "./assets/alarm-digital.mp3";
+
+  const alarmSounds = [
+    {
+      value: BELL_SOUND,
+      label: "Bell",
+    },
+    {
+      value: DIGITAL_SOUND,
+      label: "Digital",
+    },
+  ];
+
   const dispatch = useDispatch();
 
   const backClickHandler = () => {
@@ -58,6 +78,10 @@ const Settings = () => {
       dispatch(setCurrentTime());
     }
   };
+
+  const Label = ({ children }) => (
+    <label className={classes.label}>{children}</label>
+  );
 
   return (
     <Container className={classes.container}>
@@ -192,23 +216,58 @@ const Settings = () => {
         <div className={classes.divider}></div>
         <div className={classes.spacer}></div>
         <h4 className={classes.card_text}>Auto start Breaks?</h4>
-        <ButtonGroup className="mb-2">
-          <ToggleButton
-            className="btn_break"
-            id="toggle-check"
-            type="checkbox"
-            variant="outline-light"
-            checked={autoBreakBool}
-            value="1"
-            onClick={saveClickHandler}
-          >
-            {!autoBreakBool && "No"}
-            {autoBreakBool && "Yes"}
-          </ToggleButton>
-        </ButtonGroup>
+        <ToggleButton
+          className="btn_break"
+          id="toggle-check"
+          type="checkbox"
+          variant="outline-light"
+          checked={autoBreakBool}
+          value="1"
+          onClick={saveClickHandler}
+        >
+          {!autoBreakBool && "No"}
+          {autoBreakBool && "Yes"}
+        </ToggleButton>
         <div className={classes.spacer_small}></div>
         <div className={classes.divider}></div>
         <div className={classes.spacer}></div>
+        <Row>
+          <Col>
+            <h4 className={classes.card_text}>Alarm Sounds</h4>
+          </Col>
+          <Col>
+            <Dropdown>
+              <Dropdown.Toggle variant="custom-sounds" id="dropdown-basic">
+                Bell
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item value="Bell">Bell</Dropdown.Item>
+                <Dropdown.Item value="Digital">Digital</Dropdown.Item>
+                <Dropdown.Item value="Kitchen">Kitchen</Dropdown.Item>
+                <Dropdown.Item value="No Sound">No Sound</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Col>
+          <Col></Col>
+        </Row>
+        <div className={classes.spacer_small}></div>
+        <div className={classes.divider}></div>
+        <div className={classes.spacer}></div>
+        <Row>
+          <Col>
+            <h4 className={classes.card_text}>Alarm Volume</h4>
+          </Col>
+          <Col>
+            <Slider onChange={(e) => setVolume(e.target.value)} />
+          </Col>
+          <Col>
+            <h2>{volume}</h2>
+          </Col>
+        </Row>
+        <div className={classes.spacer_small}></div>
+        <div className={classes.divider}></div>
+        <div className={classes.spacer}></div>
+
         <Row>
           <Col className={classes.align_center}>
             <Button
