@@ -24,21 +24,18 @@ function App() {
     const favicon = getFaviconEl();
     favicon.href =
       "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/pomo/favicon.ico";
-
   }
 
   if (Number(timerMode) === 2) {
     const favicon = getFaviconEl();
     favicon.href =
       "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/short/favicon.ico";
-
   }
 
   if (Number(timerMode) === 3) {
     const favicon = getFaviconEl();
     favicon.href =
       "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/long/favicon.ico";
-
   }
 
   useEffect(() => {
@@ -77,7 +74,6 @@ function App() {
         </Switch>
       </div>
       <div className={classes.spacer_small} />
-
       <Footer />
     </div>
   );
