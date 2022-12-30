@@ -36,7 +36,10 @@ import { useEffect } from "react";
 import { Fragment } from "react";
 
 import sound from "../assets/button-press.wav";
+import bellSound from "../assets/alarm-bell.mp3";
+
 import { player } from "../utilities/util";
+import { useCallback } from "react";
 
 function getNavBarHomeLink() {
   return document.getElementById("home_nav");
@@ -52,15 +55,23 @@ const Settings = () => {
 
   const [volume, setVolume] = useState(alarmVolumeState);
 
-  const adjustedVolume = volume / 100;
+  let adjustedVolume = alarmVolumeState / 100;
 
-  const alarmAudio = player({ asset: sound, volume: adjustedVolume });
+  const alarmAudio = player({
+    asset: bellSound,
+    volume: adjustedVolume,
+    loop: false,
+  });
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     setVolume(alarmVolumeState);
-  }, [alarmVolumeState]);
+  }, [setVolume]);
+
+  // useEffect(() => {
+  //   var adjustedVolume = alarmVolumeState / 100;
+  // }, []);
 
   const backClickHandler = () => {
     dispatch(setAlarmVolume(volume));
@@ -101,13 +112,21 @@ const Settings = () => {
     dispatch(setDefault());
   };
 
-  const sliderClickHandler = (e) => {
-    setVolume(e.target.value);
-    dispatch(setAlarmVolume(e.target.value));
-    alarmAudio.play({ volume: "0.2" });
+  const sliderClickHandler = useCallback(
+    (e) => {
+      // adjustedVolume = e.target.value / 100;
 
-    console.log("slider click handler");
-  };
+      setVolume(e.target.value);
+      dispatch(setAlarmVolume(e.target.value));
+
+      console.log(`Adjusted volume: ${adjustedVolume}`);
+
+      alarmAudio.play({ asset: sound, volume: adjustedVolume });
+
+      console.log("slider click handler");
+    },
+    [dispatch, alarmAudio, alarmVolumeState, adjustedVolume]
+  );
 
   return (
     <Fragment>
