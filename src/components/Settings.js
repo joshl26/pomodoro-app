@@ -35,8 +35,9 @@ import {
 import { useEffect } from "react";
 import { Fragment } from "react";
 
-import sound from "../assets/button-press.wav";
 import bellSound from "../assets/alarm-bell.mp3";
+import digitalSound from "../assets/alarm-digital.mp3";
+import kitchenSound from "../assets/alarm-kitchen.mp3";
 
 import { player } from "../utilities/util";
 import { useCallback } from "react";
@@ -57,17 +58,11 @@ const Settings = () => {
 
   let adjustedVolume = alarmVolumeState / 100;
 
-  const alarmAudio = player({
-    asset: bellSound,
-    volume: adjustedVolume,
-    loop: false,
-  });
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     setVolume(alarmVolumeState);
-  }, [setVolume]);
+  }, [setVolume, alarmVolumeState]);
 
   // useEffect(() => {
   //   var adjustedVolume = alarmVolumeState / 100;
@@ -116,16 +111,42 @@ const Settings = () => {
     (e) => {
       // adjustedVolume = e.target.value / 100;
 
+      if (alarmSoundState === "Bell") {
+        player({
+          asset: bellSound,
+          volume: adjustedVolume,
+          loop: false,
+        }).play();
+      }
+
+      if (alarmSoundState === "Digital") {
+        player({
+          asset: digitalSound,
+          volume: adjustedVolume,
+          loop: false,
+        }).play();
+      }
+
+      if (alarmSoundState === "Kitchen") {
+        player({
+          asset: kitchenSound,
+          volume: adjustedVolume,
+          loop: false,
+        }).play();
+      }
+
+      if (alarmSoundState === "No Sound") {
+        return;
+      }
+
       setVolume(e.target.value);
       dispatch(setAlarmVolume(e.target.value));
 
       console.log(`Adjusted volume: ${adjustedVolume}`);
 
-      alarmAudio.play({ asset: sound, volume: adjustedVolume });
-
       console.log("slider click handler");
     },
-    [dispatch, alarmAudio, alarmVolumeState, adjustedVolume]
+    [dispatch, adjustedVolume, alarmSoundState]
   );
 
   return (
@@ -312,7 +333,7 @@ const Settings = () => {
             <Col>
               <h4 className={classes.card_text}>Alarm Volume</h4>
             </Col>
-            <Col>
+            <Col style={{ paddingLeft: "25px" }}>
               <Row style={{ height: "25%" }}></Row>
               <Row>
                 <Slider
