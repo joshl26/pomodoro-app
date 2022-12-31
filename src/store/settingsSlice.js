@@ -17,6 +17,7 @@ export const settingsSlice = createSlice({
     alarmenabled: true,
     alarmsound: "Bell",
     alarmvolume: 50,
+    
   },
   reducers: {
     pomoIncrement: (state) => {
