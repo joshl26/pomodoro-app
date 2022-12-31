@@ -64,7 +64,7 @@ const ExpiredNotice = () => {
   );
 };
 
-const ShowCounter = ({ minutes, seconds, x }) => {
+const ShowCounter = ({ days, hours, minutes, seconds, x }) => {
   function paddedSeconds() {
     if (seconds < 10) {
       return `0${seconds}`;
@@ -100,11 +100,11 @@ const ShowCounter = ({ minutes, seconds, x }) => {
 };
 
 const CountdownTimer = ({ targetDate, time }) => {
-  const [minutes, seconds, x] = useCountdown(targetDate, time);
+  const [days, hours, minutes, seconds, x] = useCountdown(targetDate, time);
 
-  // const cycleCompleteState = useSelector(
-  //   (state) => state.settings.cyclecomplete
-  // );
+  const cycleCompleteState = useSelector(
+    (state) => state.settings.cyclecomplete
+  );
 
   console.log(`minutes: ${minutes}`);
 
