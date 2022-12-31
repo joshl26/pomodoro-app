@@ -48,6 +48,9 @@ const ExpiredNotice = () => {
       }
     }
 
+    // dispatch(setTimerEnabled(false));
+    // dispatch(setCycleComplete());
+
     console.log("Use effect");
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -103,7 +106,9 @@ const CountdownTimer = ({ targetDate, time }) => {
     (state) => state.settings.cyclecomplete
   );
 
-  if (1) {
+  console.log(`minutes: ${minutes}`);
+
+  if (minutes + seconds === 0) {
     return <ExpiredNotice />;
   } else {
     return <ShowCounter minutes={minutes} seconds={seconds} x={x} />;

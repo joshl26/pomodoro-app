@@ -6,6 +6,7 @@ import {
   autoBreak,
   timerMode,
   setCurrentTime,
+  setCycleStart,
 } from "../store/settingsSlice";
 
 import classes from "./Timer.module.css";
@@ -14,7 +15,10 @@ import CountdownTimer from "./CountDownTimer";
 import Container from "react-bootstrap/esm/Container";
 import { Row, Col } from "react-bootstrap";
 import sound from "../assets/button-press.wav";
-
+import bellSound from "../assets/alarm-bell.mp3";
+import digitalSound from "../assets/alarm-digital.mp3";
+import kitchenSound from "../assets/alarm-kitchen.mp3";
+import { player } from "../utilities/util";
 
 const Timer = () => {
   const pomoTime = useSelector((state) => state.settings.pomodoro);
@@ -26,8 +30,45 @@ const Timer = () => {
   const autoBreaks = useSelector((state) => state.settings.autobreak);
   const counter = useSelector((state) => state.settings.counter);
   const cycleComplete = useSelector((state) => state.settings.cyclecomplete);
+  const alarmVolumeState = useSelector((state) => state.settings.alarmvolume);
+  const alarmSoundState = useSelector((state) => state.settings.alarmsound);
 
   const dispatch = useDispatch();
+
+  const ternary = () => {
+    const adjVolume = alarmVolumeState / 100;
+
+    // if ((cycleComplete === true) & (autoBreaks === false)) {
+
+    if (cycleComplete === true) {
+      if (alarmSoundState === "Bell") {
+        player({
+          asset: bellSound,
+          volume: adjVolume,
+          loop: false,
+        }).play();
+      }
+
+      if (alarmSoundState === "Digital") {
+        player({
+          asset: digitalSound,
+          volume: adjVolume,
+          loop: false,
+        }).play();
+      }
+
+      if (alarmSoundState === "Kitchen") {
+        player({
+          asset: kitchenSound,
+          volume: adjVolume,
+          loop: false,
+        }).play();
+      }
+
+      return true;
+    } else return false;
+  };
+  // const ternary = false;
 
   const totalTimeMS = currentTime * 60 * 1000;
   const NOW_IN_MS = new Date().getTime();
@@ -103,6 +144,21 @@ const Timer = () => {
                 }}
               >
                 {timeEnabled === false ? "START" : "STOP"}
+              </button>
+            ) : (
+              ""
+            )}
+
+            {ternary() === true ? (
+              <button
+                className={buttonStyle()}
+                onClick={() => {
+                  dispatch(timerEnabled());
+                  dispatch(setCycleStart());
+                  new Audio(sound).play();
+                }}
+              >
+                Next Round
               </button>
             ) : (
               ""
