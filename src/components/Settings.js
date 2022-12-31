@@ -283,19 +283,25 @@ const Settings = () => {
           </Row>
           <div className={classes.divider}></div>
           <div className={classes.spacer}></div>
-          <h4 className={classes.card_text}>Auto start Breaks?</h4>
-          <ToggleButton
-            className="btn_break"
-            id="toggle-check"
-            type="checkbox"
-            variant="outline-light"
-            checked={autoBreakBool}
-            value="1"
-            onClick={saveClickHandler}
-          >
-            {!autoBreakBool && "No"}
-            {autoBreakBool && "Yes"}
-          </ToggleButton>
+          <Row>
+            <Col>
+              <h4 className={classes.card_text}>Auto start Breaks?</h4>
+            </Col>
+            <Col style={{ textAlign: "left" }}>
+              <ToggleButton
+                className="btn_break"
+                id="toggle-check"
+                type="checkbox"
+                variant="outline-light"
+                checked={autoBreakBool}
+                value="1"
+                onClick={saveClickHandler}
+              >
+                {!autoBreakBool && "No"}
+                {autoBreakBool && "Yes"}
+              </ToggleButton>
+            </Col>
+          </Row>
           <div className={classes.spacer}></div>
           <div className={classes.divider}></div>
           <div className={classes.spacer}></div>
@@ -334,15 +340,11 @@ const Settings = () => {
               <h4 className={classes.card_text}>Alarm Volume</h4>
             </Col>
             <Col style={{ paddingLeft: "25px" }}>
-              <Row style={{ height: "25%" }}></Row>
-              <Row>
-                <Slider
-                  value={alarmVolumeState}
-                  onChange={sliderClickHandler}
-                  onClick={sliderClickHandler}
-                />
-              </Row>
-              <Row></Row>
+              <Slider
+                value={alarmVolumeState}
+                onChange={sliderClickHandler}
+                onClick={sliderClickHandler}
+              />
             </Col>
             <Col>
               <h2>{alarmVolumeState}</h2>
@@ -363,6 +365,7 @@ const Settings = () => {
               </Button>
             </Col>
           </Row>
+          <div className={classes.spacer}></div>
         </div>
       </Container>
     </Fragment>
