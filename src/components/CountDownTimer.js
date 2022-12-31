@@ -13,6 +13,8 @@ import {
   timerMode,
   counterIncrement,
   setCounter,
+  setCycleComplete,
+  setCycleStart,
 } from "../store/settingsSlice";
 
 const ExpiredNotice = () => {
@@ -25,7 +27,7 @@ const ExpiredNotice = () => {
   useEffect(() => {
     if (autoBreak === false) {
       dispatch(setTimerEnabled(false));
-      // dispatch(setCycle(true));
+      dispatch(setCycleComplete());
     }
 
     if (autoBreak === true) {
@@ -34,6 +36,7 @@ const ExpiredNotice = () => {
         dispatch(counterIncrement());
         dispatch(timerMode(cycle));
         dispatch(setTimerEnabled(true));
+        dispatch(setCycleStart());
       }
 
       if (counter > 8) {
@@ -41,7 +44,7 @@ const ExpiredNotice = () => {
         // dispatch(setCycle());
         dispatch(setCounter(1));
         dispatch(timerMode(1));
-        dispatch(setTimerEnabled(true));
+        dispatch(setTimerEnabled(false));
       }
     }
 
@@ -96,7 +99,11 @@ const ShowCounter = ({ days, hours, minutes, seconds, x }) => {
 const CountdownTimer = ({ targetDate, time }) => {
   const [days, hours, minutes, seconds, x] = useCountdown(targetDate, time);
 
-  if (days + hours + minutes + seconds <= 0) {
+  const cycleCompleteState = useSelector(
+    (state) => state.settings.cyclecomplete
+  );
+
+  if (cycleCompleteState) {
     return <ExpiredNotice />;
   } else {
     return <ShowCounter minutes={minutes} seconds={seconds} x={x} />;
