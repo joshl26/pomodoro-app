@@ -38,8 +38,6 @@ const Timer = () => {
   const ternary = () => {
     const adjVolume = alarmVolumeState / 100;
 
-    // if ((cycleComplete === true) & (autoBreaks === false)) {
-
     if (cycleComplete === true) {
       if (alarmSoundState === "Bell") {
         player({
@@ -153,9 +151,10 @@ const Timer = () => {
               <button
                 className={buttonStyle()}
                 onClick={() => {
+                  player({}).stop();
+                  new Audio(sound).play();
                   dispatch(timerEnabled());
                   dispatch(setCycleStart());
-                  new Audio(sound).play();
                 }}
               >
                 Next Round
