@@ -103,7 +103,7 @@ const CountdownTimer = ({ targetDate, time }) => {
     (state) => state.settings.cyclecomplete
   );
 
-  if (cycleCompleteState) {
+  if (1) {
     return <ExpiredNotice />;
   } else {
     return <ShowCounter minutes={minutes} seconds={seconds} x={x} />;
