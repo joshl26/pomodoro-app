@@ -14,6 +14,9 @@ export const settingsSlice = createSlice({
     cycle: [1, 2, 1, 2, 1, 2, 1, 2, 3],
     counter: 0,
     cyclecomplete: false,
+    alarmenabled: true,
+    alarmsound: "Bell",
+    alarmvolume: 50,
   },
   reducers: {
     pomoIncrement: (state) => {
@@ -144,6 +147,9 @@ export const settingsSlice = createSlice({
       state.cycle = [1, 2, 1, 2, 1, 2, 1, 2, 3];
       state.counter = 0;
       state.cyclecomplete = false;
+      state.alarmenabled = true;
+      state.alarmsound = "Bell";
+      state.alarmvolume = 50;
     },
     counterIncrement: (state) => {
       console.log("Counter increment...");
@@ -172,24 +178,6 @@ export const settingsSlice = createSlice({
     setCycleComplete: (state) => {
       console.log("setCycleComplete");
       state.cyclecomplete = true;
-
-      //Increment counter automatically if autobreak is true
-      // if (state.autobreak === true) {
-      //   console.log("Increment Counter...");
-
-      //   //set max counter increment = cycle state array overall length
-      //   if (Number(state.counter) <= 8) {
-      //     console.log("Counter: " + state.counter);
-      //     state.counter += 1;
-      //     if (Number(state.counter) === 8) {
-      //       console.log("Counter Reset: " + state.counter);
-      //       state.counter = 0;
-      //     }
-      //   }
-      // } else {
-      //   state.timerenabled = false;
-      // }
-      // state.timermode = state.cycle[state.counter];
     },
     setCycleStart: (state) => {
       state.cyclecomplete = false;
@@ -198,6 +186,21 @@ export const settingsSlice = createSlice({
     setCycle: (state, action) => {
       console.log("Set Cycle Complete: " + action.payload);
       state.cyclecomplete = action.payload;
+    },
+
+    setAlarmState: (state, action) => {
+      console.log("Toggle Alarm State");
+      state.alarmenabled = action.payload;
+    },
+
+    setAlarmVolume: (state, action) => {
+      console.log("Set Alarm Volume" + action.payload);
+      state.alarmvolume = action.payload;
+    },
+
+    setAlarmSound: (state, action) => {
+      console.log("Set Alarm Sound" + action.payload);
+      state.alarmsound = action.payload;
     },
   },
 });
@@ -227,6 +230,9 @@ export const {
   setCycleComplete,
   setCycleStart,
   setCycle,
+  setAlarmState,
+  setAlarmVolume,
+  setAlarmSound,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;
