@@ -33,15 +33,15 @@ npm run test
 
 👤 **Joshua Lehman**
 
-* Website: joshlehman.ca
+* Website: https://joshlehman.ca
 * Github: [@joshl26](https://github.com/joshl26)
-* LinkedIn: [@https:\/\/www.linkedin.com\/in\/jlehmaneng\/](https://linkedin.com/in/https:\/\/www.linkedin.com\/in\/jlehmaneng\/)
+* LinkedIn: [@jlehmaneng](https://linkedin.com/in/jlehmaneng/)
 
 ## Show your support
 
 Give a ⭐️ if this project helped you!
 
-<a href="https://www.patreon.com/patreon.com\/TheModernDeveloper">
+<a href="https://www.patreon.com/TheModernDeveloper">
   <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
 </a>
 
