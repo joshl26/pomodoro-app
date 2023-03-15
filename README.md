@@ -7,9 +7,9 @@
 
 > A pomodoro timer written in React.js, clone of the famous pomofocus timer app. 
 
-### 🏠 [Homepage]((https://joshlehman.ca/pomodor/))
+### 🏠 [Homepage](https://joshlehman.ca/pomodor/)
 
-### ✨ [Demo]((https://joshlehman.ca/pomodor/))
+### ✨ [Demo](https://joshlehman.ca/pomodor/)
 
 ## Install
 
