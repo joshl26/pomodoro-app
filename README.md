@@ -20,7 +20,7 @@
 A ReactJS and Redux Pomodoro timer clone based on the famous Pomofocus app
 </p>
 
-### 🏠 [Homepage](https://github.com/joshl26/pomodoro-app)
+### 🏠 [Homepage](https://github.com/joshl26)
 
 ### 👀 [Live Demo](https://joshlehman.ca/pomodor)
 
