@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to pomodoro-app 👋</h1>
+<h1 align="center">Welcome to PomoBreak 👋</h1>
 <p>
   <a href="https://www.npmjs.com/package/pomodoro-app" target="_blank">
     <img alt="Version" src="https://img.shields.io/npm/v/pomodoro-app.svg">
@@ -17,12 +17,48 @@
 </p>
 
 <p>
-A ReactJS and Redux Pomodoro timer clone based on the famous Pomofocus app
+A ReactJS and Redux Pomodoro timer based on the famous Pomofocus app.
 </p>
 
-### 🏠 [Homepage](https://github.com/joshl26)
+## Technologies Utilized
 
-### 👀 [Live Demo](https://joshlehman.ca/pomodor)
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![React.js](https://img.shields.io/badge/react.js-%23404d59.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Redux](https://img.shields.io/badge/redux-%23404d59.svg?style=for-the-badge&logo=redux&logoColor=%2361DAFB)
+![Bootstrap](https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white)
+
+> HTML5 - A markup language for creating web pages and web applications.
+
+> CSS3 - used for describing the presentation of a document written in a markup language.
+
+> Bootstrap - A free and open-source front-end web framework for designing websites and web applications quickly.
+
+> Node.js - Open-source, cross-platform JavaScript run-time environment for executing JavaScript code server-side.
+
+> Redux - For state management.
+
+## Screenshots
+
+> Landing Page
+> ![Home](https://raw.githubusercontent.com/joshl26/joshl26/main/assets/pomodor-1.png)
+
+> Customizeable Timers
+> ![Timers](https://raw.githubusercontent.com/joshl26/joshl26/main/assets/pomodor-2.png)
+
+> Help Page
+> ![Help](https://raw.githubusercontent.com/joshl26/joshl26/main/assets/pomodor-3.png)
+
+> Settings page
+> ![Settings](https://raw.githubusercontent.com/joshl26/joshl26/main/assets/pomodor-4.png)
+
+## Demo
+
+### ✨ [Live Demo Site](https://joshlehman.ca/pomodor)
+
+> <p>Hosted with GoDaddy</p>
 
 ## Prerequisites
 
