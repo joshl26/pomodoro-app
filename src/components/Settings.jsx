@@ -7,7 +7,7 @@ import Col from "react-bootstrap/esm/Col";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/esm/Button";
 import ToggleButton from "react-bootstrap/esm/ToggleButton";
-import Slider from "../components/Slider";
+import Slider from "./Slider";
 
 import Dropdown from "react-bootstrap/esm/Dropdown";
 
