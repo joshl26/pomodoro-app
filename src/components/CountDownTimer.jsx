@@ -7,7 +7,6 @@ import Progress from "./Progress";
 import { useSelector, useDispatch } from "react-redux";
 import Container from "react-bootstrap/esm/Container";
 import { Row } from "react-bootstrap";
-
 import {
   setTimerEnabled,
   timerMode,
@@ -100,13 +99,13 @@ const ShowCounter = ({ days, hours, minutes, seconds, x }) => {
 };
 
 const CountdownTimer = ({ targetDate, time }) => {
-  const [days, hours, minutes, seconds, x] = useCountdown(targetDate, time);
+  const [minutes, seconds, x] = useCountdown(targetDate, time);
 
-  const cycleCompleteState = useSelector(
-    (state) => state.settings.cyclecomplete
-  );
+  // const cycleCompleteState = useSelector(
+  //   (state) => state.settings.cyclecomplete
+  // );
 
-  console.log(`minutes: ${minutes}`);
+  // console.log(`minutes: ${minutes}`);
 
   if (minutes + seconds === 0) {
     return <ExpiredNotice />;
