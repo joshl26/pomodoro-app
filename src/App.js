@@ -56,19 +56,19 @@ function App() {
       <div className={classes.content}>
         <div className={classes.spacer_small} />
         <Switch>
-          <Route path="/pomodor" exact>
+          <Route path="/" exact>
             <Timer />
           </Route>
-          <Route path="/pomodor/settings">
+          <Route path="/settings">
             <Settings />
           </Route>
-          <Route path="/pomodor/report">
+          <Route path="/report">
             <Report />
           </Route>
-          <Route path="/pomodor/login">
+          <Route path="/login">
             <Login />
           </Route>
-          <Route path="/pomodor/help">
+          <Route path="/help">
             <Help />
           </Route>
         </Switch>

@@ -6,4 +6,4 @@ COPY package.json /pomodoro-app/
 RUN npm install
 COPY . .
 CMD ["npm", "start"]
-EXPOSE 3001
+EXPOSE 3000

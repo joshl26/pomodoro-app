@@ -1,13 +1,12 @@
 {
-  "homepage": "https://github.com/joshl26/pomodoro-app",
   "name": "pomodoro-app",
   "version": "0.1.0",
   "description": "A ReactJS and Redux Pomodoro timer clone based on the famous Pomofocus app",
   "private": false,
   "author": "Joshua Lehman",
   "license": "MIT",
-  "demo": {    
-    "url":"https://joshlehman.ca/pomodor"
+  "demo": {
+    "url": "https://joshlehman.ca/pomodor"
   },
   "repository": {
     "type": "git",
@@ -20,7 +19,6 @@
     "npm": ">=8.0.0",
     "node": ">=17.0.0"
   },
-
   "packageManager": "^pnpm@6.32.4",
   "dependencies": {
     "@redux-devtools/core": "^3.13.1",
@@ -40,7 +38,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set PORT=3001 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

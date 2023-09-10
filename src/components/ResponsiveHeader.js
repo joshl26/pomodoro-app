@@ -35,34 +35,20 @@ const ResponsiveHeader = () => {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto"></Nav>
-            <Nav defaultActiveKey="/pomodor/">
-              <Nav.Link id="home_nav" as={Link} eventKey="/pomodor/" to="/pomodor/">
+            <Nav defaultActiveKey="/">
+              <Nav.Link id="home_nav" as={Link} eventKey="/" to="/">
                 Home
               </Nav.Link>
-
-              <Nav.Link as={Link} eventKey="/pomodor/help/" to="/pomodor/help/">
+              <Nav.Link as={Link} eventKey="/help" to="/help">
                 Help
               </Nav.Link>
-
-              <Nav.Link
-                as={Link}
-                eventKey="/pomodor/login/"
-                to="/pomodor/login/"
-              >
+              <Nav.Link as={Link} eventKey="/login" to="/login">
                 Login
               </Nav.Link>
-              <Nav.Link
-                as={Link}
-                eventKey="/pomodor/report/"
-                to="/pomodor/report/"
-              >
+              <Nav.Link as={Link} eventKey="/report" to="/report">
                 Charts
               </Nav.Link>
-              <Nav.Link
-                as={Link}
-                eventKey="/pomodor/settings/"
-                to="/pomodor/settings/"
-              >
+              <Nav.Link as={Link} eventKey="/settings" to="/settings">
                 Settings
               </Nav.Link>
             </Nav>

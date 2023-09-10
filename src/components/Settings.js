@@ -159,7 +159,7 @@ const Settings = () => {
               <h4 className={classes.card_text}>SETTINGS</h4>
             </Col>
             <Col className={classes.align_right}>
-              <Link to="/pomodor/">
+              <Link to="/">
                 <Button
                   id="back_btn"
                   onClick={backClickHandler}
