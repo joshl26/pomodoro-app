@@ -177,7 +177,7 @@ export const settingsSlice = createSlice({
     },
     setCycleComplete: (state) => {
       console.log("setCycleComplete");
-      state.cyclecomplete = true;
+      // state.cyclecomplete = true;
     },
     setCycleStart: (state) => {
       state.cyclecomplete = false;

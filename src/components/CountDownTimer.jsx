@@ -23,35 +23,53 @@ const ExpiredNotice = () => {
 
   const dispatch = useDispatch();
 
+  //TODO look at refactoring this block of code, too much repetetition.
+
   useEffect(() => {
-    if (autoBreak === false) {
-      dispatch(setTimerEnabled(false));
-      dispatch(setCycleComplete());
-    }
-
-    if (autoBreak === true) {
-      if (counter <= 8) {
-        dispatch(setTimerEnabled(false));
-        dispatch(counterIncrement());
-        dispatch(timerMode(cycle));
-        dispatch(setTimerEnabled(true));
-        dispatch(setCycleStart());
-      }
-
-      if (counter > 8) {
-        dispatch(setTimerEnabled(false));
-        // dispatch(setCycle());
-        dispatch(setCounter(1));
-        dispatch(timerMode(1));
-        dispatch(setTimerEnabled(false));
-      }
-    }
+    // dispatch(setTimerEnabled(false));
+    // dispatch(counterIncrement());
+    // dispatch(timerMode(cycle));
+    //dispatch(setTimerEnabled(true));
+    // dispatch(setCycleStart());
 
     // dispatch(setTimerEnabled(false));
-    // dispatch(setCycleComplete());
+    // dispatch(setCycle());
+    // dispatch(setCounter(1));
+    // dispatch(timerMode(1));
+    // dispatch(setTimerEnabled(false));
 
-    console.log("Use effect");
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    return () => {};
+  }, []);
+
+  // useEffect(() => {
+  //   if (autoBreak === false) {
+  //     dispatch(setTimerEnabled(false));
+  //     dispatch(setCycleComplete());
+  //   }
+
+  //   if (autoBreak === true) {
+  //     if (counter <= 8) {
+  //       dispatch(setTimerEnabled(false));
+  //       dispatch(counterIncrement());
+  //       dispatch(timerMode(cycle));
+  //       dispatch(setTimerEnabled(true));
+  //       dispatch(setCycleStart());
+  //     }
+
+  //     if (counter > 8) {
+  //       dispatch(setTimerEnabled(false));
+  //       // dispatch(setCycle());
+  //       dispatch(setCounter(1));
+  //       dispatch(timerMode(1));
+  //       dispatch(setTimerEnabled(false));
+  //     }
+  //   }
+
+  //   // dispatch(setTimerEnabled(false));
+  //   // dispatch(setCycleComplete());
+
+  //   console.log("Use effect");
+  // }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Container>
@@ -101,17 +119,21 @@ const ShowCounter = ({ days, hours, minutes, seconds, x }) => {
 const CountdownTimer = ({ targetDate, time }) => {
   const [minutes, seconds, x] = useCountdown(targetDate, time);
 
+  useEffect(() => {}, [seconds]);
+
   // const cycleCompleteState = useSelector(
   //   (state) => state.settings.cyclecomplete
   // );
 
   // console.log(`minutes: ${minutes}`);
 
-  if (minutes + seconds === 0) {
-    return <ExpiredNotice />;
-  } else {
-    return <ShowCounter minutes={minutes} seconds={seconds} x={x} />;
-  }
+  // if (minutes + seconds === 0) {
+  //   return <ExpiredNotice />;
+  // } else {
+  //   return <ShowCounter minutes={minutes} seconds={seconds} x={x} />;
+  // }
+
+  return <ShowCounter minutes={minutes} seconds={seconds} x={x} />;
 };
 
 export default CountdownTimer;
