@@ -36,19 +36,32 @@ const ResponsiveHeader = () => {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto"></Nav>
             <Nav defaultActiveKey="/">
-              <Nav.Link id="home_nav" as={Link} eventKey="/" to="/">
+              <Nav.Link
+                id="home_nav"
+                as={Link}
+                eventKey="/pomodor/"
+                to="/pomodor/"
+              >
                 Home
               </Nav.Link>
-              <Nav.Link as={Link} eventKey="/help" to="/help">
+              <Nav.Link as={Link} eventKey="/pomodor/help" to="/pomodor/help">
                 Help
               </Nav.Link>
-              <Nav.Link as={Link} eventKey="/login" to="/login">
+              <Nav.Link as={Link} eventKey="/pomodor/login" to="/pomodor/login">
                 Login
               </Nav.Link>
-              <Nav.Link as={Link} eventKey="/report" to="/report">
+              <Nav.Link
+                as={Link}
+                eventKey="/pomodor/report"
+                to="/pomodor/report"
+              >
                 Charts
               </Nav.Link>
-              <Nav.Link as={Link} eventKey="/settings" to="/settings">
+              <Nav.Link
+                as={Link}
+                eventKey="/pomodor/settings"
+                to="/pomodor/settings"
+              >
                 Settings
               </Nav.Link>
             </Nav>

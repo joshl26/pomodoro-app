@@ -1,4 +1,5 @@
 {
+  "homepage": "/pomodor/",
   "name": "pomodoro-app",
   "version": "0.1.0",
   "description": "A ReactJS and Redux Pomodoro timer clone based on the famous Pomofocus app",
