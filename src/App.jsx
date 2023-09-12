@@ -52,14 +52,14 @@ function App() {
   return (
     <div className={activeClass}>
       <div className={classes.spacer_small} />
-      {/* <ResponsiveHeader /> */}
+      <ResponsiveHeader />
       <div className={classes.content}>
         <div className={classes.spacer_small} />
         <Switch>
           <Route path="/pomodor/" exact>
             <Timer />
           </Route>
-          {/* <Route path="/pomodor/settings">
+          <Route path="/pomodor/settings">
             <Settings />
           </Route>
           <Route path="/pomodor/report">
@@ -70,7 +70,7 @@ function App() {
           </Route>
           <Route path="/pomodor/help">
             <Help />
-          </Route> */}
+          </Route>
         </Switch>
       </div>
       <div className={classes.spacer_small} />
