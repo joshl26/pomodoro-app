@@ -54,7 +54,7 @@ export default function Timer() {
   };
 
   function buttonStyle() {
-    let btnStyle = `${classes.action_btn1}`;
+    var btnStyle = `${classes.action_btn1}`;
 
     if (timerEnabledState === false && Number(timeMode) === 1) {
       btnStyle = `${classes.action_btn1}`;
@@ -99,47 +99,41 @@ export default function Timer() {
           </Row>
           <SecondaryButtons />
           <Container>
-            <div className={classes.time}>
-              <h1>react-timer-hook </h1>
-              <p>Timer Demo</p>
-              <div style={{ fontSize: "100px" }}>
-                <span>{minutes}</span>:<span>{seconds}</span>
-              </div>
-              <p>{isRunning ? "Running" : "Not running"}</p>
-              <button onClick={start}>Start</button>
-              <button onClick={pause}>Pause</button>
-              <button onClick={resume}>Resume</button>
-              <button
-                onClick={() => {
-                  // Restarts to 5 minutes timer
-                  dispatch(timerEnabled());
-
-                  const time = new Date();
-                  time.setSeconds(time.getSeconds() + 300);
-                  restart(time);
-                }}
-              >
-                Restart
-              </button>
+            <div style={{ fontSize: "100px" }}>
+              <span>{minutes}</span>
+              <span>:</span>
+              <span>{seconds}</span>
             </div>
             <div>
-              {cycleComplete === false ? (
-                <button
-                  className={buttonStyle()}
-                  onClick={() => {
-                    dispatch(timerEnabled());
-                    // // Restarts to 5 minutes timer
-                    // const time = new Date();
-                    // time.setSeconds(time.getSeconds() + 300);
-                    // restart(time);
-                  }}
-                >
-                  {timerEnabledState === false ? "START" : "STOP"}
-                </button>
-              ) : (
-                ""
-              )}
-
+              <Row>
+                <Col>
+                  <button className={buttonStyle()} onClick={start}>
+                    Start
+                  </button>
+                </Col>
+                <Col>
+                  <button className={buttonStyle()} onClick={pause}>
+                    Pause
+                  </button>
+                </Col>
+                <Col>
+                  <button className={buttonStyle()} onClick={resume}>
+                    Resume
+                  </button>
+                </Col>
+                <Col>
+                  <button
+                    className={buttonStyle()}
+                    onClick={() => {
+                      const time = new Date();
+                      time.setSeconds(time.getSeconds() + currentTime * 60);
+                      restart(time);
+                    }}
+                  >
+                    Restart
+                  </button>
+                </Col>
+              </Row>
               {ternary() === true ? (
                 <button
                   className={buttonStyle()}
@@ -171,7 +165,7 @@ export default function Timer() {
                     className={classes.autobreak_btn}
                   >
                     Auto Start Breaks:
-                  </button>{" "}
+                  </button>
                   ENABLED
                 </p>
               ) : (
