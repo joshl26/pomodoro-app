@@ -14,9 +14,7 @@ export default function Timer() {
 
   expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + currentTime * 60);
 
-  //   useEffect(() => {
-  //     return () => {};
-  //   }, [currentTime]);
+  // useEffect(() => {}, [currentTime]);
 
   const pomoTime = useSelector((state) => state.settings.pomodoro);
   const shortTime = useSelector((state) => state.settings.short);
@@ -43,6 +41,7 @@ export default function Timer() {
     resume,
     restart,
   } = useTimer({
+    autoStart: false,
     expiryTimestamp,
     onExpire: () => console.warn("onExpire called"),
   });
@@ -102,6 +101,7 @@ export default function Timer() {
             <div style={{ fontSize: "100px" }}>
               <span>{minutes}</span>
               <span>:</span>
+              {seconds < 10 ? <span>0</span> : ""}
               <span>{seconds}</span>
             </div>
             <div>
