@@ -1,13 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTimer } from "react-timer-hook";
-import classes from "./Timer.module.css";
-import SecondaryButtons from "./SecondaryButtons";
-import Container from "react-bootstrap/esm/Container";
 import { Row, Col } from "react-bootstrap";
 import { setTimerEnabled, timerEnabled } from "../store/settingsSlice";
-import Progress from "./Progress";
-import { FaBeer } from "react-icons/fa";
+import { FaForward } from "react-icons/fa";
+import classes from "./Timer.css";
+import SecondaryButtons from "./SecondaryButtons";
+import Container from "react-bootstrap/esm/Container";
 
 export default function Timer() {
   const currentTime = useSelector((state) => state.settings.currenttime);
@@ -16,11 +15,13 @@ export default function Timer() {
 
   expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + currentTime * 60);
 
-  // useEffect(() => {}, [currentTime]);
+  useEffect(() => {
+    // expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + currentTime * 60);
+  }, [currentTime]);
 
-  const pomoTime = useSelector((state) => state.settings.pomodoro);
-  const shortTime = useSelector((state) => state.settings.short);
-  const longTime = useSelector((state) => state.settings.long);
+  // const pomoTime = useSelector((state) => state.settings.pomodoro);
+  // const shortTime = useSelector((state) => state.settings.short);
+  // const longTime = useSelector((state) => state.settings.long);
   const timeMode = useSelector((state) => state.settings.timermode);
   const timerEnabledState = useSelector((state) => state.settings.timerenabled);
   const autoBreaks = useSelector((state) => state.settings.autobreak);
@@ -73,30 +74,30 @@ export default function Timer() {
   };
 
   function buttonStyle() {
-    var btnStyle = `${classes.action_btn1}`;
+    var btnStyle;
 
     if (timerEnabledState === false && Number(timeMode) === 1) {
-      btnStyle = `${classes.action_btn1}`;
+      btnStyle = `action_btn1`;
     }
 
     if (timerEnabledState === true && Number(timeMode) === 1) {
-      btnStyle = `${classes.action_btn1_active}`;
+      btnStyle = `action_btn1_active`;
     }
 
     if (timerEnabledState === false && Number(timeMode) === 2) {
-      btnStyle = `${classes.action_btn2}`;
+      btnStyle = `action_btn2`;
     }
 
     if (timerEnabledState === true && Number(timeMode) === 2) {
-      btnStyle = `${classes.action_btn2_active}`;
+      btnStyle = `action_btn2_active`;
     }
 
     if (timerEnabledState === false && Number(timeMode) === 3) {
-      btnStyle = `${classes.action_btn3}`;
+      btnStyle = `action_btn3`;
     }
 
     if (timerEnabledState === true && Number(timeMode) === 3) {
-      btnStyle = `${classes.action_btn3_active}`;
+      btnStyle = `action_btn3_active`;
     }
 
     return btnStyle;
@@ -105,16 +106,16 @@ export default function Timer() {
   return (
     <div style={{ textAlign: "center" }}>
       <Container>
-        <div className={classes.content}>
+        <div className="content">
           <Row>
-            <Col className={classes.align_center}>
+            <Col className="align_center">
               {autoBreaks === true ? (
                 <h3>Pomodoro Cycle: {Number(counter)}</h3>
               ) : (
                 <h3> </h3>
               )}
             </Col>
-            <div className={classes.spacer} />
+            <div className="spacer" />
           </Row>
           <SecondaryButtons />
           <Container>
@@ -136,34 +137,21 @@ export default function Timer() {
                     </button>
                   </Col>
                 ) : (
-                  <Col>
-                    <button
-                      className={buttonStyle()}
-                      onClick={pauseButtonClicked}
-                    >
-                      Pause
-                    </button>
-                    <FaBeer />
-                  </Col>
+                  <>
+                    <Col></Col>
+                    <Col>
+                      <button
+                        className={buttonStyle()}
+                        onClick={pauseButtonClicked}
+                      >
+                        Pause
+                      </button>
+                    </Col>
+                    <Col>
+                      <FaForward className="next_icon" />
+                    </Col>
+                  </>
                 )}
-
-                {/* <Col>
-                  <button className={buttonStyle()} onClick={resume}>
-                    Resume
-                  </button>
-                </Col>
-                <Col>
-                  <button
-                    className={buttonStyle()}
-                    onClick={() => {
-                      const time = new Date();
-                      time.setSeconds(time.getSeconds() + currentTime * 60);
-                      restart(time);
-                    }}
-                  >
-                    Restart
-                  </button>
-                </Col> */}
               </Row>
               {ternary() === true ? (
                 <button
@@ -185,7 +173,7 @@ export default function Timer() {
         </div>
         <Container>
           <Row>
-            <Col sm={12} className={classes.align_center}>
+            <Col sm={12} className="align_center">
               {autoBreaks ? (
                 <p>
                   <button
@@ -193,7 +181,7 @@ export default function Timer() {
                       //   dispatch(autoBreak(false));
                       //   dispatch(setCounter(0));
                     }}
-                    className={classes.autobreak_btn}
+                    className="autobreak_btn"
                   >
                     Auto Start Breaks:
                   </button>
@@ -208,10 +196,10 @@ export default function Timer() {
                       //   dispatch(timerMode(1));
                       //   dispatch(setCurrentTime(pomoTime));
                     }}
-                    className={classes.autobreak_btn}
+                    className="autobreak_btn"
                   >
                     Auto Start Breaks:
-                  </button>{" "}
+                  </button>
                   DISABLED
                 </p>
               )}

@@ -1,9 +1,9 @@
-import classes from "./Progress.module.css";
+import "./Progress.css";
 
 const Progress = ({ percent }) => {
   return (
-    <div className={classes.container}>
-      <div className={classes.progress} style={{ width: `${percent}%` }} />
+    <div className="container">
+      <div className="progress" style={{ width: `${percent}%` }} />
     </div>
   );
 };

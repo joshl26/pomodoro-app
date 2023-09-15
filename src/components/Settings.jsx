@@ -1,20 +1,19 @@
 import "./Settings.css";
-import classes from "./Settings.module.css";
-
-import { Container } from "react-bootstrap";
-import Row from "react-bootstrap/esm/Row";
-import Col from "react-bootstrap/esm/Col";
-import { Link } from "react-router-dom";
-import Button from "react-bootstrap/esm/Button";
-import ToggleButton from "react-bootstrap/esm/ToggleButton";
 import Slider from "./Slider";
-
-import Dropdown from "react-bootstrap/esm/Dropdown";
-
+import bellSound from "../assets/alarm-bell.mp3";
+import digitalSound from "../assets/alarm-digital.mp3";
+import kitchenSound from "../assets/alarm-kitchen.mp3";
+import {
+  Container,
+  Row,
+  Col,
+  Dropdown,
+  ToggleButton,
+  Button,
+} from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-
 import { useState } from "react";
-
 import {
   pomoIncrement,
   pomoDecrement,
@@ -34,11 +33,6 @@ import {
 } from "../store/settingsSlice";
 import { useEffect } from "react";
 import { Fragment } from "react";
-
-import bellSound from "../assets/alarm-bell.mp3";
-import digitalSound from "../assets/alarm-digital.mp3";
-import kitchenSound from "../assets/alarm-kitchen.mp3";
-
 import { player } from "../utilities/util";
 import { useCallback } from "react";
 
@@ -151,40 +145,40 @@ const Settings = () => {
 
   return (
     <Fragment>
-      <div className={classes.cover} />
-      <Container className={classes.container}>
-        <div className={classes.card}>
+      <div className="cover" />
+      <Container className="container">
+        <div className="card">
           <Row>
             <Col>
-              <h4 className={classes.card_text}>SETTINGS</h4>
+              <h4 className="card_text">SETTINGS</h4>
             </Col>
-            <Col className={classes.align_right}>
+            <Col className="align_right">
               <Link to="/pomodor/">
                 <Button
                   id="back_btn"
                   onClick={backClickHandler}
                   variant="outline-light"
-                  className={classes.btn_save}
+                  className="btn_save"
                 >
                   Back
                 </Button>
               </Link>
             </Col>
           </Row>
-          <div className={classes.spacer_small}></div>
-          <div className={classes.divider}></div>
-          <div className={classes.spacer_small}></div>
-          <h4 className={classes.card_text}>Time (minutes)</h4>
+          <div className="spacer_small"></div>
+          <div className="divider"></div>
+          <div className="spacer_small"></div>
+          <h4 className="card_text">Time (minutes)</h4>
           <Row>
-            <Col md={4} className={classes.card_text}>
-              <p className={classes.timer_text}>Pomodoro</p>
+            <Col md={4} className="card_text">
+              <p className="timer_text">Pomodoro</p>
               <Row>
-                <Col className={classes.padding_left}>
-                  <div className={classes.card_time}>
-                    <h4 className={classes.time_text}>{pomodoroCount}:00</h4>
+                <Col className="padding_left">
+                  <div className="card_time">
+                    <h4 className="time_text">{pomodoroCount}:00</h4>
                   </div>
                 </Col>
-                <Col className={classes.padding_right}>
+                <Col className="padding_right">
                   <Row>
                     <Button
                       onClick={() => {
@@ -193,7 +187,7 @@ const Settings = () => {
                       }}
                       variant="custom"
                     >
-                      <h4 className={classes.text_increment}>+</h4>
+                      <h4 className="text_increment">+</h4>
                     </Button>
                   </Row>
                   <Row>
@@ -204,21 +198,21 @@ const Settings = () => {
                       }}
                       variant="custom"
                     >
-                      <h4 className={classes.text_increment}>-</h4>
+                      <h4 className="text_increment">-</h4>
                     </Button>
                   </Row>
                 </Col>
               </Row>
             </Col>
-            <Col md={4} className={classes.card_text}>
-              <p className={classes.timer_text}>Short Break</p>
+            <Col md={4} className="card_text">
+              <p className="timer_text">Short Break</p>
               <Row>
-                <Col className={classes.padding_left}>
-                  <div className={classes.card_time}>
-                    <h4 className={classes.time_text}>{shortCount}:00</h4>
+                <Col className="padding_left">
+                  <div className="card_time">
+                    <h4 className="time_text">{shortCount}:00</h4>
                   </div>
                 </Col>
-                <Col className={classes.padding_right}>
+                <Col className="padding_right">
                   <Row>
                     <Button
                       onClick={() => {
@@ -227,7 +221,7 @@ const Settings = () => {
                       }}
                       variant="custom"
                     >
-                      <h4 className={classes.text_increment}>+</h4>
+                      <h4 className="text_increment">+</h4>
                     </Button>
                   </Row>
                   <Row>
@@ -238,21 +232,21 @@ const Settings = () => {
                       }}
                       variant="custom"
                     >
-                      <h4 className={classes.text_increment}>-</h4>
+                      <h4 className="text_increment">-</h4>
                     </Button>
                   </Row>
                 </Col>
               </Row>
             </Col>
-            <Col md={4} className={classes.card_text}>
-              <p className={classes.timer_text}>Long Break</p>
+            <Col md={4} className="card_text">
+              <p className="timer_text">Long Break</p>
               <Row>
-                <Col className={classes.padding_left}>
-                  <div className={classes.card_time}>
-                    <h4 className={classes.time_text}>{longCount}:00</h4>
+                <Col className="padding_left">
+                  <div className="card_time">
+                    <h4 className="time_text">{longCount}:00</h4>
                   </div>
                 </Col>
-                <Col className={classes.padding_right}>
+                <Col className="padding_right">
                   <Row>
                     <Button
                       onClick={() => {
@@ -261,7 +255,7 @@ const Settings = () => {
                       }}
                       variant="custom"
                     >
-                      <h4 className={classes.text_increment}>+</h4>
+                      <h4 className="text_increment">+</h4>
                     </Button>
                   </Row>
                   <Row>
@@ -273,19 +267,19 @@ const Settings = () => {
                       value="negative"
                       variant="custom"
                     >
-                      <h4 className={classes.text_increment}>-</h4>
+                      <h4 className="text_increment">-</h4>
                     </Button>
                   </Row>
                 </Col>
               </Row>
             </Col>
-            <div className={classes.spacer}></div>
+            <div className="spacer"></div>
           </Row>
-          <div className={classes.divider}></div>
-          <div className={classes.spacer}></div>
+          <div className="divider"></div>
+          <div className="spacer"></div>
           <Row>
             <Col>
-              <h4 className={classes.card_text}>Auto start Breaks?</h4>
+              <h4 className="card_text">Auto start Breaks?</h4>
             </Col>
             <Col style={{ textAlign: "left" }}>
               <ToggleButton
@@ -302,12 +296,12 @@ const Settings = () => {
               </ToggleButton>
             </Col>
           </Row>
-          <div className={classes.spacer}></div>
-          <div className={classes.divider}></div>
-          <div className={classes.spacer}></div>
+          <div className="spacer"></div>
+          <div className="divider"></div>
+          <div className="spacer"></div>
           <Row>
             <Col>
-              <h4 className={classes.card_text}>Alarm Sounds</h4>
+              <h4 className="card_text">Alarm Sounds</h4>
             </Col>
             <Col>
               <Dropdown>
@@ -332,12 +326,12 @@ const Settings = () => {
             </Col>
             <Col></Col>
           </Row>
-          <div className={classes.spacer}></div>
-          <div className={classes.divider}></div>
-          <div className={classes.spacer}></div>
+          <div className="spacer"></div>
+          <div className="divider"></div>
+          <div className="spacer"></div>
           <Row>
             <Col>
-              <h4 className={classes.card_text}>Alarm Volume</h4>
+              <h4 className="card_text">Alarm Volume</h4>
             </Col>
             <Col style={{ paddingLeft: "25px" }}>
               <Slider
@@ -350,12 +344,12 @@ const Settings = () => {
               <h2>{alarmVolumeState}</h2>
             </Col>
           </Row>
-          <div className={classes.spacer_small}></div>
-          <div className={classes.divider}></div>
-          <div className={classes.spacer}></div>
+          <div className="spacer_small"></div>
+          <div className="divider"></div>
+          <div className="spacer"></div>
 
           <Row>
-            <Col className={classes.align_center}>
+            <Col className="align_center">
               <Button
                 onClick={defaultSettingsClickHandler}
                 variant="outline-light"
@@ -365,7 +359,7 @@ const Settings = () => {
               </Button>
             </Col>
           </Row>
-          <div className={classes.spacer}></div>
+          <div className="spacer"></div>
         </div>
       </Container>
     </Fragment>

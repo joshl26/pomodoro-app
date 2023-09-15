@@ -1,10 +1,10 @@
-import classes from "./Login.module.css";
+import "./Login.css";
 
 import { Container, Row } from "react-bootstrap";
 
 const Login = () => {
   return (
-    <Container className={classes.align_center}>
+    <Container className="align_center">
       <Row>
         <h1>LOGIN</h1>
       </Row>

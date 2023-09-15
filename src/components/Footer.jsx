@@ -1,13 +1,13 @@
-import classes from "./Footer.module.css";
+import "./Footer.css";
 
 const Footer = () => {
   return (
     <>
       <footer>
-        <div className={classes.container}>
-          <h1 className={classes.footer_text}>
-            Copyright{" "}
-            <a className={classes.footer_link} href="http://joshlehman.ca">
+        <div className="container">
+          <h1 className="footer_text">
+            Copyright
+            <a className="footer_link" href="http://joshlehman.ca">
               Josh Lehman
             </a>
           </h1>

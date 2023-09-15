@@ -1,10 +1,7 @@
 import { Route, Switch } from "react-router-dom";
 import { useSelector } from "react-redux";
-
 import { useEffect } from "react";
-
-import classes from "./App.module.css";
-
+import { Container } from "react-bootstrap";
 import Timer from "./components/Timer";
 import ResponsiveHeader from "./components/ResponsiveHeader";
 import Footer from "./components/Footer";
@@ -13,7 +10,7 @@ import Report from "./components/Report";
 import Login from "./components/Login";
 import Help from "./components/Help";
 import Progress from "./components/Progress";
-import { Container } from "react-bootstrap";
+import classes from "./App.module.css";
 
 function getFaviconEl() {
   return document.getElementById("favicon");

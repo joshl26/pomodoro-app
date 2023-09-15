@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { timerMode, setCurrentTime } from "../store/settingsSlice";
-import classes from "./SecondaryButtons.module.css";
+import "./SecondaryButtons.css";
 import { Row, Col, Container } from "react-bootstrap";
 
 const SecondaryButtons = () => {
@@ -21,7 +21,7 @@ const SecondaryButtons = () => {
   }
 
   return (
-    <div className={classes.container}>
+    <div className="container">
       <Container>
         <Row>
           <Col sm={4}>
@@ -31,8 +31,8 @@ const SecondaryButtons = () => {
               name={"Pomodoro"}
               className={
                 Number(timeMode) === 1
-                  ? `${classes.btn_background_pomodoro}`
-                  : `${classes.btn_secondary}`
+                  ? `btn_background_pomodoro`
+                  : `btn_secondary`
               }
               onClick={handleClick}
             >
@@ -46,8 +46,8 @@ const SecondaryButtons = () => {
               name={"Short Break"}
               className={
                 Number(timeMode) === 2
-                  ? `${classes.btn_background_short}`
-                  : `${classes.btn_secondary}`
+                  ? `btn_background_short`
+                  : `btn_secondary`
               }
               onClick={handleClick}
             >
@@ -60,9 +60,7 @@ const SecondaryButtons = () => {
               id={3}
               name={"Long Break"}
               className={
-                Number(timeMode) === 3
-                  ? `${classes.btn_background_long}`
-                  : `${classes.btn_secondary}`
+                Number(timeMode) === 3 ? `btn_background_long` : `btn_secondary`
               }
               onClick={handleClick}
             >
