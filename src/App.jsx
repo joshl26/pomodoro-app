@@ -12,6 +12,8 @@ import Settings from "./components/Settings";
 import Report from "./components/Report";
 import Login from "./components/Login";
 import Help from "./components/Help";
+import Progress from "./components/Progress";
+import { Container } from "react-bootstrap";
 
 function getFaviconEl() {
   return document.getElementById("favicon");
@@ -53,6 +55,11 @@ function App() {
     <div className={activeClass}>
       <div className={classes.spacer_small} />
       <ResponsiveHeader />
+      <div className={classes.spacer_small}></div>
+      <Container>
+        <Progress percent={50} />
+      </Container>
+      <div className={classes.spacer_small}></div>
       <div className={classes.content}>
         <div className={classes.spacer_small} />
         <Switch>

@@ -5,7 +5,9 @@ import classes from "./Timer.module.css";
 import SecondaryButtons from "./SecondaryButtons";
 import Container from "react-bootstrap/esm/Container";
 import { Row, Col } from "react-bootstrap";
-import { timerEnabled } from "../store/settingsSlice";
+import { setTimerEnabled, timerEnabled } from "../store/settingsSlice";
+import Progress from "./Progress";
+import { FaBeer } from "react-icons/fa";
 
 export default function Timer() {
   const currentTime = useSelector((state) => state.settings.currenttime);
@@ -50,6 +52,24 @@ export default function Timer() {
     if (cycleComplete === true) {
       return true;
     } else return false;
+  };
+
+  const startButtonClicked = () => {
+    if (isRunning) {
+      start();
+      dispatch(setTimerEnabled(true));
+      console.log("start button");
+    } else {
+      resume();
+      dispatch(setTimerEnabled(true));
+      console.log("start button");
+    }
+  };
+
+  const pauseButtonClicked = () => {
+    pause();
+    dispatch(setTimerEnabled(false));
+    console.log("start button");
   };
 
   function buttonStyle() {
@@ -106,17 +126,28 @@ export default function Timer() {
             </div>
             <div>
               <Row>
-                <Col>
-                  <button className={buttonStyle()} onClick={start}>
-                    Start
-                  </button>
-                </Col>
-                <Col>
-                  <button className={buttonStyle()} onClick={pause}>
-                    Pause
-                  </button>
-                </Col>
-                <Col>
+                {timerEnabledState === false ? (
+                  <Col>
+                    <button
+                      className={buttonStyle()}
+                      onClick={startButtonClicked}
+                    >
+                      Start
+                    </button>
+                  </Col>
+                ) : (
+                  <Col>
+                    <button
+                      className={buttonStyle()}
+                      onClick={pauseButtonClicked}
+                    >
+                      Pause
+                    </button>
+                    <FaBeer />
+                  </Col>
+                )}
+
+                {/* <Col>
                   <button className={buttonStyle()} onClick={resume}>
                     Resume
                   </button>
@@ -132,7 +163,7 @@ export default function Timer() {
                   >
                     Restart
                   </button>
-                </Col>
+                </Col> */}
               </Row>
               {ternary() === true ? (
                 <button
