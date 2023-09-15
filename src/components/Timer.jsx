@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTimer } from "react-timer-hook";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Container } from "react-bootstrap";
 import { setTimerEnabled, timerEnabled } from "../store/settingsSlice";
 import { FaForward } from "react-icons/fa";
-import classes from "./Timer.css";
+import "./Timer.css";
 import SecondaryButtons from "./SecondaryButtons";
-import Container from "react-bootstrap/esm/Container";
 
 export default function Timer() {
   const currentTime = useSelector((state) => state.settings.currenttime);

@@ -1,3 +1,49 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  font-family: "Noto Sans Display", sans-serif;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: rgb(219, 82, 77);
+  --secondary-color: rgb(70, 142, 145);
+  --tertiary-color: rgb(67, 126, 168);
+}
+
+html,
+body {
+  height: 100%;
+  /* overflow: hidden; */
+}
+
+html {
+  overflow-x: hidden;
+  margin-right: calc(-1 * (100vw - 100%));
+}
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+ul {
+  list-style-type: none;
+}
+
+button {
+  background-color: rgba(256, 256, 256, 0.2);
+  border: none;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 5px;
+  cursor: pointer;
+  color: white;
+}
+
 .container {
   display: flex;
   flex-grow: 1;
@@ -10,6 +56,14 @@
 .spacer {
   height: 50px;
 }
+
+/* .spacer {
+  height: 25px;
+} */
+
+/* .spacer {
+  height: 8vh;
+} */
 
 .spacer_small {
   height: 25px;

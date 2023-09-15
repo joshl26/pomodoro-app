@@ -8,6 +8,7 @@ const Footer = () => {
           <h1 className="footer_text">
             Copyright
             <a className="footer_link" href="http://joshlehman.ca">
+              {" "}
               Josh Lehman
             </a>
           </h1>

@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { timerMode, setCurrentTime } from "../store/settingsSlice";
-import "./SecondaryButtons.css";
 import { Row, Col, Container } from "react-bootstrap";
+import "./SecondaryButtons.css";
 
 const SecondaryButtons = () => {
   const pomoTime = useSelector((state) => state.settings.pomodoro);

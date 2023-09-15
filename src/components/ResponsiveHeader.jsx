@@ -7,14 +7,14 @@ import logoImage from "../assets/tomato.svg";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import classes from "./ResponsiveHeader.module.css";
+import "./ResponsiveHeader.css";
 import { Link } from "react-router-dom";
 
 const ResponsiveHeader = () => {
   return (
     <header>
       <Navbar
-        className={classes.nav_bar}
+        className="nav_bar"
         sticky="top"
         collapseOnSelect
         expand="lg"
@@ -22,20 +22,20 @@ const ResponsiveHeader = () => {
         variant="dark"
       >
         <Container>
-          <Link className={classes.link} to="/pomodor/">
-            <div className={classes.align_left}>
+          <Link className="link" to="/pomodor/">
+            <div className="align_left">
               <img
                 alt="Pomofocus App Icon"
-                className={classes.logo_image}
+                className="logo_image"
                 src={logoImage}
               />
-              <h1 className={classes.logo_text}>PomoBreak</h1>
+              <h1 className="logo_text">PomoBreak</h1>
             </div>
           </Link>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto"></Nav>
-            <Nav defaultActiveKey="/">
+            <Nav defaultActiveKey="/pomodor/">
               <Nav.Link
                 id="home_nav"
                 as={Link}

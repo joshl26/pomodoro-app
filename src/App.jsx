@@ -10,7 +10,7 @@ import Report from "./components/Report";
 import Login from "./components/Login";
 import Help from "./components/Help";
 import Progress from "./components/Progress";
-import classes from "./App.module.css";
+import "./App.css";
 
 function getFaviconEl() {
   return document.getElementById("favicon");
@@ -44,21 +44,21 @@ function App() {
   }, []);
 
   const activeClass =
-    `${Number(timerMode) === 1 ? `${classes.pomodoro}` : ``}` +
-    `${Number(timerMode) === 2 ? `${classes.short}` : ``}` +
-    `${Number(timerMode) === 3 ? `${classes.long}` : ``}`;
+    `${Number(timerMode) === 1 ? `pomodoro` : ``}` +
+    `${Number(timerMode) === 2 ? `short` : ``}` +
+    `${Number(timerMode) === 3 ? `long` : ``}`;
 
   return (
     <div className={activeClass}>
-      <div className={classes.spacer_small} />
+      <div className="spacer_small" />
       <ResponsiveHeader />
-      <div className={classes.spacer_small}></div>
+      <div className="spacer_small"></div>
       <Container>
         <Progress percent={50} />
       </Container>
-      <div className={classes.spacer_small}></div>
-      <div className={classes.content}>
-        <div className={classes.spacer_small} />
+      <div className="spacer_small"></div>
+      <div className="content">
+        <div className="spacer_small" />
         <Switch>
           <Route path="/pomodor/" exact>
             <Timer />
@@ -77,7 +77,7 @@ function App() {
           </Route>
         </Switch>
       </div>
-      <div className={classes.spacer_small} />
+      <div className="spacer_small" />
       <Footer />
     </div>
   );

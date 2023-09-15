@@ -1,9 +1,9 @@
-import classes from "./Slider.module.css";
+import "./Slider.css";
 
 export default function Slider({ value, onChange, onClick }) {
   return (
-    <div className={classes.container}>
-      {/* <span className={classes.label}>{value}</span> */}
+    <div className="container">
+      {/* <span className="label">{value}</span> */}
       <input
         value={value}
         onChange={onChange}
@@ -12,7 +12,7 @@ export default function Slider({ value, onChange, onClick }) {
         step="5"
         min={0}
         max={100}
-        className={classes.input}
+        className="input"
       />
     </div>
   );

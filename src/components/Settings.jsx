@@ -47,7 +47,6 @@ const Settings = () => {
   const autoBreakBool = useSelector((state) => state.settings.autobreak);
   const alarmVolumeState = useSelector((state) => state.settings.alarmvolume);
   const alarmSoundState = useSelector((state) => state.settings.alarmsound);
-
   const [volume, setVolume] = useState(alarmVolumeState);
 
   let adjustedVolume = alarmVolumeState / 100;

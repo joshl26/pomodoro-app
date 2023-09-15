@@ -1,9 +1,9 @@
 import { Container, Row } from "react-bootstrap";
-import classes from "./Report.module.css";
+import "./Report.css";
 
 const Report = () => {
   return (
-    <Container className={classes.align_center}>
+    <Container className="align_center">
       <Row>
         <h1>REPORTS</h1>
       </Row>
