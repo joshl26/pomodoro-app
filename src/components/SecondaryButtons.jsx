@@ -31,8 +31,8 @@ const SecondaryButtons = () => {
               name={"Pomodoro"}
               className={
                 Number(timeMode) === 1
-                  ? `btn_background_pomodoro`
-                  : `btn_secondary`
+                  ? `btn-background-pomodoro`
+                  : `btn-secondary`
               }
               onClick={handleClick}
             >
@@ -46,8 +46,8 @@ const SecondaryButtons = () => {
               name={"Short Break"}
               className={
                 Number(timeMode) === 2
-                  ? `btn_background_short`
-                  : `btn_secondary`
+                  ? `btn-background-short`
+                  : `btn-secondary`
               }
               onClick={handleClick}
             >
@@ -60,7 +60,7 @@ const SecondaryButtons = () => {
               id={3}
               name={"Long Break"}
               className={
-                Number(timeMode) === 3 ? `btn_background_long` : `btn_secondary`
+                Number(timeMode) === 3 ? `btn-background-long` : `btn-secondary`
               }
               onClick={handleClick}
             >

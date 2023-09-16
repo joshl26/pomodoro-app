@@ -3,9 +3,9 @@ import "./Report.css";
 
 const Report = () => {
   return (
-    <Container className="align_center">
+    <Container>
       <Row>
-        <h1>REPORTS</h1>
+        <h1>Charts</h1>
       </Row>
       <br />
       <br />

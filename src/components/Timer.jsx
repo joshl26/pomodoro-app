@@ -104,7 +104,7 @@ export default function Timer() {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <Container className="timer-container">
+      <Container>
         <div className="timer-content">
           <Row>
             <Col className="align-center">

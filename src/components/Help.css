@@ -1,16 +1,7 @@
-.howto_image {
+.howto-image {
   width: 100%;
 }
 
-.align_center {
-  text-align: center;
-  background-color: white;
-  padding: 20px;
-  border-radius: 20px;
-}
-
-.textalign_center {
+.textalign-center {
   text-align: center;
 }
-
-

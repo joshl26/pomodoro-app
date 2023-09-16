@@ -15,24 +15,24 @@ const ResponsiveHeader = () => {
   return (
     <header>
       <Navbar
-        className="nav_bar"
+        className="nav-bar"
         sticky="top"
         collapseOnSelect
         expand="lg"
         bg=""
         variant="dark"
       >
-        <Container className="header_container">
-          <Row className="header_row">
+        <Container className="header-container">
+          <Row className="header-row">
             <Col md={3}>
               <Link className="link" to="/pomodor/">
-                <div className="align_left">
+                <div className="align-left">
                   <img
                     alt="Pomofocus App Icon"
-                    className="logo_image"
+                    className="logo-image"
                     src={logoImage}
                   />
-                  <h1 className="logo_text">PomoBreak</h1>
+                  <h1 className="logo-text">PomoBreak</h1>
                 </div>
               </Link>
             </Col>
@@ -43,7 +43,7 @@ const ResponsiveHeader = () => {
                 <Nav className="me-auto"></Nav>
                 <Nav defaultActiveKey="/pomodor/">
                   <Nav.Link
-                    id="home_nav"
+                    id="home-nav"
                     as={Link}
                     eventKey="/pomodor/"
                     to="/pomodor/"

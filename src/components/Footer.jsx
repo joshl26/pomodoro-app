@@ -5,9 +5,9 @@ const Footer = () => {
     <>
       <footer>
         <div className="container">
-          <h1 className="footer_text">
+          <h1 className="footer-text">
             Copyright
-            <a className="footer_link" href="http://joshlehman.ca">
+            <a className="footer-link" href="http://joshlehman.ca">
               {" "}
               Josh Lehman
             </a>

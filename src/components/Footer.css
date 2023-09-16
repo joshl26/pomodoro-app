@@ -1,8 +1,9 @@
-.footer_text {
+.footer-text {
   font-size: 1rem;
+  text-align: center;
 }
 
-.footer_link {
+.footer-link {
   text-decoration: none;
   color: white;
 }

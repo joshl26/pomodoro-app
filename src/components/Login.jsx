@@ -3,9 +3,9 @@ import "./Login.css";
 
 const Login = () => {
   return (
-    <Container className="align_center">
+    <Container>
       <Row>
-        <h1>LOGIN</h1>
+        <h1>Login</h1>
       </Row>
       <br />
       <br />

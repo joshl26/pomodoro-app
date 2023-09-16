@@ -1,16 +1,13 @@
-import "./Help.css";
-
 import howToImage from "../assets/Pomodore_Technique.png";
-
 import { Container } from "react-bootstrap";
+import "./Help.css";
 
 const Help = () => {
   return (
-    <>
-      <h1 className="textalign_center">Help</h1>
-      <div className="spacer"> </div>
-
-      <Container className="align_center">
+    <div>
+      <h1 className="textalign-center">Help</h1>
+      <div className="spacer" />
+      <Container className="align-center">
         <img
           alt="
   
@@ -32,11 +29,11 @@ const Help = () => {
           Turning on auto-break will automatically cycle through the timers in the pattern mentioned above. 
   
           "
-          className="howto_image"
+          className="howto-image"
           src={howToImage}
         ></img>
       </Container>
-    </>
+    </div>
   );
 };
 

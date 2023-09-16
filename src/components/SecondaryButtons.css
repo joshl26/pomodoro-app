@@ -1,20 +1,15 @@
-.btn_secondary {
-  margin-bottom: 15px;
+.btn-secondary {
+  height: auto;
   opacity: 0.6;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  margin-bottom: 25px;
-  vertical-align: middle;
-  font-size: 1rem;
+  font-size: 1.25rem;
   background-color: rgba(0, 0, 0, 0.1);
   color: white;
   transition: transform 0.1s ease-in-out;
   border-radius: 0.5rem;
 }
 
-.btn_background_pomodoro {
+.btn-background-pomodoro {
   margin-bottom: 15px;
-  width: 90%;
   padding-left: 1rem;
   padding-right: 1rem;
   padding-top: 0.5rem;
@@ -27,9 +22,8 @@
   border-radius: 0.5rem;
 }
 
-.btn_background_short {
+.btn-background-short {
   margin-bottom: 15px;
-  width: 90%;
   padding-left: 1rem;
   padding-right: 1rem;
   padding-top: 0.5rem;
@@ -42,8 +36,7 @@
   border-radius: 0.5rem;
 }
 
-.btn_background_long {
-  width: 90%;
+.btn-background-long {
   margin-bottom: 15px;
   padding-left: 1rem;
   padding-right: 1rem;
@@ -57,7 +50,7 @@
   border-radius: 0.5rem;
 }
 
-.button_spacer {
+.button-spacer {
   height: 2rem;
   width: 100%;
 }

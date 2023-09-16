@@ -1,16 +1,16 @@
-.nav_bar {
+.nav-bar {
   text-align: center;
   background-color: transparent;
 }
 
-.header_container {
+.header-container {
   display: flex;
   color: var(--tertiary-color);
   background-color: transparent;
   height: 13vh;
 }
 
-.header_row {
+.header-row {
   width: inherit;
 }
 
@@ -21,7 +21,7 @@
   color: white;
 }
 
-.logo_link {
+.logo-link {
   color: white;
   text-decoration: none;
   height: 100%;
@@ -36,16 +36,16 @@
   gap: 0.5rem;
 }
 
-.chart_icon {
+.chart-icon {
   height: 40px;
   vertical-align: middle;
 }
 
-.nav_list {
+.nav-list {
   background-color: transparent;
 }
 
-.logo_text {
+.logo-text {
   padding: 0 10px 0 10px;
   display: table-cell;
   font-size: 0rem;
@@ -53,7 +53,7 @@
   text-decoration: none;
 }
 
-.logo_image {
+.logo-image {
   padding-left: 0.5rem;
   display: table-cell;
   height: 2.5rem;
@@ -61,12 +61,12 @@
 
 @media only screen and (min-width: 768px) {
   /* For desktop: */
-  .logo_image {
+  .logo-image {
     display: table-cell;
     height: 3rem;
   }
 
-  .logo_text {
+  .logo-text {
     width: 120%;
     text-decoration: none;
     display: table-cell;
@@ -76,7 +76,7 @@
   }
 }
 
-.align_left {
+.align-left {
   vertical-align: middle;
   display: table;
 }

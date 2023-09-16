@@ -37,7 +37,7 @@ import { player } from "../utilities/util";
 import { useCallback } from "react";
 
 function getNavBarHomeLink() {
-  return document.getElementById("home_nav");
+  return document.getElementById("home-nav");
 }
 
 const Settings = () => {
@@ -144,40 +144,39 @@ const Settings = () => {
 
   return (
     <Fragment>
-      <div className="cover" />
-      <Container className="container">
-        <div className="card">
+      <Container className="settings-container">
+        <div className="settings-card">
           <Row>
             <Col>
-              <h4 className="card_text">SETTINGS</h4>
+              <h4 className="card-text">SETTINGS</h4>
             </Col>
-            <Col className="align_right">
+            <Col className="align-right">
               <Link to="/pomodor/">
                 <Button
-                  id="back_btn"
+                  id="back-btn"
                   onClick={backClickHandler}
                   variant="outline-light"
-                  className="btn_save"
+                  className="btn-save"
                 >
                   Back
                 </Button>
               </Link>
             </Col>
           </Row>
-          <div className="spacer_small"></div>
+          <div className="spacer-small"></div>
           <div className="divider"></div>
-          <div className="spacer_small"></div>
-          <h4 className="card_text">Time (minutes)</h4>
+          <div className="spacer-small"></div>
+          <h4 className="card-text">Time (minutes)</h4>
           <Row>
-            <Col md={4} className="card_text">
-              <p className="timer_text">Pomodoro</p>
+            <Col md={4} className="card-text">
+              <p className="timer-text">Pomodoro</p>
               <Row>
-                <Col className="padding_left">
-                  <div className="card_time">
-                    <h4 className="time_text">{pomodoroCount}:00</h4>
+                <Col className="padding-left">
+                  <div className="card-time">
+                    <h4 className="time-text">{pomodoroCount}:00</h4>
                   </div>
                 </Col>
-                <Col className="padding_right">
+                <Col className="padding-right">
                   <Row>
                     <Button
                       onClick={() => {
@@ -186,7 +185,7 @@ const Settings = () => {
                       }}
                       variant="custom"
                     >
-                      <h4 className="text_increment">+</h4>
+                      <h4 className="text-increment">+</h4>
                     </Button>
                   </Row>
                   <Row>
@@ -197,21 +196,21 @@ const Settings = () => {
                       }}
                       variant="custom"
                     >
-                      <h4 className="text_increment">-</h4>
+                      <h4 className="text-increment">-</h4>
                     </Button>
                   </Row>
                 </Col>
               </Row>
             </Col>
-            <Col md={4} className="card_text">
-              <p className="timer_text">Short Break</p>
+            <Col md={4} className="card-text">
+              <p className="timer-text">Short Break</p>
               <Row>
-                <Col className="padding_left">
-                  <div className="card_time">
-                    <h4 className="time_text">{shortCount}:00</h4>
+                <Col className="padding-left">
+                  <div className="card-time">
+                    <h4 className="time-text">{shortCount}:00</h4>
                   </div>
                 </Col>
-                <Col className="padding_right">
+                <Col className="padding-right">
                   <Row>
                     <Button
                       onClick={() => {
@@ -220,7 +219,7 @@ const Settings = () => {
                       }}
                       variant="custom"
                     >
-                      <h4 className="text_increment">+</h4>
+                      <h4 className="text-increment">+</h4>
                     </Button>
                   </Row>
                   <Row>
@@ -231,21 +230,21 @@ const Settings = () => {
                       }}
                       variant="custom"
                     >
-                      <h4 className="text_increment">-</h4>
+                      <h4 className="text-increment">-</h4>
                     </Button>
                   </Row>
                 </Col>
               </Row>
             </Col>
-            <Col md={4} className="card_text">
-              <p className="timer_text">Long Break</p>
+            <Col md={4} className="card-text">
+              <p className="timer-text">Long Break</p>
               <Row>
-                <Col className="padding_left">
-                  <div className="card_time">
-                    <h4 className="time_text">{longCount}:00</h4>
+                <Col className="padding-left">
+                  <div className="card-time">
+                    <h4 className="time-text">{longCount}:00</h4>
                   </div>
                 </Col>
-                <Col className="padding_right">
+                <Col className="padding-right">
                   <Row>
                     <Button
                       onClick={() => {
@@ -254,7 +253,7 @@ const Settings = () => {
                       }}
                       variant="custom"
                     >
-                      <h4 className="text_increment">+</h4>
+                      <h4 className="text-increment">+</h4>
                     </Button>
                   </Row>
                   <Row>
@@ -266,7 +265,7 @@ const Settings = () => {
                       value="negative"
                       variant="custom"
                     >
-                      <h4 className="text_increment">-</h4>
+                      <h4 className="text-increment">-</h4>
                     </Button>
                   </Row>
                 </Col>
@@ -278,11 +277,11 @@ const Settings = () => {
           <div className="spacer"></div>
           <Row>
             <Col>
-              <h4 className="card_text">Auto start Breaks?</h4>
+              <h4 className="card-text">Auto start Breaks?</h4>
             </Col>
             <Col style={{ textAlign: "left" }}>
               <ToggleButton
-                className="btn_break"
+                className="btn-break"
                 id="toggle-check"
                 type="checkbox"
                 variant="outline-light"
@@ -300,7 +299,7 @@ const Settings = () => {
           <div className="spacer"></div>
           <Row>
             <Col>
-              <h4 className="card_text">Alarm Sounds</h4>
+              <h4 className="card-text">Alarm Sounds</h4>
             </Col>
             <Col>
               <Dropdown>
@@ -330,7 +329,7 @@ const Settings = () => {
           <div className="spacer"></div>
           <Row>
             <Col>
-              <h4 className="card_text">Alarm Volume</h4>
+              <h4 className="card-text">Alarm Volume</h4>
             </Col>
             <Col style={{ paddingLeft: "25px" }}>
               <Slider
@@ -343,16 +342,15 @@ const Settings = () => {
               <h2>{alarmVolumeState}</h2>
             </Col>
           </Row>
-          <div className="spacer_small"></div>
+          <div className="spacer-small"></div>
           <div className="divider"></div>
           <div className="spacer"></div>
-
           <Row>
-            <Col className="align_center">
+            <Col className="align-center">
               <Button
                 onClick={defaultSettingsClickHandler}
                 variant="outline-light"
-                className="btn_save"
+                className="default-settings"
               >
                 Restore Defaults
               </Button>
