@@ -2,13 +2,24 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTimer } from "react-timer-hook";
 import { Row, Col, Container } from "react-bootstrap";
-import { setTimerEnabled, timerEnabled } from "../store/settingsSlice";
+import {
+  setTimerEnabled,
+  timerEnabled,
+  setSecondsLeft,
+  setCycleStart,
+  autoBreak,
+  setCounter,
+  timerMode,
+  setCurrentTime,
+} from "../store/settingsSlice";
 import { FaForward } from "react-icons/fa";
 import "./Timer.css";
 import SecondaryButtons from "./SecondaryButtons";
 
 export default function Timer() {
   const currentTime = useSelector((state) => state.settings.currenttime);
+  const secondsLeftState = useSelector((state) => state.settings.secondsleft);
+  const totalSecondsState = useSelector((state) => state.settings.totalseconds);
 
   const expiryTimestamp = new Date();
 
@@ -18,16 +29,16 @@ export default function Timer() {
     // expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + currentTime * 60);
   }, [currentTime]);
 
-  // const pomoTime = useSelector((state) => state.settings.pomodoro);
-  // const shortTime = useSelector((state) => state.settings.short);
-  // const longTime = useSelector((state) => state.settings.long);
+  const pomoTime = useSelector((state) => state.settings.pomodoro);
+  const shortTime = useSelector((state) => state.settings.short);
+  const longTime = useSelector((state) => state.settings.long);
   const timeMode = useSelector((state) => state.settings.timermode);
   const timerEnabledState = useSelector((state) => state.settings.timerenabled);
   const autoBreaks = useSelector((state) => state.settings.autobreak);
   const counter = useSelector((state) => state.settings.counter);
   const cycleComplete = useSelector((state) => state.settings.cyclecomplete);
-  // const alarmVolumeState = useSelector((state) => state.settings.alarmvolume);
-  // const alarmSoundState = useSelector((state) => state.settings.alarmsound);
+  const alarmVolumeState = useSelector((state) => state.settings.alarmvolume);
+  const alarmSoundState = useSelector((state) => state.settings.alarmsound);
 
   const dispatch = useDispatch();
 
@@ -47,6 +58,10 @@ export default function Timer() {
     expiryTimestamp,
     onExpire: () => console.warn("onExpire called"),
   });
+
+  dispatch(setSecondsLeft(totalSeconds));
+
+  console.log(totalSeconds, seconds);
 
   const ternary = () => {
     if (cycleComplete === true) {
@@ -159,7 +174,7 @@ export default function Timer() {
                     // player({}).stop();
                     // new Audio(sound).play();
                     dispatch(timerEnabled());
-                    // dispatch(setCycleStart());
+                    dispatch(setCycleStart());
                   }}
                 >
                   Next Round
@@ -177,8 +192,8 @@ export default function Timer() {
                 <p>
                   <button
                     onClick={() => {
-                      //   dispatch(autoBreak(false));
-                      //   dispatch(setCounter(0));
+                      dispatch(autoBreak(false));
+                      dispatch(setCounter(0));
                     }}
                     className="autobreak-btn"
                   >
@@ -190,10 +205,10 @@ export default function Timer() {
                 <p>
                   <button
                     onClick={() => {
-                      //   dispatch(autoBreak(true));
-                      //   dispatch(setCounter(1));
-                      //   dispatch(timerMode(1));
-                      //   dispatch(setCurrentTime(pomoTime));
+                      dispatch(autoBreak(true));
+                      dispatch(setCounter(1));
+                      dispatch(timerMode(1));
+                      dispatch(setCurrentTime(pomoTime));
                     }}
                     className="autobreak-btn"
                   >

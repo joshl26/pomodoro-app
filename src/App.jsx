@@ -17,6 +17,12 @@ function getFaviconEl() {
 }
 
 function App() {
+  const secondsLeftState = useSelector((state) => state.settings.secondsleft);
+  const totalSecondsState = useSelector((state) => state.settings.totalseconds);
+
+  var percentComplete =
+    ((totalSecondsState - secondsLeftState) / totalSecondsState) * 100;
+
   const timerMode = useSelector((state) => state.settings.timermode);
 
   if (Number(timerMode) === 1) {
@@ -54,11 +60,10 @@ function App() {
       <ResponsiveHeader />
       <div className="spacer_small"></div>
       <Container>
-        <Progress percent={50} />
+        <Progress percent={percentComplete} />
       </Container>
       <div className="spacer_small"></div>
       <div className="content">
-        {/* <div className="spacer_small" /> */}
         <Switch>
           <Route path="/pomodor/" exact>
             <Timer />

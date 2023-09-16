@@ -11,6 +11,8 @@ export const settingsSlice = createSlice({
     timermode: 1,
     timerenabled: false,
     currenttime: 25,
+    totalseconds: 1500,
+    secondsleft: 1500,
     cycle: [1, 2, 1, 2, 1, 2, 1, 2, 3],
     counter: 0,
     cyclecomplete: false,
@@ -144,6 +146,8 @@ export const settingsSlice = createSlice({
       state.timermode = 1;
       state.timerenabled = false;
       state.currenttime = 25;
+      state.totalseconds = 1500;
+      state.secondsleft = 1500;
       state.cycle = [1, 2, 1, 2, 1, 2, 1, 2, 3];
       state.counter = 0;
       state.cyclecomplete = false;
@@ -202,6 +206,10 @@ export const settingsSlice = createSlice({
       console.log("Set Alarm Sound" + action.payload);
       state.alarmsound = action.payload;
     },
+    setSecondsLeft: (state, action) => {
+      console.log("Set seconds left" + action.payload);
+      state.secondsleft = action.payload;
+    },
   },
 });
 
@@ -233,6 +241,7 @@ export const {
   setAlarmState,
   setAlarmVolume,
   setAlarmSound,
+  setSecondsLeft,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;
