@@ -210,6 +210,10 @@ export const settingsSlice = createSlice({
       console.log("Set seconds left" + action.payload);
       state.secondsleft = action.payload;
     },
+    setTotalSeconds: (state, action) => {
+      console.log("Set Total Seconds" + action.payload);
+      state.totalseconds = action.payload;
+    },
   },
 });
 
@@ -242,6 +246,7 @@ export const {
   setAlarmVolume,
   setAlarmSound,
   setSecondsLeft,
+  setTotalSeconds,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

@@ -11,34 +11,29 @@ import {
   setCounter,
   timerMode,
   setCurrentTime,
+  
 } from "../store/settingsSlice";
 import { FaForward } from "react-icons/fa";
 import "./Timer.css";
 import SecondaryButtons from "./SecondaryButtons";
 
-export default function Timer() {
-  const currentTime = useSelector((state) => state.settings.currenttime);
-  const secondsLeftState = useSelector((state) => state.settings.secondsleft);
-  const totalSecondsState = useSelector((state) => state.settings.totalseconds);
-
-  const expiryTimestamp = new Date();
-
-  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + currentTime * 60);
-
-  useEffect(() => {
-    // expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + currentTime * 60);
-  }, [currentTime]);
-
+export default function Timer({ expiryTimestamp }) {
   const pomoTime = useSelector((state) => state.settings.pomodoro);
   const shortTime = useSelector((state) => state.settings.short);
   const longTime = useSelector((state) => state.settings.long);
   const timeMode = useSelector((state) => state.settings.timermode);
+  const autoBreakState = useSelector((state) => state.settings.autobreak);
   const timerEnabledState = useSelector((state) => state.settings.timerenabled);
+  const currentTime = useSelector((state) => state.settings.currenttime);
   const autoBreaks = useSelector((state) => state.settings.autobreak);
   const counter = useSelector((state) => state.settings.counter);
   const cycleComplete = useSelector((state) => state.settings.cyclecomplete);
-  const alarmVolumeState = useSelector((state) => state.settings.alarmvolume);
-  const alarmSoundState = useSelector((state) => state.settings.alarmsound);
+  // const alarmVolumeState = useSelector((state) => state.settings.alarmvolume);
+  // const alarmSoundState = useSelector((state) => state.settings.alarmsound);
+
+  useEffect(() => {}, [currentTime]);
+
+  console.log("Timer " + currentTime, "Expiry Timestamp " + expiryTimestamp);
 
   const dispatch = useDispatch();
 
@@ -59,9 +54,9 @@ export default function Timer() {
     onExpire: () => console.warn("onExpire called"),
   });
 
-  dispatch(setSecondsLeft(totalSeconds));
-
-  console.log(totalSeconds, seconds);
+  useEffect(() => {
+    dispatch(setSecondsLeft(totalSeconds));
+  }, [totalSeconds, dispatch]);
 
   const ternary = () => {
     if (cycleComplete === true) {
@@ -131,7 +126,15 @@ export default function Timer() {
             </Col>
             <div className="spacer" />
           </Row>
-          <SecondaryButtons />
+          <SecondaryButtons
+            autoBreakState={autoBreakState}
+            timerEnabled={timerEnabledState}
+            currentTime={currentTime}
+            pomoTime={pomoTime}
+            timeMode={timeMode}
+            shortTime={shortTime}
+            longTime={longTime}
+          />
           <Container>
             <div style={{ fontSize: "100px" }}>
               <span>{minutes}</span>
