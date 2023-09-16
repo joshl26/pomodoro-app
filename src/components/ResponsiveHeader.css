@@ -3,15 +3,18 @@
   background-color: transparent;
 }
 
-.container {
+.header_container {
   display: flex;
   color: var(--tertiary-color);
   background-color: transparent;
   height: 13vh;
-  width: 100%;
 }
 
-.content {
+.header_row {
+  width: inherit;
+}
+
+.header-content {
   justify-content: space-between;
   display: flex;
   width: 100%;
@@ -93,4 +96,5 @@ a {
 .link {
   text-decoration: none;
   color: white;
+  font-size: 2rem;
 }

@@ -58,7 +58,7 @@ function App() {
       </Container>
       <div className="spacer_small"></div>
       <div className="content">
-        <div className="spacer_small" />
+        {/* <div className="spacer_small" /> */}
         <Switch>
           <Route path="/pomodor/" exact>
             <Timer />

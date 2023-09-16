@@ -76,27 +76,27 @@ export default function Timer() {
     var btnStyle;
 
     if (timerEnabledState === false && Number(timeMode) === 1) {
-      btnStyle = `action_btn1`;
+      btnStyle = `action-btn1`;
     }
 
     if (timerEnabledState === true && Number(timeMode) === 1) {
-      btnStyle = `action_btn1_active`;
+      btnStyle = `action-btn1-active`;
     }
 
     if (timerEnabledState === false && Number(timeMode) === 2) {
-      btnStyle = `action_btn2`;
+      btnStyle = `action-btn2`;
     }
 
     if (timerEnabledState === true && Number(timeMode) === 2) {
-      btnStyle = `action_btn2_active`;
+      btnStyle = `action-btn2-active`;
     }
 
     if (timerEnabledState === false && Number(timeMode) === 3) {
-      btnStyle = `action_btn3`;
+      btnStyle = `action-btn3`;
     }
 
     if (timerEnabledState === true && Number(timeMode) === 3) {
-      btnStyle = `action_btn3_active`;
+      btnStyle = `action-btn3-active`;
     }
 
     return btnStyle;
@@ -104,10 +104,10 @@ export default function Timer() {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <Container>
-        <div className="content">
+      <Container className="timer-container">
+        <div className="timer-content">
           <Row>
-            <Col className="align_center">
+            <Col className="align-center">
               {autoBreaks === true ? (
                 <h3>Pomodoro Cycle: {Number(counter)}</h3>
               ) : (
@@ -147,7 +147,7 @@ export default function Timer() {
                       </button>
                     </Col>
                     <Col>
-                      <FaForward className="next_icon" />
+                      <FaForward className="next-icon" />
                     </Col>
                   </>
                 )}
@@ -172,7 +172,7 @@ export default function Timer() {
         </div>
         <Container>
           <Row>
-            <Col sm={12} className="align_center">
+            <Col sm={12} className="align-center">
               {autoBreaks ? (
                 <p>
                   <button
@@ -180,7 +180,7 @@ export default function Timer() {
                       //   dispatch(autoBreak(false));
                       //   dispatch(setCounter(0));
                     }}
-                    className="autobreak_btn"
+                    className="autobreak-btn"
                   >
                     Auto Start Breaks:
                   </button>
@@ -195,7 +195,7 @@ export default function Timer() {
                       //   dispatch(timerMode(1));
                       //   dispatch(setCurrentTime(pomoTime));
                     }}
-                    className="autobreak_btn"
+                    className="autobreak-btn"
                   >
                     Auto Start Breaks:
                   </button>
