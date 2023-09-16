@@ -15,6 +15,7 @@ const SecondaryButtons = ({
   timeMode,
   shortTime,
   longTime,
+  updateExpiryTimestamp,
 }) => {
   const dispatch = useDispatch();
 
@@ -24,6 +25,7 @@ const SecondaryButtons = ({
       dispatch(setCurrentTime());
       dispatch(setSecondsLeft(event.target.value * 60));
       dispatch(setTotalSeconds(event.target.value * 60));
+      updateExpiryTimestamp(event.target.value);
     }
   }
 

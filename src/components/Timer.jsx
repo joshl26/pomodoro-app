@@ -11,13 +11,12 @@ import {
   setCounter,
   timerMode,
   setCurrentTime,
-  
 } from "../store/settingsSlice";
 import { FaForward } from "react-icons/fa";
 import "./Timer.css";
 import SecondaryButtons from "./SecondaryButtons";
 
-export default function Timer({ expiryTimestamp }) {
+export default function Timer() {
   const pomoTime = useSelector((state) => state.settings.pomodoro);
   const shortTime = useSelector((state) => state.settings.short);
   const longTime = useSelector((state) => state.settings.long);
@@ -30,6 +29,14 @@ export default function Timer({ expiryTimestamp }) {
   const cycleComplete = useSelector((state) => state.settings.cyclecomplete);
   // const alarmVolumeState = useSelector((state) => state.settings.alarmvolume);
   // const alarmSoundState = useSelector((state) => state.settings.alarmsound);
+  const expiryTimestamp = new Date();
+  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + currentTime * 60);
+
+  const updateExpiryTimestamp = (event) => {
+    const expiryTimestamp = new Date();
+    expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + event * 60);
+    restart(expiryTimestamp, false);
+  };
 
   useEffect(() => {}, [currentTime]);
 
@@ -134,6 +141,8 @@ export default function Timer({ expiryTimestamp }) {
             timeMode={timeMode}
             shortTime={shortTime}
             longTime={longTime}
+            updateExpiryTimestamp={updateExpiryTimestamp}
+            restart={restart}
           />
           <Container>
             <div style={{ fontSize: "100px" }}>
