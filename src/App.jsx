@@ -17,11 +17,8 @@ function getFaviconEl() {
 }
 
 function App() {
-  const currentTime = useSelector((state) => state.settings.currenttime);
   const secondsLeftState = useSelector((state) => state.settings.secondsleft);
   const totalSecondsState = useSelector((state) => state.settings.totalseconds);
-
-  useEffect(() => {}, [currentTime]);
 
   var percentComplete =
     ((totalSecondsState - secondsLeftState) / totalSecondsState) * 100;
@@ -69,7 +66,7 @@ function App() {
       <div className="content">
         <Switch>
           <Route path="/pomodor/" exact>
-            <Timer currentTime={currentTime} />
+            <Timer />
           </Route>
           <Route path="/pomodor/settings">
             <Settings />

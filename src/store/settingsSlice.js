@@ -17,7 +17,7 @@ export const settingsSlice = createSlice({
     counter: 0,
     cyclecomplete: false,
     alarmenabled: true,
-    alarmsound: "Bell",
+    alarmsound: "No Sound",
     alarmvolume: 50,
   },
   reducers: {
@@ -102,7 +102,7 @@ export const settingsSlice = createSlice({
       console.log("Auto break state set: " + action.payload);
       state.autobreak = action.payload;
     },
-    timerMode: (state, action) => {
+    setTimerMode: (state, action) => {
       console.log("Timer mode state set: " + action.payload);
       state.timermode = action.payload;
     },
@@ -152,7 +152,7 @@ export const settingsSlice = createSlice({
       state.counter = 0;
       state.cyclecomplete = false;
       state.alarmenabled = true;
-      state.alarmsound = "Bell";
+      state.alarmsound = "No Sounds";
       state.alarmvolume = 50;
     },
     counterIncrement: (state) => {
@@ -231,7 +231,7 @@ export const {
   autoPomo,
   autoBreak,
   autoBreakBoolean,
-  timerMode,
+  setTimerMode,
   timerEnabled,
   setTimerEnabled,
   setCurrentTime,

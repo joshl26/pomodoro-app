@@ -25,7 +25,7 @@ import {
   setDefault,
   autoBreak,
   setCounter,
-  timerMode,
+  setTimerMode,
   setTimerEnabled,
   setAlarmState,
   setAlarmVolume,
@@ -78,7 +78,7 @@ const Settings = () => {
     } else {
       dispatch(setCounter(1));
       dispatch(autoBreak(true));
-      dispatch(timerMode(1));
+      dispatch(setTimerMode(1));
       dispatch(setCurrentTime());
     }
   };

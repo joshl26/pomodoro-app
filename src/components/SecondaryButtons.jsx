@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import {
-  timerMode,
+  setTimerMode,
   setCurrentTime,
   setSecondsLeft,
   setTotalSeconds,
@@ -12,7 +12,7 @@ const SecondaryButtons = ({
   autoBreakState,
   timerEnabled,
   pomoTime,
-  timeMode,
+  timerMode,
   shortTime,
   longTime,
   updateExpiryTimestamp,
@@ -21,7 +21,7 @@ const SecondaryButtons = ({
 
   function handleClick(event) {
     if ((autoBreakState === false) & (timerEnabled === false)) {
-      dispatch(timerMode(Number(event.target.id)));
+      dispatch(setTimerMode(Number(event.target.id)));
       dispatch(setCurrentTime());
       dispatch(setSecondsLeft(event.target.value * 60));
       dispatch(setTotalSeconds(event.target.value * 60));
@@ -39,7 +39,7 @@ const SecondaryButtons = ({
               id={1}
               name={"Pomodoro"}
               className={
-                Number(timeMode) === 1
+                Number(timerMode) === 1
                   ? `btn-background-pomodoro`
                   : `btn-secondary`
               }
@@ -54,7 +54,7 @@ const SecondaryButtons = ({
               id={2}
               name={"Short Break"}
               className={
-                Number(timeMode) === 2
+                Number(timerMode) === 2
                   ? `btn-background-short`
                   : `btn-secondary`
               }
@@ -69,7 +69,9 @@ const SecondaryButtons = ({
               id={3}
               name={"Long Break"}
               className={
-                Number(timeMode) === 3 ? `btn-background-long` : `btn-secondary`
+                Number(timerMode) === 3
+                  ? `btn-background-long`
+                  : `btn-secondary`
               }
               onClick={handleClick}
             >

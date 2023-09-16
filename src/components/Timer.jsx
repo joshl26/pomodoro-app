@@ -9,26 +9,30 @@ import {
   setCycleStart,
   autoBreak,
   setCounter,
-  timerMode,
+  setTimerMode,
   setCurrentTime,
+  setTotalSeconds,
 } from "../store/settingsSlice";
 import { FaForward } from "react-icons/fa";
 import "./Timer.css";
 import SecondaryButtons from "./SecondaryButtons";
+import { player } from "../utilities/util";
+
+import sound from "../assets/alarm-bell.mp3";
 
 export default function Timer() {
   const pomoTime = useSelector((state) => state.settings.pomodoro);
   const shortTime = useSelector((state) => state.settings.short);
   const longTime = useSelector((state) => state.settings.long);
-  const timeMode = useSelector((state) => state.settings.timermode);
+  const timerMode = useSelector((state) => state.settings.timermode);
   const autoBreakState = useSelector((state) => state.settings.autobreak);
   const timerEnabledState = useSelector((state) => state.settings.timerenabled);
   const currentTime = useSelector((state) => state.settings.currenttime);
   const autoBreaks = useSelector((state) => state.settings.autobreak);
   const counter = useSelector((state) => state.settings.counter);
   const cycleComplete = useSelector((state) => state.settings.cyclecomplete);
-  // const alarmVolumeState = useSelector((state) => state.settings.alarmvolume);
-  // const alarmSoundState = useSelector((state) => state.settings.alarmsound);
+  const alarmVolumeState = useSelector((state) => state.settings.alarmvolume);
+  const alarmSoundState = useSelector((state) => state.settings.alarmsound);
   const expiryTimestamp = new Date();
   expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + currentTime * 60);
 
@@ -89,30 +93,69 @@ export default function Timer() {
     console.log("start button");
   };
 
+  const fastForwardButton = () => {
+    // player({}).stop();
+    // new Audio(sound).play();
+    // dispatch(timerEnabled());
+    // dispatch(setCycleStart());
+
+    dispatch(setTimerEnabled(false));
+
+    if (timerMode === 1) {
+      dispatch(setTimerMode(2));
+      dispatch(setCurrentTime());
+      dispatch(setTotalSeconds(shortTime * 60));
+      dispatch(setSecondsLeft(shortTime * 60));
+      const expiryTimestamp = new Date();
+      expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + shortTime * 60);
+      restart(expiryTimestamp, false);
+    }
+
+    if (timerMode === 2) {
+      dispatch(setTimerMode(3));
+      dispatch(setCurrentTime());
+      dispatch(setTotalSeconds(longTime * 60));
+      dispatch(setSecondsLeft(longTime * 60));
+      const expiryTimestamp = new Date();
+      expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + longTime * 60);
+      restart(expiryTimestamp, false);
+    }
+
+    if (timerMode === 3) {
+      dispatch(setTimerMode(1));
+      dispatch(setCurrentTime());
+      dispatch(setTotalSeconds(pomoTime * 60));
+      dispatch(setSecondsLeft(pomoTime * 60));
+      const expiryTimestamp = new Date();
+      expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + pomoTime * 60);
+      restart(expiryTimestamp, false);
+    }
+  };
+
   function buttonStyle() {
     var btnStyle;
 
-    if (timerEnabledState === false && Number(timeMode) === 1) {
+    if (timerEnabledState === false && Number(timerMode) === 1) {
       btnStyle = `action-btn1`;
     }
 
-    if (timerEnabledState === true && Number(timeMode) === 1) {
+    if (timerEnabledState === true && Number(timerMode) === 1) {
       btnStyle = `action-btn1-active`;
     }
 
-    if (timerEnabledState === false && Number(timeMode) === 2) {
+    if (timerEnabledState === false && Number(timerMode) === 2) {
       btnStyle = `action-btn2`;
     }
 
-    if (timerEnabledState === true && Number(timeMode) === 2) {
+    if (timerEnabledState === true && Number(timerMode) === 2) {
       btnStyle = `action-btn2-active`;
     }
 
-    if (timerEnabledState === false && Number(timeMode) === 3) {
+    if (timerEnabledState === false && Number(timerMode) === 3) {
       btnStyle = `action-btn3`;
     }
 
-    if (timerEnabledState === true && Number(timeMode) === 3) {
+    if (timerEnabledState === true && Number(timerMode) === 3) {
       btnStyle = `action-btn3-active`;
     }
 
@@ -138,7 +181,7 @@ export default function Timer() {
             timerEnabled={timerEnabledState}
             currentTime={currentTime}
             pomoTime={pomoTime}
-            timeMode={timeMode}
+            timerMode={timerMode}
             shortTime={shortTime}
             longTime={longTime}
             updateExpiryTimestamp={updateExpiryTimestamp}
@@ -152,7 +195,7 @@ export default function Timer() {
               <span>{seconds}</span>
             </div>
             <div>
-              <Row>
+              <Row className="timer-control">
                 {timerEnabledState === false ? (
                   <Col>
                     <button
@@ -174,7 +217,10 @@ export default function Timer() {
                       </button>
                     </Col>
                     <Col>
-                      <FaForward className="next-icon" />
+                      <FaForward
+                        className="fast-forward"
+                        onClick={fastForwardButton}
+                      />
                     </Col>
                   </>
                 )}
@@ -183,8 +229,8 @@ export default function Timer() {
                 <button
                   className={buttonStyle()}
                   onClick={() => {
-                    // player({}).stop();
-                    // new Audio(sound).play();
+                    player({}).stop();
+                    new Audio(sound).play();
                     dispatch(timerEnabled());
                     dispatch(setCycleStart());
                   }}
@@ -219,8 +265,15 @@ export default function Timer() {
                     onClick={() => {
                       dispatch(autoBreak(true));
                       dispatch(setCounter(1));
-                      dispatch(timerMode(1));
+                      dispatch(setTimerMode(1));
                       dispatch(setCurrentTime(pomoTime));
+                      dispatch(setTotalSeconds(pomoTime * 60));
+                      dispatch(setSecondsLeft(pomoTime * 60));
+                      const expiryTimestamp = new Date();
+                      expiryTimestamp.setSeconds(
+                        expiryTimestamp.getSeconds() + pomoTime * 60
+                      );
+                      restart(expiryTimestamp, false);
                     }}
                     className="autobreak-btn"
                   >
