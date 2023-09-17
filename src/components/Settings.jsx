@@ -23,13 +23,13 @@ import {
   longDecrement,
   setCurrentTime,
   setDefault,
-  autoBreak,
+  setAutoBreak,
   setCounter,
   setTimerMode,
-  setTimerEnabled,
   setAlarmState,
   setAlarmVolume,
   setAlarmSound,
+  setTotalSeconds,
 } from "../store/settingsSlice";
 import { useEffect } from "react";
 import { Fragment } from "react";
@@ -46,6 +46,11 @@ const Settings = () => {
   const longCount = useSelector((state) => state.settings.long);
   const autoBreakBool = useSelector((state) => state.settings.autobreak);
   const alarmVolumeState = useSelector((state) => state.settings.alarmvolume);
+  const timerMode = useSelector((state) => state.settings.timermode);
+  const pomoTime = useSelector((state) => state.settings.pomodoro);
+  const shortTime = useSelector((state) => state.settings.short);
+  const longTime = useSelector((state) => state.settings.long);
+
   const alarmSoundState = useSelector((state) => state.settings.alarmsound);
   const [volume, setVolume] = useState(alarmVolumeState);
 
@@ -63,23 +68,35 @@ const Settings = () => {
 
   const backClickHandler = () => {
     dispatch(setAlarmVolume(volume));
+
+    if (timerMode === 1) {
+      dispatch(setTotalSeconds(pomoTime * 60));
+    }
+
+    if (timerMode === 2) {
+      dispatch(setTotalSeconds(shortTime * 60));
+    }
+
+    if (timerMode === 3) {
+      dispatch(setTotalSeconds(longTime * 60));
+    }
+
     getNavBarHomeLink().click();
     // console.log(getFaviconEl().click());
   };
 
-  const saveClickHandler = () => {
-    dispatch(setTimerEnabled(false));
+  const autostartClickHandler = () => {
+    // dispatch(setTimerEnabled(false));
+    // dispatch(setCurrentTime());
 
-    if (autoBreakBool === true) {
-      // dispatch(timerMode(1));
+    if (autoBreakBool) {
       dispatch(setCounter(0));
-      dispatch(autoBreak(false));
-      dispatch(setCurrentTime());
+      dispatch(setTimerMode(1));
+      dispatch(setAutoBreak(false));
     } else {
       dispatch(setCounter(1));
-      dispatch(autoBreak(true));
       dispatch(setTimerMode(1));
-      dispatch(setCurrentTime());
+      dispatch(setAutoBreak(true));
     }
   };
 
@@ -287,7 +304,7 @@ const Settings = () => {
                 variant="outline-light"
                 checked={autoBreakBool}
                 value="1"
-                onClick={saveClickHandler}
+                onClick={autostartClickHandler}
               >
                 {!autoBreakBool && "No"}
                 {autoBreakBool && "Yes"}

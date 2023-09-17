@@ -10,7 +10,7 @@ import "./SecondaryButtons.css";
 
 const SecondaryButtons = ({
   autoBreakState,
-  timerEnabled,
+  isRunning,
   pomoTime,
   timerMode,
   shortTime,
@@ -20,7 +20,7 @@ const SecondaryButtons = ({
   const dispatch = useDispatch();
 
   function handleClick(event) {
-    if ((autoBreakState === false) & (timerEnabled === false)) {
+    if ((autoBreakState === false) & (isRunning === false)) {
       dispatch(setTimerMode(Number(event.target.id)));
       dispatch(setCurrentTime());
       dispatch(setSecondsLeft(event.target.value * 60));
