@@ -23,7 +23,7 @@ import {
   longDecrement,
   setCurrentTime,
   setDefault,
-  setAutoBreak,
+  setAutoStart,
   setCounter,
   setTimerMode,
   setAlarmState,
@@ -44,7 +44,7 @@ const Settings = () => {
   const pomodoroCount = useSelector((state) => state.settings.pomodoro);
   const shortCount = useSelector((state) => state.settings.short);
   const longCount = useSelector((state) => state.settings.long);
-  const autoBreakBool = useSelector((state) => state.settings.autobreak);
+  const autoStartState = useSelector((state) => state.settings.autostart);
   const alarmVolumeState = useSelector((state) => state.settings.alarmvolume);
   const timerMode = useSelector((state) => state.settings.timermode);
   const pomoTime = useSelector((state) => state.settings.pomodoro);
@@ -89,14 +89,14 @@ const Settings = () => {
     // dispatch(setTimerEnabled(false));
     // dispatch(setCurrentTime());
 
-    if (autoBreakBool) {
+    if (autoStartState) {
       dispatch(setCounter(0));
       dispatch(setTimerMode(1));
-      dispatch(setAutoBreak(false));
+      dispatch(setAutoStart(false));
     } else {
       dispatch(setCounter(1));
       dispatch(setTimerMode(1));
-      dispatch(setAutoBreak(true));
+      dispatch(setAutoStart(true));
     }
   };
 
@@ -302,12 +302,12 @@ const Settings = () => {
                 id="toggle-check"
                 type="checkbox"
                 variant="outline-light"
-                checked={autoBreakBool}
+                checked={autoStartState}
                 value="1"
                 onClick={autostartClickHandler}
               >
-                {!autoBreakBool && "No"}
-                {autoBreakBool && "Yes"}
+                {!autoStartState && "No"}
+                {autoStartState && "Yes"}
               </ToggleButton>
             </Col>
           </Row>

@@ -6,8 +6,7 @@ export const settingsSlice = createSlice({
     pomodoro: 25,
     short: 5,
     long: 15,
-    autobreak: false,
-    autopomo: false,
+    autostart: false,
     timermode: 1,
     currenttime: 25,
     totalseconds: 1500,
@@ -15,11 +14,32 @@ export const settingsSlice = createSlice({
     cycle: [1, 2, 1, 2, 1, 2, 1, 2, 3],
     counter: 0,
     cyclecomplete: false,
+    cyclestarted: false,
+    cyclepaused: false,
     alarmenabled: false,
     alarmsound: "No Sound",
     alarmvolume: 50,
   },
   reducers: {
+    setDefault: (state) => {
+      console.log("Reset to defaults...");
+      state.pomodoro = 25;
+      state.short = 5;
+      state.long = 15;
+      state.autostart = false;
+      state.timermode = 1;
+      state.currenttime = 25;
+      state.totalseconds = 1500;
+      state.secondsleft = 1500;
+      state.cycle = [1, 2, 1, 2, 1, 2, 1, 2, 3];
+      state.counter = 0;
+      state.cyclecomplete = false;
+      state.cyclestarted = false;
+      state.cyclepaused = false;
+      state.alarmenabled = false;
+      state.alarmsound = "No Sound";
+      state.alarmvolume = 50;
+    },
     pomoIncrement: (state) => {
       // console.log("Pomo increment...");
       //limit pomodoro state to 40 minutes (max)
@@ -38,11 +58,6 @@ export const settingsSlice = createSlice({
         state.pomodoro -= 1;
       }
     },
-    pomoIncrementByAmount: (state, action) => {
-      // console.log("Pomo increment by amount: " + action.payload);
-      state.pomodoro += action.payload;
-    },
-
     shortIncrement: (state) => {
       // console.log("Short increment...");
       //limit short state to 10 minutes (max)
@@ -61,11 +76,6 @@ export const settingsSlice = createSlice({
         state.short -= 1;
       }
     },
-    shortIncrementByAmount: (state, action) => {
-      // console.log("Short increment by amount: " + action.payload);
-      state.short += action.payload;
-    },
-
     longIncrement: (state) => {
       // console.log("Long increment...");
       //limit long state to 25 minutes (max)
@@ -84,22 +94,15 @@ export const settingsSlice = createSlice({
         state.long -= 1;
       }
     },
-    longDecrementByAmount: (state, action) => {
-      // console.log("Long decrement by amount: " + action.payload);
-      state.long += action.payload;
+    setAutoStart: (state, action) => {
+      console.log("Auto start state set: " + action.payload);
+      state.autostart = action.payload;
     },
-    autoPomo: (state) => {
-      console.log("Auto pomo state flip...");
-      state.autopomo = !state.autopomo;
+    setCyclePaused: (state, action) => {
+      console.log("Cycle paused state set: " + action.payload);
+      state.cyclepaused = action.payload;
     },
-    autoBreakBoolean: (state) => {
-      console.log("Auto break state flip...");
-      state.autobreak = !state.autobreak;
-    },
-    setAutoBreak: (state, action) => {
-      console.log("Auto break state set: " + action.payload);
-      state.autobreak = action.payload;
-    },
+
     setTimerMode: (state, action) => {
       console.log("Timer mode state set: " + action.payload);
       state.timermode = action.payload;
@@ -126,27 +129,8 @@ export const settingsSlice = createSlice({
         state.currenttime = state.long;
       }
     },
-    setDefault: (state) => {
-      console.log("Reset to defaults...");
-      state.pomodoro = 25;
-      state.short = 5;
-      state.long = 15;
-      state.autobreak = false;
-      state.autopomo = false;
-      state.timermode = 1;
-      state.currenttime = 25;
-      state.totalseconds = 1500;
-      state.secondsleft = 1500;
-      state.cycle = [1, 2, 1, 2, 1, 2, 1, 2, 3];
-      state.counter = 0;
-      state.cyclecomplete = false;
-      state.alarmenabled = false;
-      state.alarmsound = "No Sounds";
-      state.alarmvolume = 50;
-    },
     counterIncrement: (state) => {
       console.log("Counter increment...");
-
       if (Number(state.counter) < 9) {
         state.counter += 1;
         return;
@@ -155,19 +139,14 @@ export const settingsSlice = createSlice({
         return;
       }
     },
-    counterDecrement: (state) => {
-      console.log("Counter decrement...");
-      if (Number(state.counter) > 0) {
-        state.counter -= 1;
-      }
-    },
+
     setCounter: (state, action) => {
       console.log("Set Counter: " + action.payload);
       state.counter = action.payload;
     },
     setCycleComplete: (state) => {
       console.log("setCycleComplete");
-      // state.cyclecomplete = true;
+      state.cyclecomplete = true;
     },
     setCycleStart: (state) => {
       state.cyclecomplete = false;
@@ -214,8 +193,7 @@ export const {
   longDecrement,
   longDecrementByAmount,
   autoPomo,
-  setAutoBreak,
-  autoBreakBoolean,
+  setAutoStart,
   setTimerMode,
   setCurrentTime,
   setDefault,
@@ -225,6 +203,7 @@ export const {
   setCycleComplete,
   setCycleStart,
   setCycle,
+  setCyclePaused,
   setAlarmState,
   setAlarmVolume,
   setAlarmSound,

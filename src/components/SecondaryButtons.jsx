@@ -9,7 +9,7 @@ import { Row, Col, Container } from "react-bootstrap";
 import "./SecondaryButtons.css";
 
 const SecondaryButtons = ({
-  autoBreakState,
+  autoStartState,
   isRunning,
   pomoTime,
   timerMode,
@@ -20,7 +20,7 @@ const SecondaryButtons = ({
   const dispatch = useDispatch();
 
   function handleClick(event) {
-    if ((autoBreakState === false) & (isRunning === false)) {
+    if ((autoStartState === false) & (isRunning === false)) {
       dispatch(setTimerMode(Number(event.target.id)));
       dispatch(setCurrentTime());
       dispatch(setSecondsLeft(event.target.value * 60));

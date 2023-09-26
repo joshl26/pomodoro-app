@@ -4,32 +4,35 @@ import { useTimer } from "react-timer-hook";
 import { Row, Col, Container } from "react-bootstrap";
 import {
   setSecondsLeft,
-  setCycleStart,
-  setAutoBreak,
+  setAutoStart,
   setCounter,
   setTimerMode,
   setCurrentTime,
   setTotalSeconds,
   counterIncrement,
+  setCycleComplete,
+  setCyclePaused,
 } from "../store/settingsSlice";
 import { FaForward } from "react-icons/fa";
 import "./Timer.css";
 import SecondaryButtons from "./SecondaryButtons";
-import { player } from "../utilities/util";
+// import { player } from "../utilities/util";
 
-import sound from "../assets/alarm-bell.mp3";
+// import sound from "../assets/alarm-bell.mp3";
 
 export default function Timer() {
   const pomoTime = useSelector((state) => state.settings.pomodoro);
   const shortTime = useSelector((state) => state.settings.short);
   const longTime = useSelector((state) => state.settings.long);
   const timerMode = useSelector((state) => state.settings.timermode);
-  const autoBreakState = useSelector((state) => state.settings.autobreak);
+  const autoStartState = useSelector((state) => state.settings.autostart);
+  const cyclePausedState = useSelector((state) => state.settings.cyclepaused);
   // const timerEnabledState = useSelector((state) => state.settings.timerenabled);
   const currentTime = useSelector((state) => state.settings.currenttime);
   const counter = useSelector((state) => state.settings.counter);
-  const cycleComplete = useSelector((state) => state.settings.cyclecomplete);
+  // const cycleComplete = useSelector((state) => state.settings.cyclecomplete);
   const cycle = useSelector((state) => state.settings.cycle);
+  const secondsLeft = useSelector((state) => state.secondsleft);
 
   // const alarmVolumeState = useSelector((state) => state.settings.alarmvolume);
   // const alarmSoundState = useSelector((state) => state.settings.alarmsound);
@@ -41,8 +44,6 @@ export default function Timer() {
     expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + event * 60);
     restart(expiryTimestamp, false);
   };
-
-  useEffect(() => {}, [currentTime]);
 
   // console.log("Timer " + currentTime, "Expiry Timestamp " + expiryTimestamp);
 
@@ -60,43 +61,73 @@ export default function Timer() {
     resume,
     restart,
   } = useTimer({
-    autoStart: false,
+    autoStart: autoStartState,
     expiryTimestamp,
     onExpire: () => {
-      if (autoBreakState === true) {
-        dispatch(counterIncrement());
-        console.log(cycle[counter]);
-        if (cycle[counter] === 1) {
-          setPomoTime(true);
-          start();
-        }
-
-        if (cycle[counter] === 2) {
-          setShortTime(true);
-          start();
-        }
-
-        if (cycle[counter] === 3) {
-          setLongTime(true);
-          start();
-        }
-      }
-      console.warn("onExpire called");
+      cycleExpired();
     },
   });
 
+  const cycleExpired = () => {
+    dispatch(setCycleComplete(true));
+
+    if (autoStartState === true) {
+      const expiryTimestamp = new Date();
+      expiryTimestamp.setSeconds(
+        expiryTimestamp.getSeconds() + currentTime * 60
+      );
+      restart(expiryTimestamp);
+      start();
+    }
+
+    // if (autoStartState === true) {
+    //   dispatch(counterIncrement());
+    //   console.log(cycle[counter]);
+    //   if (cycle[counter] === 1) {
+    //     setPomoTime(true);
+    //     start();
+    //   }
+
+    //   if (cycle[counter] === 2) {
+    //     setShortTime(true);
+    //     start();
+    //   }
+
+    //   if (cycle[counter] === 3) {
+    //     setLongTime(true);
+    //     start();
+    //   }
+    // }
+    // console.warn("onExpire called");
+  };
+
   useEffect(() => {
     dispatch(setSecondsLeft(totalSeconds));
-    // dispatch(setTotalSeconds(totalSeconds));
-  }, [totalSeconds, dispatch]);
+  }, [
+    secondsLeft,
+    currentTime,
+    isRunning,
+    totalSeconds,
+    dispatch,
+    cyclePausedState,
+    autoStartState,
+  ]);
 
   const startButtonClicked = () => {
     start();
+    // updateExpiryTimestamp(currentTime);
     console.log("start button");
   };
 
   const pauseButtonClicked = () => {
     pause();
+    dispatch(setCyclePaused(true));
+    console.log("start button");
+  };
+
+  const resumeButtonClicked = () => {
+    resume();
+    dispatch(setCyclePaused(false));
     console.log("start button");
   };
 
@@ -131,8 +162,11 @@ export default function Timer() {
     // dispatch(timerEnabled());
     // dispatch(setCycleStart());
 
-    if (autoBreakState === true) {
+    dispatch(setCyclePaused(false));
+
+    if (autoStartState === true) {
       dispatch(counterIncrement());
+
       // dispatch(setTimerEnabled(true));
 
       if (timerMode === 1) {
@@ -148,15 +182,15 @@ export default function Timer() {
       }
     } else {
       if (timerMode === 1) {
-        setPomoTime(false);
-      }
-
-      if (timerMode === 2) {
         setShortTime(false);
       }
 
-      if (timerMode === 3) {
+      if (timerMode === 2) {
         setLongTime(false);
+      }
+
+      if (timerMode === 3) {
+        setPomoTime(false);
       }
     }
   };
@@ -194,11 +228,16 @@ export default function Timer() {
   return (
     <div style={{ textAlign: "center" }}>
       <Container>
+        <h3>IsRunning: {String(isRunning)}</h3>
+        <h3>Auto Start: {String(autoStartState)}</h3>
+        <h3>Paused: {String(cyclePausedState)}</h3>
         <div className="timer-content">
           <Row>
             <Col className="align-center">
-              {autoBreakState === true ? (
-                <h3>Pomodoro Cycle: {Number(counter)}</h3>
+              {autoStartState === true ? (
+                <>
+                  <h3>Pomodoro Cycle: {Number(counter)}</h3>
+                </>
               ) : (
                 <h3> </h3>
               )}
@@ -206,7 +245,7 @@ export default function Timer() {
             <div className="spacer" />
           </Row>
           <SecondaryButtons
-            autoBreakState={autoBreakState}
+            autoStartState={autoStartState}
             isRunning={isRunning}
             currentTime={currentTime}
             pomoTime={pomoTime}
@@ -225,7 +264,7 @@ export default function Timer() {
             </div>
             <div>
               <Row className="timer-control">
-                {isRunning === false ? (
+                {isRunning === false && cyclePausedState === false ? (
                   <Col>
                     <button
                       className={buttonStyle()}
@@ -237,16 +276,28 @@ export default function Timer() {
                 ) : (
                   <>
                     <Col></Col>
+                    {cyclePausedState === true ? (
+                      <Col>
+                        <button
+                          className={buttonStyle()}
+                          onClick={resumeButtonClicked}
+                        >
+                          Resume
+                        </button>
+                      </Col>
+                    ) : (
+                      <Col>
+                        <button
+                          className={buttonStyle()}
+                          onClick={pauseButtonClicked}
+                        >
+                          Pause
+                        </button>
+                      </Col>
+                    )}
+
                     <Col>
-                      <button
-                        className={buttonStyle()}
-                        onClick={pauseButtonClicked}
-                      >
-                        Pause
-                      </button>
-                    </Col>
-                    <Col>
-                      {autoBreakState === false ? (
+                      {autoStartState === false ? (
                         <FaForward
                           className="fast-forward"
                           onClick={fastForwardButton}
@@ -264,11 +315,11 @@ export default function Timer() {
         <Container>
           <Row>
             <Col sm={12} className="align-center">
-              {autoBreakState ? (
+              {autoStartState ? (
                 <p>
                   <button
                     onClick={() => {
-                      dispatch(setAutoBreak(false));
+                      dispatch(setAutoStart(false));
                       dispatch(setCounter(0));
                       dispatch(setTimerMode(1));
                       dispatch(setCurrentTime(pomoTime));
@@ -283,14 +334,14 @@ export default function Timer() {
                     className="autobreak-btn"
                   >
                     Auto Start Breaks:
-                  </button>
+                  </button>{" "}
                   ENABLED
                 </p>
               ) : (
                 <p>
                   <button
                     onClick={() => {
-                      dispatch(setAutoBreak(true));
+                      dispatch(setAutoStart(true));
                       dispatch(setCounter(1));
                       dispatch(setTimerMode(1));
                       dispatch(setCurrentTime(pomoTime));
