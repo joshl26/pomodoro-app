@@ -1,8 +1,5 @@
-import "./Settings.css";
-import Slider from "./Slider";
-import bellSound from "../assets/sounds/alarm-bell.mp3";
-import digitalSound from "../assets/sounds/alarm-digital.mp3";
-import kitchenSound from "../assets/sounds/alarm-kitchen.mp3";
+import { Fragment, useEffect, useCallback, useState } from "react";
+import { player } from "../utilities/util";
 import {
   Container,
   Row,
@@ -13,7 +10,6 @@ import {
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
 import {
   pomoIncrement,
   pomoDecrement,
@@ -31,10 +27,11 @@ import {
   setAlarmSound,
   setTotalSeconds,
 } from "../store/settingsSlice";
-import { useEffect } from "react";
-import { Fragment } from "react";
-import { player } from "../utilities/util";
-import { useCallback } from "react";
+import Slider from "./Slider";
+import bellSound from "../assets/sounds/alarm-bell.mp3";
+import digitalSound from "../assets/sounds/alarm-digital.mp3";
+import kitchenSound from "../assets/sounds/alarm-kitchen.mp3";
+import "./Settings.css";
 
 function getNavBarHomeLink() {
   return document.getElementById("home-nav");

@@ -12,10 +12,14 @@ import {
   counterIncrement,
   setCycleComplete,
   setCyclePaused,
+  counterDecrement,
 } from "../store/settingsSlice";
-import { FaForward } from "react-icons/fa";
+import { FaStepForward, FaStepBackward } from "react-icons/fa";
 import "./Timer.css";
 import SecondaryButtons from "./SecondaryButtons";
+import { player } from "../utilities/util";
+import ButtonPressSound from "../assets/sounds/button-press.wav";
+
 // import { player } from "../utilities/util";
 
 // import sound from "../assets/alarm-bell.mp3";
@@ -101,36 +105,6 @@ export default function Timer() {
     // console.warn("onExpire called");
   };
 
-  useEffect(() => {
-    dispatch(setSecondsLeft(totalSeconds));
-  }, [
-    secondsLeft,
-    currentTime,
-    isRunning,
-    totalSeconds,
-    dispatch,
-    cyclePausedState,
-    autoStartState,
-  ]);
-
-  const startButtonClicked = () => {
-    start();
-    // updateExpiryTimestamp(currentTime);
-    console.log("start button");
-  };
-
-  const pauseButtonClicked = () => {
-    pause();
-    dispatch(setCyclePaused(true));
-    console.log("start button");
-  };
-
-  const resumeButtonClicked = () => {
-    resume();
-    dispatch(setCyclePaused(false));
-    console.log("start button");
-  };
-
   //  autostart is boolean value
   const setShortTime = () => {
     dispatch(setTimerMode(2));
@@ -156,11 +130,42 @@ export default function Timer() {
     updateExpiryTimestamp(pomoTime);
   };
 
-  const fastForwardButton = () => {
+  const buttonClickSound = () => {
+    player({
+      asset: ButtonPressSound,
+      volume: 0.5,
+      loop: false,
+    }).play();
+  };
+
+  const startButtonClicked = () => {
+    start();
+    buttonClickSound();
+    // updateExpiryTimestamp(currentTime);
+    // console.log("start button");
+  };
+
+  const pauseButtonClicked = () => {
+    pause();
+    dispatch(setCyclePaused(true));
+    buttonClickSound();
+    // console.log("pause button");
+  };
+
+  const resumeButtonClicked = () => {
+    resume();
+    dispatch(setCyclePaused(false));
+    buttonClickSound();
+    // console.log("resume button");
+  };
+
+  const forwardButtonClicked = () => {
     // player({}).stop();
     // new Audio(sound).play();
     // dispatch(timerEnabled());
     // dispatch(setCycleStart());
+
+    buttonClickSound();
 
     dispatch(setCyclePaused(false));
 
@@ -168,6 +173,40 @@ export default function Timer() {
       dispatch(counterIncrement());
 
       // dispatch(setTimerEnabled(true));
+
+      if (timerMode === 1) {
+        setPomoTime(true);
+      }
+
+      if (timerMode === 2) {
+        setShortTime(true);
+      }
+
+      if (timerMode === 3) {
+        setLongTime(true);
+      }
+    } else {
+      if (timerMode === 1) {
+        setShortTime(false);
+      }
+
+      if (timerMode === 2) {
+        setLongTime(false);
+      }
+
+      if (timerMode === 3) {
+        setPomoTime(false);
+      }
+    }
+  };
+
+  const backwardButtonClicked = () => {
+    buttonClickSound();
+
+    dispatch(setCyclePaused(false));
+
+    if (autoStartState === true) {
+      dispatch(counterDecrement());
 
       if (timerMode === 1) {
         setPomoTime(true);
@@ -225,6 +264,18 @@ export default function Timer() {
     return btnStyle;
   }
 
+  useEffect(() => {
+    dispatch(setSecondsLeft(totalSeconds));
+  }, [
+    secondsLeft,
+    currentTime,
+    isRunning,
+    totalSeconds,
+    dispatch,
+    cyclePausedState,
+    autoStartState,
+  ]);
+
   return (
     <div style={{ textAlign: "center" }}>
       <Container>
@@ -275,7 +326,12 @@ export default function Timer() {
                   </Col>
                 ) : (
                   <>
-                    <Col></Col>
+                    <Col>
+                      <FaStepBackward
+                        className="step-button"
+                        onClick={backwardButtonClicked}
+                      />
+                    </Col>
                     {cyclePausedState === true ? (
                       <Col>
                         <button
@@ -298,9 +354,9 @@ export default function Timer() {
 
                     <Col>
                       {autoStartState === false ? (
-                        <FaForward
-                          className="fast-forward"
-                          onClick={fastForwardButton}
+                        <FaStepForward
+                          className="step-button"
+                          onClick={forwardButtonClicked}
                         />
                       ) : (
                         ""
