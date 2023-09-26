@@ -1,8 +1,8 @@
 import "./Settings.css";
 import Slider from "./Slider";
-import bellSound from "../assets/alarm-bell.mp3";
-import digitalSound from "../assets/alarm-digital.mp3";
-import kitchenSound from "../assets/alarm-kitchen.mp3";
+import bellSound from "../assets/sounds/alarm-bell.mp3";
+import digitalSound from "../assets/sounds/alarm-digital.mp3";
+import kitchenSound from "../assets/sounds/alarm-kitchen.mp3";
 import {
   Container,
   Row,
