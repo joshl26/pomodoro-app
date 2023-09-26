@@ -4,8 +4,11 @@ import {
   setCurrentTime,
   setSecondsLeft,
   setTotalSeconds,
+  setCyclePaused,
 } from "../store/settingsSlice";
 import { Row, Col, Container } from "react-bootstrap";
+import { player } from "../utilities/util";
+import TimerStepSound from "../assets/sounds/step-sound.mp3";
 import "./SecondaryButtons.css";
 
 const SecondaryButtons = ({
@@ -20,12 +23,20 @@ const SecondaryButtons = ({
   const dispatch = useDispatch();
 
   function handleClick(event) {
-    if ((autoStartState === false) & (isRunning === false)) {
-      dispatch(setTimerMode(Number(event.target.id)));
-      dispatch(setCurrentTime());
-      dispatch(setSecondsLeft(event.target.value * 60));
-      dispatch(setTotalSeconds(event.target.value * 60));
-      updateExpiryTimestamp(event.target.value);
+    if (timerMode !== Number(event.target.id)) {
+      player({
+        asset: TimerStepSound,
+        volume: 0.5,
+        loop: false,
+      }).play();
+      if ((autoStartState === false) & (isRunning === false)) {
+        dispatch(setCyclePaused(false));
+        dispatch(setTimerMode(Number(event.target.id)));
+        dispatch(setCurrentTime());
+        dispatch(setSecondsLeft(event.target.value * 60));
+        dispatch(setTotalSeconds(event.target.value * 60));
+        updateExpiryTimestamp(event.target.value);
+      }
     }
   }
 

@@ -31,6 +31,8 @@ import Slider from "./Slider";
 import bellSound from "../assets/sounds/alarm-bell.mp3";
 import digitalSound from "../assets/sounds/alarm-digital.mp3";
 import kitchenSound from "../assets/sounds/alarm-kitchen.mp3";
+import { FaPlus, FaMinus } from "react-icons/fa";
+
 import "./Settings.css";
 
 function getNavBarHomeLink() {
@@ -47,21 +49,15 @@ const Settings = () => {
   const pomoTime = useSelector((state) => state.settings.pomodoro);
   const shortTime = useSelector((state) => state.settings.short);
   const longTime = useSelector((state) => state.settings.long);
-
   const alarmSoundState = useSelector((state) => state.settings.alarmsound);
-  const [volume, setVolume] = useState(alarmVolumeState);
 
-  let adjustedVolume = alarmVolumeState / 100;
+  const [volume, setVolume] = useState(alarmVolumeState);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     setVolume(alarmVolumeState);
   }, [setVolume, alarmVolumeState]);
-
-  // useEffect(() => {
-  //   var adjustedVolume = alarmVolumeState / 100;
-  // }, []);
 
   const backClickHandler = () => {
     dispatch(setAlarmVolume(volume));
@@ -110,18 +106,16 @@ const Settings = () => {
   };
 
   const defaultSettingsClickHandler = () => {
-    setVolume(50);
+    setVolume(0.5);
     dispatch(setDefault());
   };
 
   const sliderClickHandler = useCallback(
     (e) => {
-      // adjustedVolume = e.target.value / 100;
-
       if (alarmSoundState === "Bell") {
         player({
           asset: bellSound,
-          volume: adjustedVolume,
+          volume: alarmVolumeState,
           loop: false,
         }).play();
       }
@@ -129,7 +123,7 @@ const Settings = () => {
       if (alarmSoundState === "Digital") {
         player({
           asset: digitalSound,
-          volume: adjustedVolume,
+          volume: alarmVolumeState,
           loop: false,
         }).play();
       }
@@ -137,7 +131,7 @@ const Settings = () => {
       if (alarmSoundState === "Kitchen") {
         player({
           asset: kitchenSound,
-          volume: adjustedVolume,
+          volume: alarmVolumeState,
           loop: false,
         }).play();
       }
@@ -149,11 +143,11 @@ const Settings = () => {
       setVolume(e.target.value);
       dispatch(setAlarmVolume(e.target.value));
 
-      console.log(`Adjusted volume: ${adjustedVolume}`);
+      console.log(`Adjusted volume: ${alarmVolumeState}`);
 
       console.log("slider click handler");
     },
-    [dispatch, adjustedVolume, alarmSoundState]
+    [dispatch, alarmVolumeState, alarmSoundState]
   );
 
   return (
@@ -199,7 +193,7 @@ const Settings = () => {
                       }}
                       variant="custom"
                     >
-                      <h4 className="text-increment">+</h4>
+                      <FaPlus className="time-change" />
                     </Button>
                   </Row>
                   <Row>
@@ -210,7 +204,7 @@ const Settings = () => {
                       }}
                       variant="custom"
                     >
-                      <h4 className="text-increment">-</h4>
+                      <FaMinus className="time-change" />
                     </Button>
                   </Row>
                 </Col>
@@ -233,7 +227,7 @@ const Settings = () => {
                       }}
                       variant="custom"
                     >
-                      <h4 className="text-increment">+</h4>
+                      <FaPlus className="time-change" />
                     </Button>
                   </Row>
                   <Row>
@@ -244,7 +238,7 @@ const Settings = () => {
                       }}
                       variant="custom"
                     >
-                      <h4 className="text-increment">-</h4>
+                      <FaMinus className="time-change" />
                     </Button>
                   </Row>
                 </Col>
@@ -267,7 +261,7 @@ const Settings = () => {
                       }}
                       variant="custom"
                     >
-                      <h4 className="text-increment">+</h4>
+                      <FaPlus className="time-change" />
                     </Button>
                   </Row>
                   <Row>
@@ -279,7 +273,7 @@ const Settings = () => {
                       value="negative"
                       variant="custom"
                     >
-                      <h4 className="text-increment">-</h4>
+                      <FaMinus className="time-change" />
                     </Button>
                   </Row>
                 </Col>
@@ -353,7 +347,7 @@ const Settings = () => {
               />
             </Col>
             <Col>
-              <h2>{alarmVolumeState}</h2>
+              <h2>{Math.round(alarmVolumeState * 100)}</h2>
             </Col>
           </Row>
           <div className="spacer-small"></div>

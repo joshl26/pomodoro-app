@@ -209,27 +209,27 @@ export default function Timer() {
       dispatch(counterDecrement());
 
       if (timerMode === 1) {
+        setLongTime(true);
+      }
+
+      if (timerMode === 2) {
         setPomoTime(true);
       }
 
-      if (timerMode === 2) {
-        setShortTime(true);
-      }
-
       if (timerMode === 3) {
-        setLongTime(true);
+        setShortTime(true);
       }
     } else {
       if (timerMode === 1) {
-        setShortTime(false);
-      }
-
-      if (timerMode === 2) {
         setLongTime(false);
       }
 
-      if (timerMode === 3) {
+      if (timerMode === 2) {
         setPomoTime(false);
+      }
+
+      if (timerMode === 3) {
+        setShortTime(false);
       }
     }
   };
@@ -266,6 +266,14 @@ export default function Timer() {
 
   useEffect(() => {
     dispatch(setSecondsLeft(totalSeconds));
+    if (isRunning) {
+      player({
+        asset: ButtonPressSound,
+        volume: 0.5,
+        loop: false,
+      }).play();
+    } else {
+    }
   }, [
     secondsLeft,
     currentTime,

@@ -3,6 +3,10 @@
   color: rgb(0, 0, 0) !important;
 }
 
+.time-change {
+  width: 10px;
+}
+
 .btn-custom {
   margin: 2px auto !important;
   padding: 0 !important;

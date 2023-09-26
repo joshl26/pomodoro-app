@@ -18,7 +18,7 @@ export const settingsSlice = createSlice({
     cyclepaused: false,
     alarmenabled: false,
     alarmsound: "No Sound",
-    alarmvolume: 50,
+    alarmvolume: 0.5,
   },
   reducers: {
     setDefault: (state) => {
@@ -38,7 +38,7 @@ export const settingsSlice = createSlice({
       state.cyclepaused = false;
       state.alarmenabled = false;
       state.alarmsound = "No Sound";
-      state.alarmvolume = 50;
+      state.alarmvolume = 0.5;
     },
     pomoIncrement: (state) => {
       // console.log("Pomo increment...");
