@@ -1,4 +1,4 @@
-export function player({ asset, volume = 0.5, loop = false }) {
+export function player({ asset, volume = 0.5, loop = false, isRunning }) {
   const audio = new Audio();
   audio.src = asset;
   audio.volume = volume;
@@ -25,10 +25,10 @@ export function player({ asset, volume = 0.5, loop = false }) {
   };
 
   const stop = () => {
-    audio.pause();
+    console.log("Audio stop initiated");
   };
 
-  const setVolume = (value) => (audio.volume = value / 100);
+  const setVolume = (value) => (audio.volume = value);
 
   const setAudio = (src) => {
     audio.src = src;

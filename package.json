@@ -36,6 +36,7 @@
     "react-router-dom": "^5.3.4",
     "react-scripts": "5.0.1",
     "react-timer-hook": "^3.0.7",
+    "react-use-audio-player": "^2.1.1",
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
     "web-vitals": "^2.1.4"

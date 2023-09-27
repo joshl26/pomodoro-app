@@ -16,6 +16,7 @@ export const settingsSlice = createSlice({
     cyclecomplete: false,
     cyclestarted: false,
     cyclepaused: false,
+    buttonsound: false,
     alarmenabled: false,
     alarmsound: "No Sound",
     alarmvolume: 0.5,
@@ -36,6 +37,7 @@ export const settingsSlice = createSlice({
       state.cyclecomplete = false;
       state.cyclestarted = false;
       state.cyclepaused = false;
+      state.buttonsound = false;
       state.alarmenabled = false;
       state.alarmsound = "No Sound";
       state.alarmvolume = 0.5;
@@ -161,6 +163,11 @@ export const settingsSlice = createSlice({
       state.alarmenabled = action.payload;
     },
 
+    setButtonSoundState: (state, action) => {
+      console.log("Button Sound State");
+      state.buttonsound = action.payload;
+    },
+
     setAlarmVolume: (state, action) => {
       console.log("Set Alarm Volume" + action.payload);
       state.alarmvolume = action.payload;
@@ -209,6 +216,7 @@ export const {
   setAlarmSound,
   setSecondsLeft,
   setTotalSeconds,
+  setButtonSoundState,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

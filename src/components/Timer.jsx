@@ -17,8 +17,10 @@ import {
 import { FaStepForward, FaStepBackward } from "react-icons/fa";
 import "./Timer.css";
 import SecondaryButtons from "./SecondaryButtons";
-import { player } from "../utilities/util";
+// import { player } from "../utilities/util";
+import { useGlobalAudioPlayer } from "react-use-audio-player";
 import ButtonPressSound from "../assets/sounds/button-press.wav";
+import TickingSlowSound from "../assets/sounds/ticking-slow.mp3";
 
 // import { player } from "../utilities/util";
 
@@ -38,6 +40,14 @@ export default function Timer() {
   const cycle = useSelector((state) => state.settings.cycle);
   const secondsLeft = useSelector((state) => state.secondsleft);
 
+  const {
+    play: playAudio,
+    pause: pauseAudio,
+    stop: stopAudio,
+    playing: isPlaying,
+    load: loadAudio,
+  } = useGlobalAudioPlayer();
+
   // const alarmVolumeState = useSelector((state) => state.settings.alarmvolume);
   // const alarmSoundState = useSelector((state) => state.settings.alarmsound);
   const expiryTimestamp = new Date();
@@ -46,7 +56,7 @@ export default function Timer() {
   const updateExpiryTimestamp = (event) => {
     const expiryTimestamp = new Date();
     expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + event * 60);
-    restart(expiryTimestamp, false);
+    restartTimer(expiryTimestamp, false);
   };
 
   // console.log("Timer " + currentTime, "Expiry Timestamp " + expiryTimestamp);
@@ -57,13 +67,11 @@ export default function Timer() {
     totalSeconds,
     seconds,
     minutes,
-    hours,
-    days,
     isRunning,
-    start,
-    pause,
-    resume,
-    restart,
+    start: startTimer,
+    resume: resumeTimer,
+    pause: pauseTimer,
+    restart: restartTimer,
   } = useTimer({
     autoStart: autoStartState,
     expiryTimestamp,
@@ -80,8 +88,8 @@ export default function Timer() {
       expiryTimestamp.setSeconds(
         expiryTimestamp.getSeconds() + currentTime * 60
       );
-      restart(expiryTimestamp);
-      start();
+      restartTimer(expiryTimestamp);
+      startTimer();
     }
 
     // if (autoStartState === true) {
@@ -131,29 +139,29 @@ export default function Timer() {
   };
 
   const buttonClickSound = () => {
-    player({
-      asset: ButtonPressSound,
-      volume: 0.5,
-      loop: false,
-    }).play();
+    // player({
+    //   asset: ButtonPressSound,
+    //   volume: 0.5,
+    //   loop: false,
+    // }).play();
   };
 
   const startButtonClicked = () => {
-    start();
+    startTimer();
     buttonClickSound();
     // updateExpiryTimestamp(currentTime);
     // console.log("start button");
   };
 
   const pauseButtonClicked = () => {
-    pause();
+    pauseTimer();
     dispatch(setCyclePaused(true));
     buttonClickSound();
     // console.log("pause button");
   };
 
   const resumeButtonClicked = () => {
-    resume();
+    resumeTimer();
     dispatch(setCyclePaused(false));
     buttonClickSound();
     // console.log("resume button");
@@ -266,13 +274,14 @@ export default function Timer() {
 
   useEffect(() => {
     dispatch(setSecondsLeft(totalSeconds));
+
     if (isRunning) {
-      player({
-        asset: ButtonPressSound,
-        volume: 0.5,
-        loop: false,
-      }).play();
-    } else {
+      // player({
+      //   isRunning: isRunning,
+      //   asset: TickingSlowSound,
+      //   volume: 0.5,
+      //   loop: false,
+      // }).play();
     }
   }, [
     secondsLeft,
@@ -287,9 +296,9 @@ export default function Timer() {
   return (
     <div style={{ textAlign: "center" }}>
       <Container>
-        {/* <h3>IsRunning: {String(isRunning)}</h3>
+        <h3>IsRunning: {String(isRunning)}</h3>
         <h3>Auto Start: {String(autoStartState)}</h3>
-        <h3>Paused: {String(cyclePausedState)}</h3> */}
+        <h3>Paused: {String(cyclePausedState)}</h3>
         <div className="timer-content">
           <Row>
             <Col className="align-center">
@@ -312,7 +321,7 @@ export default function Timer() {
             shortTime={shortTime}
             longTime={longTime}
             updateExpiryTimestamp={updateExpiryTimestamp}
-            restart={restart}
+            restart={restartTimer}
           />
           <Container>
             <div style={{ fontSize: "100px" }}>
@@ -397,7 +406,7 @@ export default function Timer() {
                       expiryTimestamp.setSeconds(
                         expiryTimestamp.getSeconds() + pomoTime * 60
                       );
-                      restart(expiryTimestamp, false);
+                      restartTimer(expiryTimestamp, false);
                     }}
                     className="autobreak-btn"
                   >
@@ -419,7 +428,7 @@ export default function Timer() {
                       expiryTimestamp.setSeconds(
                         expiryTimestamp.getSeconds() + pomoTime * 60
                       );
-                      restart(expiryTimestamp, false);
+                      restartTimer(expiryTimestamp, false);
                     }}
                     className="autobreak-btn"
                   >

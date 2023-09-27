@@ -26,6 +26,7 @@ import {
   setAlarmVolume,
   setAlarmSound,
   setTotalSeconds,
+  setButtonSoundState,
 } from "../store/settingsSlice";
 import Slider from "./Slider";
 import bellSound from "../assets/sounds/alarm-bell.mp3";
@@ -50,6 +51,7 @@ const Settings = () => {
   const shortTime = useSelector((state) => state.settings.short);
   const longTime = useSelector((state) => state.settings.long);
   const alarmSoundState = useSelector((state) => state.settings.alarmsound);
+  const buttonSoundState = useSelector((state) => state.settings.buttonsound);
 
   const [volume, setVolume] = useState(alarmVolumeState);
 
@@ -138,6 +140,10 @@ const Settings = () => {
       dispatch(setTimerMode(1));
       dispatch(setAutoStart(true));
     }
+  };
+
+  const buttonSoundClickHandler = () => {
+    dispatch(setButtonSoundState(!buttonSoundState));
   };
 
   const alarmClickHandler = (e) => {
@@ -284,6 +290,29 @@ const Settings = () => {
         <div className="spacer"></div>
         <div className="divider"></div>
         <div className="spacer"></div>
+        <Row>
+          <Col>
+            <h4 className="card-text">Button sounds?</h4>
+          </Col>
+          <Col style={{ textAlign: "left" }}>
+            <ToggleButton
+              className="btn-sound"
+              id="toggle-sound"
+              type="checkbox"
+              variant="outline-light"
+              checked={buttonSoundState}
+              value="1"
+              onClick={buttonSoundClickHandler}
+            >
+              {!buttonSoundState && "No"}
+              {buttonSoundState && "Yes"}
+            </ToggleButton>
+          </Col>
+        </Row>
+        <div className="spacer"></div>
+        <div className="divider"></div>
+        <div className="spacer"></div>
+
         <Row>
           <Col>
             <h4 className="card-text">Alarm Sounds</h4>
