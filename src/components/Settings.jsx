@@ -55,6 +55,37 @@ const Settings = () => {
 
   const dispatch = useDispatch();
 
+  const TimeButtons = () => {
+    return (
+      <Col className="padding-right">
+        <Col>
+          <Button
+            onClick={() => {
+              dispatch(pomoIncrement());
+              dispatch(setCurrentTime());
+            }}
+            variant="custom"
+            className="time-buttons"
+          >
+            <FaPlus className="time-change" />
+          </Button>
+        </Col>
+        <Col>
+          <Button
+            onClick={() => {
+              dispatch(pomoDecrement());
+              dispatch(setCurrentTime());
+            }}
+            variant="custom"
+            className="time-buttons"
+          >
+            <FaMinus className="time-change" />
+          </Button>
+        </Col>
+      </Col>
+    );
+  };
+
   useEffect(() => {
     setVolume(alarmVolumeState);
   }, [setVolume, alarmVolumeState]);
@@ -155,8 +186,8 @@ const Settings = () => {
       <Container className="settings-container">
         <div className="settings-card">
           <Row>
-            <Col>
-              <h4 className="card-text">SETTINGS</h4>
+            <Col md={6}>
+              <p className="card-text">Tip: Click back to save your changes</p>
             </Col>
             <Col className="align-right">
               <Link to="/pomodor/">
@@ -164,7 +195,7 @@ const Settings = () => {
                   id="back-btn"
                   onClick={backClickHandler}
                   variant="outline-light"
-                  className="btn-save"
+                  className="btn-back"
                 >
                   Back
                 </Button>
@@ -181,33 +212,10 @@ const Settings = () => {
               <Row>
                 <Col className="padding-left">
                   <div className="card-time">
-                    <h4 className="time-text">{pomodoroCount}:00</h4>
+                    <h4 className="time-text">{pomodoroCount}</h4>
                   </div>
                 </Col>
-                <Col className="padding-right">
-                  <Row>
-                    <Button
-                      onClick={() => {
-                        dispatch(pomoIncrement());
-                        dispatch(setCurrentTime());
-                      }}
-                      variant="custom"
-                    >
-                      <FaPlus className="time-change" />
-                    </Button>
-                  </Row>
-                  <Row>
-                    <Button
-                      onClick={() => {
-                        dispatch(pomoDecrement());
-                        dispatch(setCurrentTime());
-                      }}
-                      variant="custom"
-                    >
-                      <FaMinus className="time-change" />
-                    </Button>
-                  </Row>
-                </Col>
+                <TimeButtons />
               </Row>
             </Col>
             <Col md={4} className="card-text">
@@ -215,33 +223,10 @@ const Settings = () => {
               <Row>
                 <Col className="padding-left">
                   <div className="card-time">
-                    <h4 className="time-text">{shortCount}:00</h4>
+                    <h4 className="time-text">{shortCount}</h4>
                   </div>
                 </Col>
-                <Col className="padding-right">
-                  <Row>
-                    <Button
-                      onClick={() => {
-                        dispatch(shortIncrement());
-                        dispatch(setCurrentTime());
-                      }}
-                      variant="custom"
-                    >
-                      <FaPlus className="time-change" />
-                    </Button>
-                  </Row>
-                  <Row>
-                    <Button
-                      onClick={() => {
-                        dispatch(shortDecrement());
-                        dispatch(setCurrentTime());
-                      }}
-                      variant="custom"
-                    >
-                      <FaMinus className="time-change" />
-                    </Button>
-                  </Row>
-                </Col>
+                <TimeButtons className="padding-right" />
               </Row>
             </Col>
             <Col md={4} className="card-text">
@@ -249,34 +234,10 @@ const Settings = () => {
               <Row>
                 <Col className="padding-left">
                   <div className="card-time">
-                    <h4 className="time-text">{longCount}:00</h4>
+                    <h4 className="time-text">{longCount}</h4>
                   </div>
                 </Col>
-                <Col className="padding-right">
-                  <Row>
-                    <Button
-                      onClick={() => {
-                        dispatch(longIncrement());
-                        dispatch(setCurrentTime());
-                      }}
-                      variant="custom"
-                    >
-                      <FaPlus className="time-change" />
-                    </Button>
-                  </Row>
-                  <Row>
-                    <Button
-                      onClick={() => {
-                        dispatch(longDecrement());
-                        dispatch(setCurrentTime());
-                      }}
-                      value="negative"
-                      variant="custom"
-                    >
-                      <FaMinus className="time-change" />
-                    </Button>
-                  </Row>
-                </Col>
+                <TimeButtons className="padding-right" />
               </Row>
             </Col>
             <div className="spacer"></div>
