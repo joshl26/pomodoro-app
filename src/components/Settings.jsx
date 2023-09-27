@@ -55,13 +55,21 @@ const Settings = () => {
 
   const dispatch = useDispatch();
 
-  const TimeButtons = () => {
+  const TimeButtons = ({ buttonTime }) => {
     return (
       <Col className="padding-right">
         <Col>
           <Button
             onClick={() => {
-              dispatch(pomoIncrement());
+              if (buttonTime === "pomo") {
+                dispatch(pomoIncrement());
+              }
+              if (buttonTime === "short") {
+                dispatch(shortIncrement());
+              }
+              if (buttonTime === "long") {
+                dispatch(longIncrement());
+              }
               dispatch(setCurrentTime());
             }}
             variant="custom"
@@ -73,7 +81,15 @@ const Settings = () => {
         <Col>
           <Button
             onClick={() => {
-              dispatch(pomoDecrement());
+              if (buttonTime === "pomo") {
+                dispatch(pomoDecrement());
+              }
+              if (buttonTime === "short") {
+                dispatch(shortDecrement());
+              }
+              if (buttonTime === "long") {
+                dispatch(longDecrement());
+              }
               dispatch(setCurrentTime());
             }}
             variant="custom"
@@ -182,153 +198,154 @@ const Settings = () => {
   );
 
   return (
-    <Fragment>
-      <Container className="settings-container">
-        <div className="settings-card">
-          <Row>
-            <Col md={6}>
-              <p className="card-text">Tip: Click back to save your changes</p>
-            </Col>
-            <Col className="align-right">
-              <Link to="/pomodor/">
-                <Button
-                  id="back-btn"
-                  onClick={backClickHandler}
-                  variant="outline-light"
-                  className="btn-back"
-                >
-                  Back
-                </Button>
-              </Link>
-            </Col>
-          </Row>
-          <div className="spacer-small"></div>
-          <div className="divider"></div>
-          <div className="spacer-small"></div>
-          <h4 className="card-text">Time (minutes)</h4>
-          <Row>
-            <Col md={4} className="card-text">
-              <p className="timer-text">Pomodoro</p>
-              <Row>
-                <Col className="padding-left">
-                  <div className="card-time">
-                    <h4 className="time-text">{pomodoroCount}</h4>
-                  </div>
-                </Col>
-                <TimeButtons />
-              </Row>
-            </Col>
-            <Col md={4} className="card-text">
-              <p className="timer-text">Short Break</p>
-              <Row>
-                <Col className="padding-left">
-                  <div className="card-time">
-                    <h4 className="time-text">{shortCount}</h4>
-                  </div>
-                </Col>
-                <TimeButtons className="padding-right" />
-              </Row>
-            </Col>
-            <Col md={4} className="card-text">
-              <p className="timer-text">Long Break</p>
-              <Row>
-                <Col className="padding-left">
-                  <div className="card-time">
-                    <h4 className="time-text">{longCount}</h4>
-                  </div>
-                </Col>
-                <TimeButtons className="padding-right" />
-              </Row>
-            </Col>
-            <div className="spacer"></div>
-          </Row>
-          <div className="divider"></div>
-          <div className="spacer"></div>
-          <Row>
-            <Col>
-              <h4 className="card-text">Auto start Breaks?</h4>
-            </Col>
-            <Col style={{ textAlign: "left" }}>
-              <ToggleButton
-                className="btn-break"
-                id="toggle-check"
-                type="checkbox"
-                variant="outline-light"
-                checked={autoStartState}
-                value="1"
-                onClick={autostartClickHandler}
-              >
-                {!autoStartState && "No"}
-                {autoStartState && "Yes"}
-              </ToggleButton>
-            </Col>
-          </Row>
-          <div className="spacer"></div>
-          <div className="divider"></div>
-          <div className="spacer"></div>
-          <Row>
-            <Col>
-              <h4 className="card-text">Alarm Sounds</h4>
-            </Col>
-            <Col>
-              <Dropdown>
-                <Dropdown.Toggle variant="custom-sounds" id="dropdown-basic">
-                  {alarmSoundState}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item value="Bell" onClick={alarmClickHandler}>
-                    Bell
-                  </Dropdown.Item>
-                  <Dropdown.Item value="Digital" onClick={alarmClickHandler}>
-                    Digital
-                  </Dropdown.Item>
-                  <Dropdown.Item value="Kitchen" onClick={alarmClickHandler}>
-                    Kitchen
-                  </Dropdown.Item>
-                  <Dropdown.Item value="No Sound" onClick={alarmClickHandler}>
-                    No Sound
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </Col>
-            <Col></Col>
-          </Row>
-          <div className="spacer"></div>
-          <div className="divider"></div>
-          <div className="spacer"></div>
-          <Row>
-            <Col>
-              <h4 className="card-text">Alarm Volume</h4>
-            </Col>
-            <Col style={{ paddingLeft: "25px" }}>
-              <Slider
-                value={alarmVolumeState}
-                onChange={sliderClickHandler}
-                onClick={sliderClickHandler}
-              />
-            </Col>
-            <Col>
-              <h2>{Math.round(alarmVolumeState * 100)}</h2>
-            </Col>
-          </Row>
-          <div className="spacer-small"></div>
-          <div className="divider"></div>
-          <div className="spacer"></div>
-          <Row>
-            <Col className="align-center">
+    <Container className="settings-container">
+      <h1>Settings</h1>
+      <div className="spacer-small"></div>
+
+      <div className="settings-card">
+        <Row>
+          <Col md={6}>
+            <p className="card-text">Tip: Click back to save your changes</p>
+          </Col>
+          <Col className="align-right">
+            <Link to="/pomodor/">
               <Button
-                onClick={defaultSettingsClickHandler}
+                id="back-btn"
+                onClick={backClickHandler}
                 variant="outline-light"
-                className="default-settings"
+                className="btn-back"
               >
-                Restore Defaults
+                Back
               </Button>
-            </Col>
-          </Row>
+            </Link>
+          </Col>
+        </Row>
+        <div className="spacer-small"></div>
+        <div className="divider"></div>
+        <div className="spacer-small"></div>
+        <h4 className="card-text">Time (minutes)</h4>
+        <Row>
+          <Col md={4} className="card-text">
+            <p className="timer-text">Pomodoro</p>
+            <Row>
+              <Col className="padding-left">
+                <div className="card-time">
+                  <h4 className="time-text">{pomodoroCount}</h4>
+                </div>
+              </Col>
+              <TimeButtons buttonTime={"pomo"} />
+            </Row>
+          </Col>
+          <Col md={4} className="card-text">
+            <p className="timer-text">Short Break</p>
+            <Row>
+              <Col className="padding-left">
+                <div className="card-time">
+                  <h4 className="time-text">{shortCount}</h4>
+                </div>
+              </Col>
+              <TimeButtons buttonTime={"short"} />
+            </Row>
+          </Col>
+          <Col md={4} className="card-text">
+            <p className="timer-text">Long Break</p>
+            <Row>
+              <Col className="padding-left">
+                <div className="card-time">
+                  <h4 className="time-text">{longCount}</h4>
+                </div>
+              </Col>
+              <TimeButtons buttonTime={"long"} />
+            </Row>
+          </Col>
           <div className="spacer"></div>
-        </div>
-      </Container>
-    </Fragment>
+        </Row>
+        <div className="divider"></div>
+        <div className="spacer"></div>
+        <Row>
+          <Col>
+            <h4 className="card-text">Auto start Breaks?</h4>
+          </Col>
+          <Col style={{ textAlign: "left" }}>
+            <ToggleButton
+              className="btn-break"
+              id="toggle-check"
+              type="checkbox"
+              variant="outline-light"
+              checked={autoStartState}
+              value="1"
+              onClick={autostartClickHandler}
+            >
+              {!autoStartState && "No"}
+              {autoStartState && "Yes"}
+            </ToggleButton>
+          </Col>
+        </Row>
+        <div className="spacer"></div>
+        <div className="divider"></div>
+        <div className="spacer"></div>
+        <Row>
+          <Col>
+            <h4 className="card-text">Alarm Sounds</h4>
+          </Col>
+          <Col>
+            <Dropdown>
+              <Dropdown.Toggle variant="custom-sounds" id="dropdown-basic">
+                {alarmSoundState}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item value="Bell" onClick={alarmClickHandler}>
+                  Bell
+                </Dropdown.Item>
+                <Dropdown.Item value="Digital" onClick={alarmClickHandler}>
+                  Digital
+                </Dropdown.Item>
+                <Dropdown.Item value="Kitchen" onClick={alarmClickHandler}>
+                  Kitchen
+                </Dropdown.Item>
+                <Dropdown.Item value="No Sound" onClick={alarmClickHandler}>
+                  No Sound
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Col>
+          <Col></Col>
+        </Row>
+        <div className="spacer"></div>
+        <div className="divider"></div>
+        <div className="spacer"></div>
+        <Row>
+          <Col>
+            <h4 className="card-text">Alarm Volume</h4>
+          </Col>
+          <Col style={{ paddingLeft: "25px" }}>
+            <Slider
+              value={alarmVolumeState}
+              onChange={sliderClickHandler}
+              onClick={sliderClickHandler}
+            />
+          </Col>
+          <Col>
+            <h2>{Math.round(alarmVolumeState * 100)}</h2>
+          </Col>
+        </Row>
+        <div className="spacer-small"></div>
+        <div className="divider"></div>
+        <div className="spacer"></div>
+        <Row>
+          <Col className="align-center">
+            <Button
+              onClick={defaultSettingsClickHandler}
+              variant="outline-light"
+              className="default-settings"
+            >
+              Restore Defaults
+            </Button>
+          </Col>
+        </Row>
+        <div className="spacer"></div>
+      </div>
+    </Container>
   );
 };
 
