@@ -307,9 +307,9 @@ export default function Timer() {
   return (
     <div style={{ textAlign: "center" }}>
       <Container>
-        <h3>IsRunning: {String(isRunning)}</h3>
+        {/* <h3>IsRunning: {String(isRunning)}</h3>
         <h3>Auto Start: {String(autoStartState)}</h3>
-        <h3>Paused: {String(cyclePausedState)}</h3>
+        <h3>Paused: {String(cyclePausedState)}</h3> */}
         <div className="timer-content">
           <Row>
             <Col className="align-center">
