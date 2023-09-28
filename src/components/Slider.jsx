@@ -9,7 +9,7 @@ export default function Slider({ value, onChange, onClick }) {
         onChange={onChange}
         onClick={onClick}
         type="range"
-        step="0.05"
+        step={0.05}
         min={0}
         max={1}
         className="input"

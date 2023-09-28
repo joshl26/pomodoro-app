@@ -17,7 +17,6 @@ import {
 import { FaStepForward, FaStepBackward } from "react-icons/fa";
 import "./Timer.css";
 import SecondaryButtons from "./SecondaryButtons";
-// import { player } from "../utilities/util";
 import { useGlobalAudioPlayer } from "react-use-audio-player";
 import ButtonPressSound from "../assets/sounds/button-press.wav";
 import TickingSlowSound from "../assets/sounds/ticking-slow.mp3";
@@ -27,18 +26,19 @@ import TickingSlowSound from "../assets/sounds/ticking-slow.mp3";
 // import sound from "../assets/alarm-bell.mp3";
 
 export default function Timer() {
-  const pomoTime = useSelector((state) => state.settings.pomodoro);
-  const shortTime = useSelector((state) => state.settings.short);
-  const longTime = useSelector((state) => state.settings.long);
-  const timerMode = useSelector((state) => state.settings.timermode);
+  const pomoTimeState = useSelector((state) => state.settings.pomodoro);
+  const shortTimeState = useSelector((state) => state.settings.short);
+  const longTimeState = useSelector((state) => state.settings.long);
+  const timerModeState = useSelector((state) => state.settings.timermode);
   const autoStartState = useSelector((state) => state.settings.autostart);
   const cyclePausedState = useSelector((state) => state.settings.cyclepaused);
-  // const timerEnabledState = useSelector((state) => state.settings.timerenabled);
   const currentTime = useSelector((state) => state.settings.currenttime);
   const counter = useSelector((state) => state.settings.counter);
+  const secondsLeft = useSelector((state) => state.settings.secondsleft);
+  var alarmVolume = useSelector((state) => state.settings.alarmvolume);
   // const cycleComplete = useSelector((state) => state.settings.cyclecomplete);
-  const cycle = useSelector((state) => state.settings.cycle);
-  const secondsLeft = useSelector((state) => state.secondsleft);
+  // const cycle = useSelector((state) => state.settings.cycle);
+  // const timerEnabledState = useSelector((state) => state.settings.timerenabled);
 
   const {
     play: playAudio,
@@ -80,6 +80,35 @@ export default function Timer() {
     },
   });
 
+  useEffect(() => {
+    dispatch(setSecondsLeft(totalSeconds));
+
+    console.log(alarmVolume);
+
+    if (isRunning) {
+      loadAudio(ButtonPressSound, {
+        autoplay: true,
+        initialVolume: alarmVolume,
+      });
+      playAudio();
+    } else {
+      pauseAudio();
+    }
+  }, [
+    secondsLeft,
+    currentTime,
+    isRunning,
+    totalSeconds,
+    dispatch,
+    cyclePausedState,
+    autoStartState,
+    alarmVolume,
+    timerModeState,
+    pauseAudio,
+    playAudio,
+    loadAudio,
+  ]);
+
   const cycleExpired = () => {
     dispatch(setCycleComplete(true));
 
@@ -96,17 +125,17 @@ export default function Timer() {
     //   dispatch(counterIncrement());
     //   console.log(cycle[counter]);
     //   if (cycle[counter] === 1) {
-    //     setPomoTime(true);
+    //     setPomoTimeState(true);
     //     start();
     //   }
 
     //   if (cycle[counter] === 2) {
-    //     setShortTime(true);
+    //     setShortTimeState(true);
     //     start();
     //   }
 
     //   if (cycle[counter] === 3) {
-    //     setLongTime(true);
+    //     setLongTimeState(true);
     //     start();
     //   }
     // }
@@ -114,31 +143,37 @@ export default function Timer() {
   };
 
   //  autostart is boolean value
-  const setShortTime = () => {
+  const setShortTimeState = () => {
     dispatch(setTimerMode(2));
     dispatch(setCurrentTime());
-    dispatch(setTotalSeconds(shortTime * 60));
-    dispatch(setSecondsLeft(shortTime * 60));
-    updateExpiryTimestamp(shortTime);
+    dispatch(setTotalSeconds(shortTimeState * 60));
+    dispatch(setSecondsLeft(shortTimeState * 60));
+    updateExpiryTimestamp(shortTimeState);
   };
 
-  const setLongTime = () => {
+  const setLongTimeState = () => {
     dispatch(setTimerMode(3));
     dispatch(setCurrentTime());
-    dispatch(setTotalSeconds(longTime * 60));
-    dispatch(setSecondsLeft(longTime * 60));
-    updateExpiryTimestamp(longTime);
+    dispatch(setTotalSeconds(longTimeState * 60));
+    dispatch(setSecondsLeft(longTimeState * 60));
+    updateExpiryTimestamp(longTimeState);
   };
 
-  const setPomoTime = () => {
+  const setPomoTimeState = () => {
     dispatch(setTimerMode(1));
     dispatch(setCurrentTime());
-    dispatch(setTotalSeconds(pomoTime * 60));
-    dispatch(setSecondsLeft(pomoTime * 60));
-    updateExpiryTimestamp(pomoTime);
+    dispatch(setTotalSeconds(pomoTimeState * 60));
+    dispatch(setSecondsLeft(pomoTimeState * 60));
+    updateExpiryTimestamp(pomoTimeState);
   };
 
   const buttonClickSound = () => {
+    loadAudio(ButtonPressSound, {
+      autoplay: true,
+      initialVolume: alarmVolume,
+    });
+    playAudio();
+
     // player({
     //   asset: ButtonPressSound,
     //   volume: 0.5,
@@ -182,28 +217,28 @@ export default function Timer() {
 
       // dispatch(setTimerEnabled(true));
 
-      if (timerMode === 1) {
-        setPomoTime(true);
+      if (timerModeState === 1) {
+        setPomoTimeState(true);
       }
 
-      if (timerMode === 2) {
-        setShortTime(true);
+      if (timerModeState === 2) {
+        setShortTimeState(true);
       }
 
-      if (timerMode === 3) {
-        setLongTime(true);
+      if (timerModeState === 3) {
+        setLongTimeState(true);
       }
     } else {
-      if (timerMode === 1) {
-        setShortTime(false);
+      if (timerModeState === 1) {
+        setShortTimeState(false);
       }
 
-      if (timerMode === 2) {
-        setLongTime(false);
+      if (timerModeState === 2) {
+        setLongTimeState(false);
       }
 
-      if (timerMode === 3) {
-        setPomoTime(false);
+      if (timerModeState === 3) {
+        setPomoTimeState(false);
       }
     }
   };
@@ -216,28 +251,28 @@ export default function Timer() {
     if (autoStartState === true) {
       dispatch(counterDecrement());
 
-      if (timerMode === 1) {
-        setLongTime(true);
+      if (timerModeState === 1) {
+        setLongTimeState(true);
       }
 
-      if (timerMode === 2) {
-        setPomoTime(true);
+      if (timerModeState === 2) {
+        setPomoTimeState(true);
       }
 
-      if (timerMode === 3) {
-        setShortTime(true);
+      if (timerModeState === 3) {
+        setShortTimeState(true);
       }
     } else {
-      if (timerMode === 1) {
-        setLongTime(false);
+      if (timerModeState === 1) {
+        setLongTimeState(false);
       }
 
-      if (timerMode === 2) {
-        setPomoTime(false);
+      if (timerModeState === 2) {
+        setPomoTimeState(false);
       }
 
-      if (timerMode === 3) {
-        setShortTime(false);
+      if (timerModeState === 3) {
+        setShortTimeState(false);
       }
     }
   };
@@ -245,53 +280,32 @@ export default function Timer() {
   function buttonStyle() {
     var btnStyle;
 
-    if (isRunning === false && Number(timerMode) === 1) {
+    if (isRunning === false && Number(timerModeState) === 1) {
       btnStyle = `action-btn1`;
     }
 
-    if (isRunning === true && Number(timerMode) === 1) {
+    if (isRunning === true && Number(timerModeState) === 1) {
       btnStyle = `action-btn1-active`;
     }
 
-    if (isRunning === false && Number(timerMode) === 2) {
+    if (isRunning === false && Number(timerModeState) === 2) {
       btnStyle = `action-btn2`;
     }
 
-    if (isRunning === true && Number(timerMode) === 2) {
+    if (isRunning === true && Number(timerModeState) === 2) {
       btnStyle = `action-btn2-active`;
     }
 
-    if (isRunning === false && Number(timerMode) === 3) {
+    if (isRunning === false && Number(timerModeState) === 3) {
       btnStyle = `action-btn3`;
     }
 
-    if (isRunning === true && Number(timerMode) === 3) {
+    if (isRunning === true && Number(timerModeState) === 3) {
       btnStyle = `action-btn3-active`;
     }
 
     return btnStyle;
   }
-
-  useEffect(() => {
-    dispatch(setSecondsLeft(totalSeconds));
-
-    if (isRunning) {
-      // player({
-      //   isRunning: isRunning,
-      //   asset: TickingSlowSound,
-      //   volume: 0.5,
-      //   loop: false,
-      // }).play();
-    }
-  }, [
-    secondsLeft,
-    currentTime,
-    isRunning,
-    totalSeconds,
-    dispatch,
-    cyclePausedState,
-    autoStartState,
-  ]);
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -313,13 +327,14 @@ export default function Timer() {
             <div className="spacer" />
           </Row>
           <SecondaryButtons
+            alarmVolume={alarmVolume}
             autoStartState={autoStartState}
             isRunning={isRunning}
             currentTime={currentTime}
-            pomoTime={pomoTime}
-            timerMode={timerMode}
-            shortTime={shortTime}
-            longTime={longTime}
+            pomoTimeState={pomoTimeState}
+            timerModeState={timerModeState}
+            shortTimeState={shortTimeState}
+            longTimeState={longTimeState}
             updateExpiryTimestamp={updateExpiryTimestamp}
             restart={restartTimer}
           />
@@ -399,12 +414,12 @@ export default function Timer() {
                       dispatch(setAutoStart(false));
                       dispatch(setCounter(0));
                       dispatch(setTimerMode(1));
-                      dispatch(setCurrentTime(pomoTime));
-                      dispatch(setTotalSeconds(pomoTime * 60));
-                      dispatch(setSecondsLeft(pomoTime * 60));
+                      dispatch(setCurrentTime(pomoTimeState));
+                      dispatch(setTotalSeconds(pomoTimeState * 60));
+                      dispatch(setSecondsLeft(pomoTimeState * 60));
                       const expiryTimestamp = new Date();
                       expiryTimestamp.setSeconds(
-                        expiryTimestamp.getSeconds() + pomoTime * 60
+                        expiryTimestamp.getSeconds() + pomoTimeState * 60
                       );
                       restartTimer(expiryTimestamp, false);
                     }}
@@ -421,12 +436,12 @@ export default function Timer() {
                       dispatch(setAutoStart(true));
                       dispatch(setCounter(1));
                       dispatch(setTimerMode(1));
-                      dispatch(setCurrentTime(pomoTime));
-                      dispatch(setTotalSeconds(pomoTime * 60));
-                      dispatch(setSecondsLeft(pomoTime * 60));
+                      dispatch(setCurrentTime(pomoTimeState));
+                      dispatch(setTotalSeconds(pomoTimeState * 60));
+                      dispatch(setSecondsLeft(pomoTimeState * 60));
                       const expiryTimestamp = new Date();
                       expiryTimestamp.setSeconds(
-                        expiryTimestamp.getSeconds() + pomoTime * 60
+                        expiryTimestamp.getSeconds() + pomoTimeState * 60
                       );
                       restartTimer(expiryTimestamp, false);
                     }}

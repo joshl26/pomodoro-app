@@ -53,6 +53,8 @@ const Settings = () => {
   const alarmSoundState = useSelector((state) => state.settings.alarmsound);
   const buttonSoundState = useSelector((state) => state.settings.buttonsound);
 
+  console.log(alarmVolumeState);
+
   const [volume, setVolume] = useState(alarmVolumeState);
 
   const dispatch = useDispatch();
@@ -193,8 +195,8 @@ const Settings = () => {
         return;
       }
 
-      setVolume(e.target.value);
-      dispatch(setAlarmVolume(e.target.value));
+      setVolume(Number(e.target.value));
+      dispatch(setAlarmVolume(Number(e.target.value)));
 
       console.log(`Adjusted volume: ${alarmVolumeState}`);
 

@@ -7,29 +7,40 @@ import {
   setCyclePaused,
 } from "../store/settingsSlice";
 import { Row, Col, Container } from "react-bootstrap";
-import { player } from "../utilities/util";
 import TimerStepSound from "../assets/sounds/step-sound.mp3";
 import "./SecondaryButtons.css";
+import { useAudioPlayer } from "react-use-audio-player";
 
 const SecondaryButtons = ({
   autoStartState,
   isRunning,
-  pomoTime,
-  timerMode,
-  shortTime,
-  longTime,
+  pomoTimeState,
+  timerModeState,
+  shortTimeState,
+  longTimeState,
   updateExpiryTimestamp,
+  alarmVolume,
 }) => {
   const dispatch = useDispatch();
 
+  const {
+    play: playAudio,
+    pause: pauseAudio,
+    stop: stopAudio,
+    playing: isPlaying,
+    load: loadAudio,
+  } = useAudioPlayer();
+
   function handleClick(event) {
-    if (timerMode !== Number(event.target.id)) {
-      player({
-        asset: TimerStepSound,
-        volume: 0.5,
-        loop: false,
-      }).play();
-      if ((autoStartState === false) & (isRunning === false)) {
+    if (timerModeState !== Number(event.target.id)) {
+      loadAudio(TimerStepSound, {
+        autoplay: true,
+        initialVolume: alarmVolume,
+      });
+
+      console.log(event.target);
+
+      if (autoStartState === false && isRunning === false) {
         dispatch(setCyclePaused(false));
         dispatch(setTimerMode(Number(event.target.id)));
         dispatch(setCurrentTime());
@@ -46,11 +57,11 @@ const SecondaryButtons = ({
         <Row>
           <Col sm={4}>
             <button
-              value={pomoTime}
+              value={pomoTimeState}
               id={1}
               name={"Pomodoro"}
               className={
-                Number(timerMode) === 1
+                Number(timerModeState) === 1
                   ? `btn-background-pomodoro`
                   : `btn-secondary`
               }
@@ -61,11 +72,11 @@ const SecondaryButtons = ({
           </Col>
           <Col sm={4}>
             <button
-              value={shortTime}
+              value={shortTimeState}
               id={2}
               name={"Short Break"}
               className={
-                Number(timerMode) === 2
+                Number(timerModeState) === 2
                   ? `btn-background-short`
                   : `btn-secondary`
               }
@@ -76,11 +87,11 @@ const SecondaryButtons = ({
           </Col>
           <Col sm={4}>
             <button
-              value={longTime}
+              value={longTimeState}
               id={3}
               name={"Long Break"}
               className={
-                Number(timerMode) === 3
+                Number(timerModeState) === 3
                   ? `btn-background-long`
                   : `btn-secondary`
               }
