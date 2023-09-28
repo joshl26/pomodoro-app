@@ -33,8 +33,10 @@ import bellSound from "../assets/sounds/alarm-bell.mp3";
 import digitalSound from "../assets/sounds/alarm-digital.mp3";
 import kitchenSound from "../assets/sounds/alarm-kitchen.mp3";
 import { FaPlus, FaMinus } from "react-icons/fa";
+import ButtonPressSound from "../assets/sounds/button-press.wav";
 
 import "./Settings.css";
+import { useGlobalAudioPlayer } from "react-use-audio-player";
 
 function getNavBarHomeLink() {
   return document.getElementById("home-nav");
@@ -59,12 +61,33 @@ const Settings = () => {
 
   const dispatch = useDispatch();
 
+  const {
+    play: playAudio,
+    pause: pauseAudio,
+    stop: stopAudio,
+    playing: isPlaying,
+    load: loadAudio,
+  } = useGlobalAudioPlayer();
+
+  const buttonClickSound = () => {
+    console.log(buttonSoundState);
+
+    if (buttonSoundState) {
+      loadAudio(ButtonPressSound, {
+        autoplay: false,
+        initialVolume: alarmVolumeState,
+      });
+      playAudio();
+    }
+  };
+
   const TimeButtons = ({ buttonTime }) => {
     return (
       <Col className="padding-right">
         <Col>
           <Button
             onClick={() => {
+              buttonClickSound();
               if (buttonTime === "pomo") {
                 dispatch(pomoIncrement());
               }
@@ -85,6 +108,7 @@ const Settings = () => {
         <Col>
           <Button
             onClick={() => {
+              buttonClickSound();
               if (buttonTime === "pomo") {
                 dispatch(pomoDecrement());
               }
@@ -112,6 +136,7 @@ const Settings = () => {
 
   const backClickHandler = () => {
     dispatch(setAlarmVolume(volume));
+    buttonClickSound();
 
     if (timerMode === 1) {
       dispatch(setTotalSeconds(pomoTime * 60));
@@ -132,7 +157,7 @@ const Settings = () => {
   const autostartClickHandler = () => {
     // dispatch(setTimerEnabled(false));
     // dispatch(setCurrentTime());
-
+    buttonClickSound();
     if (autoStartState) {
       dispatch(setCounter(0));
       dispatch(setTimerMode(1));
@@ -145,12 +170,13 @@ const Settings = () => {
   };
 
   const buttonSoundClickHandler = () => {
+    buttonClickSound();
     dispatch(setButtonSoundState(!buttonSoundState));
   };
 
   const alarmClickHandler = (e) => {
     console.log("Event target value" + e.target.outerText);
-
+    buttonClickSound();
     dispatch(setAlarmSound(e.target.outerText));
 
     if (e.target.outerText === "No Sound") {
@@ -161,6 +187,7 @@ const Settings = () => {
   };
 
   const defaultSettingsClickHandler = () => {
+    buttonClickSound();
     setVolume(0.5);
     dispatch(setDefault());
   };

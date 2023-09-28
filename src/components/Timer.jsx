@@ -36,6 +36,8 @@ export default function Timer() {
   const counter = useSelector((state) => state.settings.counter);
   const secondsLeft = useSelector((state) => state.settings.secondsleft);
   var alarmVolume = useSelector((state) => state.settings.alarmvolume);
+  var buttonSoundState = useSelector((state) => state.settings.buttonsound);
+
   // const cycleComplete = useSelector((state) => state.settings.cyclecomplete);
   // const cycle = useSelector((state) => state.settings.cycle);
   // const timerEnabledState = useSelector((state) => state.settings.timerenabled);
@@ -83,18 +85,16 @@ export default function Timer() {
   useEffect(() => {
     dispatch(setSecondsLeft(totalSeconds));
 
-    console.log(alarmVolume);
-
     if (isRunning) {
-      loadAudio(ButtonPressSound, {
+      loadAudio(TickingSlowSound, {
         autoplay: true,
         initialVolume: alarmVolume,
       });
-      playAudio();
     } else {
-      pauseAudio();
+      // pauseAudio();
     }
   }, [
+    buttonSoundState,
     secondsLeft,
     currentTime,
     isRunning,
@@ -168,17 +168,14 @@ export default function Timer() {
   };
 
   const buttonClickSound = () => {
-    loadAudio(ButtonPressSound, {
-      autoplay: true,
-      initialVolume: alarmVolume,
-    });
-    playAudio();
+    console.log(buttonSoundState);
 
-    // player({
-    //   asset: ButtonPressSound,
-    //   volume: 0.5,
-    //   loop: false,
-    // }).play();
+    if (buttonSoundState) {
+      loadAudio(ButtonPressSound, {
+        autoplay: true,
+        initialVolume: 0.5,
+      });
+    }
   };
 
   const startButtonClicked = () => {
@@ -327,6 +324,7 @@ export default function Timer() {
             <div className="spacer" />
           </Row>
           <SecondaryButtons
+            buttonSoundState={buttonSoundState}
             alarmVolume={alarmVolume}
             autoStartState={autoStartState}
             isRunning={isRunning}

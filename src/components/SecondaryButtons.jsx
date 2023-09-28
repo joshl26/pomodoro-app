@@ -20,6 +20,7 @@ const SecondaryButtons = ({
   longTimeState,
   updateExpiryTimestamp,
   alarmVolume,
+  buttonSoundState,
 }) => {
   const dispatch = useDispatch();
 
@@ -32,11 +33,13 @@ const SecondaryButtons = ({
   } = useAudioPlayer();
 
   function handleClick(event) {
-    if (timerModeState !== Number(event.target.id)) {
-      loadAudio(TimerStepSound, {
-        autoplay: true,
-        initialVolume: alarmVolume,
-      });
+    if (timerModeState !== Number(event.target.id) && !isRunning) {
+      if (buttonSoundState) {
+        loadAudio(TimerStepSound, {
+          autoplay: true,
+          initialVolume: alarmVolume,
+        });
+      }
 
       console.log(event.target);
 
