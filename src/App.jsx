@@ -63,7 +63,7 @@ function App() {
         <Progress percent={percentComplete} />
       </Container>
       <div className="spacer_small"></div>
-      <div className="content">
+      <Container className="content">
         <Switch>
           <Route path="/pomodor/" exact>
             <Timer />
@@ -81,7 +81,7 @@ function App() {
             <Help />
           </Route>
         </Switch>
-      </div>
+      </Container>
       <div className="spacer_small" />
       <Footer />
     </div>

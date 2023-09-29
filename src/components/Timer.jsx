@@ -305,155 +305,148 @@ export default function Timer() {
   }
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <Container>
-        {/* <h3>IsRunning: {String(isRunning)}</h3>
+    <Container>
+      {/* <h3>IsRunning: {String(isRunning)}</h3>
         <h3>Auto Start: {String(autoStartState)}</h3>
         <h3>Paused: {String(cyclePausedState)}</h3> */}
-        <div className="timer-content">
-          <Row>
-            <Col className="align-center">
-              {autoStartState === true ? (
-                <>
-                  <h3>Pomodoro Cycle: {Number(counter)}</h3>
-                </>
-              ) : (
-                <h3> </h3>
-              )}
-            </Col>
-            <div className="spacer" />
-          </Row>
-          <SecondaryButtons
-            buttonSoundState={buttonSoundState}
-            alarmVolume={alarmVolume}
-            autoStartState={autoStartState}
-            isRunning={isRunning}
-            currentTime={currentTime}
-            pomoTimeState={pomoTimeState}
-            timerModeState={timerModeState}
-            shortTimeState={shortTimeState}
-            longTimeState={longTimeState}
-            updateExpiryTimestamp={updateExpiryTimestamp}
-            restart={restartTimer}
-          />
-          <Container>
-            <div style={{ fontSize: "100px" }}>
-              <span>{minutes}</span>
-              <span>:</span>
-              {seconds < 10 ? <span>0</span> : ""}
-              <span>{seconds}</span>
-            </div>
-            <div>
-              <Row className="timer-control">
-                {isRunning === false && cyclePausedState === false ? (
+      <div className="timer-content">
+        <Row>
+          <Col className="align-center">
+            {autoStartState === true ? (
+              <>
+                <h3>Pomodoro Cycle: {Number(counter)}</h3>
+              </>
+            ) : (
+              <h3> </h3>
+            )}
+          </Col>
+          <div className="spacer" />
+        </Row>
+        <SecondaryButtons
+          buttonSoundState={buttonSoundState}
+          alarmVolume={alarmVolume}
+          autoStartState={autoStartState}
+          isRunning={isRunning}
+          currentTime={currentTime}
+          pomoTimeState={pomoTimeState}
+          timerModeState={timerModeState}
+          shortTimeState={shortTimeState}
+          longTimeState={longTimeState}
+          updateExpiryTimestamp={updateExpiryTimestamp}
+          restart={restartTimer}
+        />
+        <Container>
+          <div className="main-timer-text">
+            <span>{minutes}</span>
+            <span>:</span>
+            {seconds < 10 ? <span>0</span> : ""}
+            <span>{seconds}</span>
+          </div>
+          <Row className="timer-control">
+            {isRunning === false && cyclePausedState === false ? (
+              <Col>
+                <button className={buttonStyle()} onClick={startButtonClicked}>
+                  Start
+                </button>
+              </Col>
+            ) : (
+              <>
+                <Col>
+                  {autoStartState === false ? (
+                    <FaStepBackward
+                      className="step-button"
+                      onClick={backwardButtonClicked}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </Col>
+                {cyclePausedState === true ? (
                   <Col>
                     <button
                       className={buttonStyle()}
-                      onClick={startButtonClicked}
+                      onClick={resumeButtonClicked}
                     >
-                      Start
+                      Resume
                     </button>
                   </Col>
                 ) : (
-                  <>
-                    <Col>
-                      {autoStartState === false ? (
-                        <FaStepBackward
-                          className="step-button"
-                          onClick={backwardButtonClicked}
-                        />
-                      ) : (
-                        ""
-                      )}
-                    </Col>
-                    {cyclePausedState === true ? (
-                      <Col>
-                        <button
-                          className={buttonStyle()}
-                          onClick={resumeButtonClicked}
-                        >
-                          Resume
-                        </button>
-                      </Col>
-                    ) : (
-                      <Col>
-                        <button
-                          className={buttonStyle()}
-                          onClick={pauseButtonClicked}
-                        >
-                          Pause
-                        </button>
-                      </Col>
-                    )}
-
-                    <Col>
-                      {autoStartState === false ? (
-                        <FaStepForward
-                          className="step-button"
-                          onClick={forwardButtonClicked}
-                        />
-                      ) : (
-                        ""
-                      )}
-                    </Col>
-                  </>
+                  <Col>
+                    <button
+                      className={buttonStyle()}
+                      onClick={pauseButtonClicked}
+                    >
+                      Pause
+                    </button>
+                  </Col>
                 )}
-              </Row>
-            </div>
-          </Container>
-        </div>
-        <Container>
-          <Row>
-            <Col sm={12} className="align-center">
-              {autoStartState ? (
-                <p>
-                  <button
-                    onClick={() => {
-                      dispatch(setAutoStart(false));
-                      dispatch(setCounter(0));
-                      dispatch(setTimerMode(1));
-                      dispatch(setCurrentTime(pomoTimeState));
-                      dispatch(setTotalSeconds(pomoTimeState * 60));
-                      dispatch(setSecondsLeft(pomoTimeState * 60));
-                      const expiryTimestamp = new Date();
-                      expiryTimestamp.setSeconds(
-                        expiryTimestamp.getSeconds() + pomoTimeState * 60
-                      );
-                      restartTimer(expiryTimestamp, false);
-                    }}
-                    className="autobreak-btn"
-                  >
-                    Auto Start Breaks:
-                  </button>{" "}
-                  ENABLED
-                </p>
-              ) : (
-                <p>
-                  <button
-                    onClick={() => {
-                      dispatch(setAutoStart(true));
-                      dispatch(setCounter(1));
-                      dispatch(setTimerMode(1));
-                      dispatch(setCurrentTime(pomoTimeState));
-                      dispatch(setTotalSeconds(pomoTimeState * 60));
-                      dispatch(setSecondsLeft(pomoTimeState * 60));
-                      const expiryTimestamp = new Date();
-                      expiryTimestamp.setSeconds(
-                        expiryTimestamp.getSeconds() + pomoTimeState * 60
-                      );
-                      restartTimer(expiryTimestamp, false);
-                    }}
-                    className="autobreak-btn"
-                  >
-                    Auto Start Breaks:
-                  </button>
-                  DISABLED
-                </p>
-              )}
-            </Col>
+
+                <Col>
+                  {autoStartState === false ? (
+                    <FaStepForward
+                      className="step-button"
+                      onClick={forwardButtonClicked}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </Col>
+              </>
+            )}
           </Row>
         </Container>
+      </div>
+      <Container>
+        <Row>
+          <Col sm={12} className="align-center">
+            {autoStartState ? (
+              <p>
+                <button
+                  onClick={() => {
+                    dispatch(setAutoStart(false));
+                    dispatch(setCounter(0));
+                    dispatch(setTimerMode(1));
+                    dispatch(setCurrentTime(pomoTimeState));
+                    dispatch(setTotalSeconds(pomoTimeState * 60));
+                    dispatch(setSecondsLeft(pomoTimeState * 60));
+                    const expiryTimestamp = new Date();
+                    expiryTimestamp.setSeconds(
+                      expiryTimestamp.getSeconds() + pomoTimeState * 60
+                    );
+                    restartTimer(expiryTimestamp, false);
+                  }}
+                  className="autobreak-btn"
+                >
+                  Auto Start Breaks:
+                </button>{" "}
+                ENABLED
+              </p>
+            ) : (
+              <p>
+                <button
+                  onClick={() => {
+                    dispatch(setAutoStart(true));
+                    dispatch(setCounter(1));
+                    dispatch(setTimerMode(1));
+                    dispatch(setCurrentTime(pomoTimeState));
+                    dispatch(setTotalSeconds(pomoTimeState * 60));
+                    dispatch(setSecondsLeft(pomoTimeState * 60));
+                    const expiryTimestamp = new Date();
+                    expiryTimestamp.setSeconds(
+                      expiryTimestamp.getSeconds() + pomoTimeState * 60
+                    );
+                    restartTimer(expiryTimestamp, false);
+                  }}
+                  className="autobreak-btn"
+                >
+                  Auto Start Breaks:
+                </button>
+                DISABLED
+              </p>
+            )}
+          </Col>
+        </Row>
       </Container>
-    </div>
+    </Container>
   );
 }

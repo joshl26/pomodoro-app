@@ -1,56 +1,133 @@
-.btn-secondary {
-  height: auto;
-  opacity: 0.6;
-  font-size: 1.25rem;
-  background-color: rgba(0, 0, 0, 0.1);
-  color: white;
-  transition: transform 0.1s ease-in-out;
-  border-radius: 0.5rem;
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (max-width: 768px) {
+  .secondary-btn-row {
+    height: 225px;
+    margin: 0 auto !important;
+    /* width: 600px; */
+  }
+
+  .btn-secondary {
+    height: 50px;
+    opacity: 0.6;
+    font-size: 1.25rem;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: white;
+    transition: transform 0.1s ease-in-out;
+    border-radius: 0.5rem;
+  }
+
+  .btn-background-pomodoro {
+    margin-bottom: 15px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    vertical-align: middle;
+    font-size: 1.25rem;
+    transition: transform 0.3s ease-in-out;
+    transform: translateY(-0.5rem);
+    background-color: var(--primary-color);
+    border-radius: 0.5rem;
+    width: 150px;
+  }
+
+  .btn-background-short {
+    margin-bottom: 15px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    vertical-align: middle;
+    font-size: 1.25rem;
+    transition: transform 0.3s ease-in-out;
+    transform: translateY(-0.5rem);
+    background-color: var(--secondary-color);
+    border-radius: 0.5rem;
+    width: 150px;
+  }
+
+  .btn-background-long {
+    margin-bottom: 15px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    vertical-align: middle;
+    font-size: 1.25rem;
+    transition: transform 0.3s ease-in-out;
+    transform: translateY(-0.5rem);
+    background-color: var(--tertiary-color);
+    border-radius: 0.5rem;
+    width: 150px;
+  }
+
+  .button-spacer {
+    height: 2rem;
+    width: 100%;
+  }
 }
 
-.btn-background-pomodoro {
-  margin-bottom: 15px;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  vertical-align: middle;
-  font-size: 1.25rem;
-  transition: transform 0.3s ease-in-out;
-  transform: translateY(-0.5rem);
-  background-color: var(--primary-color);
-  border-radius: 0.5rem;
-}
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 769px) {
+  .secondary-btn-row {
+    /* height: 225px; */
+    margin: 0 auto !important;
 
-.btn-background-short {
-  margin-bottom: 15px;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  vertical-align: middle;
-  font-size: 1.25rem;
-  transition: transform 0.3s ease-in-out;
-  transform: translateY(-0.5rem);
-  background-color: var(--secondary-color);
-  border-radius: 0.5rem;
-}
+    width: 100%;
+  }
 
-.btn-background-long {
-  margin-bottom: 15px;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  vertical-align: middle;
-  font-size: 1.25rem;
-  transition: transform 0.3s ease-in-out;
-  transform: translateY(-0.5rem);
-  background-color: var(--tertiary-color);
-  border-radius: 0.5rem;
-}
+  .btn-secondary {
+    width: 150px;
+    height: 50px;
+    opacity: 0.6;
+    font-size: 1.25rem;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: white;
+    transition: transform 0.1s ease-in-out;
+    border-radius: 0.5rem;
+  }
 
-.button-spacer {
-  height: 2rem;
-  width: 100%;
+  .btn-background-pomodoro {
+    margin-bottom: 15px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    vertical-align: middle;
+    font-size: 1.25rem;
+    transition: transform 0.3s ease-in-out;
+    transform: translateY(-0.5rem);
+    background-color: var(--primary-color);
+    border-radius: 0.5rem;
+    width: 150px;
+  }
+
+  .btn-background-short {
+    margin-bottom: 15px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    vertical-align: middle;
+    font-size: 1.25rem;
+    transition: transform 0.3s ease-in-out;
+    transform: translateY(-0.5rem);
+    background-color: var(--secondary-color);
+    border-radius: 0.5rem;
+    width: 150px;
+  }
+
+  .btn-background-long {
+    margin-bottom: 15px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    vertical-align: middle;
+    font-size: 1.25rem;
+    transition: transform 0.3s ease-in-out;
+    transform: translateY(-0.5rem);
+    background-color: var(--tertiary-color);
+    border-radius: 0.5rem;
+    width: 150px;
+  }
+
+  .button-spacer {
+    height: 2rem;
+    width: 100%;
+  }
 }

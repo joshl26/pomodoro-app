@@ -1,13 +1,17 @@
-.nav-bar {
+/* .nav-bar {
   text-align: center;
   background-color: transparent;
+} */
+
+.responsive-navbar-nav {
+  text-align: center;
 }
 
 .header-container {
   display: flex;
   color: var(--tertiary-color);
   background-color: transparent;
-  height: 13vh;
+  height: auto;
 }
 
 .header-row {

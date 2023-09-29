@@ -15,15 +15,6 @@
   text-align: center;
 }
 
-.timer-content {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 1.25rem 1rem 1.875rem;
-  border-radius: 1rem;
-  margin-bottom: 1.25rem;
-  width: 100%;
-  text-align: center;
-}
-
 .btn-secondary {
   font-size: 1rem;
   padding: 0.125rem 0.75rem;
@@ -208,4 +199,40 @@
 
 .autobreak-btn {
   background-color: transparent;
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (max-width: 768px) {
+  .main-timer-text {
+    text-align: center;
+    font-size: 4rem;
+  }
+
+  .timer-content {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 1.25rem 1rem 1.875rem;
+    border-radius: 1rem;
+    margin-bottom: 1.25rem;
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 769px) {
+  .timer-content {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 1.25rem 1rem 1.875rem;
+    border-radius: 1rem;
+    margin-bottom: 1.25rem;
+    margin: 0 auto;
+    /* width: 90vw; */
+    text-align: center;
+  }
+
+  .main-timer-text {
+    text-align: center;
+    font-size: 6rem;
+  }
 }

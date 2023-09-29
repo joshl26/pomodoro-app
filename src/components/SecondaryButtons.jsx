@@ -56,55 +56,53 @@ const SecondaryButtons = ({
 
   return (
     <div className="container">
-      <Container>
-        <Row>
-          <Col sm={4}>
-            <button
-              value={pomoTimeState}
-              id={1}
-              name={"Pomodoro"}
-              className={
-                Number(timerModeState) === 1
-                  ? `btn-background-pomodoro`
-                  : `btn-secondary`
-              }
-              onClick={handleClick}
-            >
-              Pomodoro
-            </button>
-          </Col>
-          <Col sm={4}>
-            <button
-              value={shortTimeState}
-              id={2}
-              name={"Short Break"}
-              className={
-                Number(timerModeState) === 2
-                  ? `btn-background-short`
-                  : `btn-secondary`
-              }
-              onClick={handleClick}
-            >
-              Short Break
-            </button>
-          </Col>
-          <Col sm={4}>
-            <button
-              value={longTimeState}
-              id={3}
-              name={"Long Break"}
-              className={
-                Number(timerModeState) === 3
-                  ? `btn-background-long`
-                  : `btn-secondary`
-              }
-              onClick={handleClick}
-            >
-              Long Break
-            </button>
-          </Col>
-        </Row>
-      </Container>
+      <Row className="secondary-btn-row">
+        <Col sm={4} md={4}>
+          <button
+            value={pomoTimeState}
+            id={1}
+            name={"Pomodoro"}
+            className={
+              Number(timerModeState) === 1
+                ? `btn-background-pomodoro`
+                : `btn-secondary`
+            }
+            onClick={handleClick}
+          >
+            Pomodoro
+          </button>
+        </Col>
+        <Col sm={4} md={4}>
+          <button
+            value={shortTimeState}
+            id={2}
+            name={"Short Break"}
+            className={
+              Number(timerModeState) === 2
+                ? `btn-background-short`
+                : `btn-secondary`
+            }
+            onClick={handleClick}
+          >
+            Short Break
+          </button>
+        </Col>
+        <Col sm={4} md={4}>
+          <button
+            value={longTimeState}
+            id={3}
+            name={"Long Break"}
+            className={
+              Number(timerModeState) === 3
+                ? `btn-background-long`
+                : `btn-secondary`
+            }
+            onClick={handleClick}
+          >
+            Long Break
+          </button>
+        </Col>
+      </Row>
     </div>
   );
 };
