@@ -239,10 +239,12 @@ const Settings = () => {
 
       <div className="settings-card">
         <Row>
-          <Col md={6}>
-            <p className="card-text">Tip: Click back to save your changes</p>
+          <Col xs={12} md={7}>
+            <p className="card-text align-right">
+              Tip: Click back to save your changes
+            </p>
           </Col>
-          <Col className="align-right">
+          <Col xs={12} className="align-right">
             <Link to="/pomodor/">
               <Button
                 id="back-btn"
@@ -341,7 +343,6 @@ const Settings = () => {
         <div className="spacer"></div>
         <div className="divider"></div>
         <div className="spacer"></div>
-
         <Row>
           <Col>
             <h4 className="card-text">Alarm Sounds</h4>
@@ -372,22 +373,21 @@ const Settings = () => {
         <div className="spacer"></div>
         <div className="divider"></div>
         <div className="spacer"></div>
-        <Row>
-          <Col>
+        <Row className="alarm-volume">
+          <Col xs={12} md={4}>
             <h4 className="card-text">Alarm Volume</h4>
           </Col>
-          <Col style={{ paddingLeft: "25px" }}>
+          <Col xs={12} md={4} style={{ paddingLeft: "25px" }}>
             <Slider
               value={alarmVolumeState}
               onChange={sliderClickHandler}
               onClick={sliderClickHandler}
             />
           </Col>
-          <Col>
+          <Col xs={12} md={4}>
             <h2>{Math.round(alarmVolumeState * 100)}</h2>
           </Col>
         </Row>
-        <div className="spacer-small"></div>
         <div className="divider"></div>
         <div className="spacer"></div>
         <Row>

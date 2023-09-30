@@ -50,20 +50,6 @@
   display: flex;
 }
 
-.settings-card {
-  margin: 0 auto;
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
-  padding: 10px;
-}
-
-.card-text {
-  text-align: left;
-  /* padding: 0px 5px 0px 5px; */
-  color: rgb(255, 255, 255);
-}
-
 .timer-text {
   margin-left: 0.75rem;
   margin-top: 1rem;
@@ -77,14 +63,6 @@
   height: 2px;
   background-color: rgb(255, 255, 255);
   width: 98%;
-}
-
-.spacer-small {
-  height: 2vh;
-}
-
-.spacer {
-  height: 4vh;
 }
 
 .spacer-large {
@@ -150,4 +128,63 @@
 
 p {
   margin-top: 1rem;
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 769px) {
+  .settings-card {
+    margin: 0 auto;
+    width: 600px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 15px;
+  }
+
+  .spacer-small {
+    height: 2vh;
+  }
+
+  .spacer {
+    height: 0px;
+  }
+
+  .card-text {
+    text-align: left;
+    /* padding: 0px 5px 0px 5px; */
+    color: rgb(255, 255, 255);
+  }
+
+  .alarm-volume {
+    height: 200px;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (max-width: 768px) {
+  .settings-card {
+    margin: 0 auto;
+    width: 80%;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 15px;
+  }
+
+  .spacer-small {
+    height: 4vh;
+  }
+
+  .align-right {
+    padding-top: 1rem;
+    text-align: center;
+  }
+
+  .card-text {
+    text-align: left;
+    /* padding: 0px 5px 0px 5px; */
+    color: rgb(255, 255, 255);
+  }
+
+  .alarm-volume {
+    height: 200px;
+  }
 }

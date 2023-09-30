@@ -335,23 +335,33 @@ export default function Timer() {
           updateExpiryTimestamp={updateExpiryTimestamp}
           restart={restartTimer}
         />
+        <div className="main-timer-text">
+          <span>{minutes}</span>
+          <span>:</span>
+          {seconds < 10 ? <span>0</span> : ""}
+          <span>{seconds}</span>
+        </div>
         <Container>
-          <div className="main-timer-text">
-            <span>{minutes}</span>
-            <span>:</span>
-            {seconds < 10 ? <span>0</span> : ""}
-            <span>{seconds}</span>
-          </div>
           <Row className="timer-control">
             {isRunning === false && cyclePausedState === false ? (
-              <Col>
+              <Col
+                style={{ width: "auto" }}
+                className="step-column"
+                md={12}
+                xs={10}
+              >
                 <button className={buttonStyle()} onClick={startButtonClicked}>
                   Start
                 </button>
               </Col>
             ) : (
               <>
-                <Col>
+                <Col
+                  style={{ width: "auto" }}
+                  className="action-button"
+                  md={2}
+                  xs={1}
+                >
                   {autoStartState === false ? (
                     <FaStepBackward
                       className="step-button"
@@ -362,7 +372,7 @@ export default function Timer() {
                   )}
                 </Col>
                 {cyclePausedState === true ? (
-                  <Col>
+                  <Col style={{ width: "auto" }} md={8} xs={10}>
                     <button
                       className={buttonStyle()}
                       onClick={resumeButtonClicked}
@@ -371,9 +381,9 @@ export default function Timer() {
                     </button>
                   </Col>
                 ) : (
-                  <Col>
+                  <Col style={{ width: "auto" }} md={8} xs={10}>
                     <button
-                      className={buttonStyle()}
+                      className={buttonStyle("step-column")}
                       onClick={pauseButtonClicked}
                     >
                       Pause
@@ -381,7 +391,7 @@ export default function Timer() {
                   </Col>
                 )}
 
-                <Col>
+                <Col style={{ width: "auto" }} md={2} xs={1}>
                   {autoStartState === false ? (
                     <FaStepForward
                       className="step-button"
@@ -398,6 +408,8 @@ export default function Timer() {
       </div>
       <Container>
         <Row>
+          <div className="spacer" />
+
           <Col sm={12} className="align-center">
             {autoStartState ? (
               <p>
@@ -418,7 +430,7 @@ export default function Timer() {
                   className="autobreak-btn"
                 >
                   Auto Start Breaks:
-                </button>{" "}
+                </button>
                 ENABLED
               </p>
             ) : (

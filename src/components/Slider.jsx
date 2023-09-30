@@ -2,7 +2,7 @@ import "./Slider.css";
 
 export default function Slider({ value, onChange, onClick }) {
   return (
-    <div className="container">
+    <div className="slider-container">
       {/* <span className="label">{value}</span> */}
       <input
         value={value}

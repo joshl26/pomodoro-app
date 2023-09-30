@@ -83,3 +83,18 @@ input[type="range"]:focus::-ms-fill-lower {
 input[type="range"]:focus::-ms-fill-upper {
   background: transparent;
 }
+
+.slider-container {
+  margin: 0 auto;
+  width: 50vw;
+  padding-top: 1rem;
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 769px) {
+  .slider-container {
+    margin: 0 auto;
+    width: 100%;
+    padding-top: 1rem;
+  }
+}
