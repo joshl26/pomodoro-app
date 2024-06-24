@@ -13,4 +13,4 @@ jobs:
       - name: publish
         run: |
           docker login -u joshlehmandev -p ${{ secrets.DOCKER_HUB_TOKEN }}
-          docker push joshlehmandev/poomodoro-app:latest
+          docker push joshlehmandev/pomodoro-app:latest
