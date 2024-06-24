@@ -17,7 +17,7 @@
 </p>
 
 <p>
-A ReactJS and Redux Pomodoro timer based on the famous Pomofocus app.
+This project was started in winter 2023 as an introduction to ReactJS. The goal was to explore basic and advanced topics such as prop drilling, React Router, responsive UI/UX design, and state management with Redux.
 </p>
 
 ## Technologies Utilized
