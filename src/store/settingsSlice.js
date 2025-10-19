@@ -18,7 +18,6 @@ export const settingsSlice = createSlice({
     short: 5,
     long: 15,
     autostart: false,
-    // timermode values: 1 = pomodoro, 2 = short break, 3 = long break
     timermode: 1,
     currenttime: 25, // minutes
     totalseconds: 1500,

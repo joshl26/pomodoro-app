@@ -1,62 +1,95 @@
-// src/store/settingsThunks.js
 import {
   setTimerMode,
   setCurrentTimeFromMode,
-  setTotalSeconds,
   setSecondsLeft,
-  setDefault,
-  setAlarmState,
-  setAlarmSound,
-  setAlarmVolume,
-  setButtonSoundState,
+  setTotalSeconds,
+  counterIncrement,
+  counterDecrement,
+  setCycleComplete,
+  setCycleStart,
+  setCyclePaused,
+  setCounter,
 } from "./settingsSlice";
 
 /**
- * Set timer mode (1|2|3) and reset currenttime/totalseconds/secondsleft
- * Usage: dispatch(setTimerModeAndReset(2))
+ * Set timer mode and reset timer seconds accordingly.
+ * Optionally auto-start the timer.
+ *
+ * @param {number} mode - Timer mode (1 = pomodoro, 2 = short break, 3 = long break)
+ * @param {boolean} [autoStart=false] - Whether to start the timer immediately
+ * @returns {Function} Thunk action
  */
-export const setTimerModeAndReset = (mode) => (dispatch, getState) => {
-  dispatch(setTimerMode(mode));
-  // update currenttime from the selected mode
-  dispatch(setCurrentTimeFromMode());
+export const setTimerModeAndReset =
+  (mode, autoStart = false) =>
+  (dispatch, getState) => {
+    dispatch(setTimerMode(mode));
+    dispatch(setCurrentTimeFromMode());
 
-  // re-read settings after setting currenttime
-  const { settings } = getState();
-  const minutes = Number(settings.currenttime) || 0;
-  const secs = Math.max(0, Math.floor(minutes * 60));
+    const state = getState().settings;
+    const totalSeconds = state.currenttime * 60;
+    dispatch(setTotalSeconds(totalSeconds));
+    dispatch(setSecondsLeft(totalSeconds));
 
-  dispatch(setTotalSeconds(secs));
-  dispatch(setSecondsLeft(secs));
-};
+    dispatch(setCyclePaused(false));
+    if (autoStart) {
+      dispatch(setCycleStart());
+    } else {
+      dispatch(setCycleComplete(false));
+    }
+  };
 
 /**
- * Reset cycle and timer to defaults.
- * If keepAudio === true, preserves alarmenabled, alarmsound, alarmvolume, buttonsound.
- * Usage: dispatch(resetCycleAndTimer({ keepAudio: true }))
+ * Advance the cycle counter and reset timer accordingly.
+ * Optionally auto-start the timer.
+ *
+ * @param {boolean} [autoStart=false] - Whether to start the timer immediately
+ * @returns {Function} Thunk action
+ */
+export const advanceCycle =
+  (autoStart = false) =>
+  (dispatch, getState) => {
+    dispatch(counterIncrement());
+
+    const state = getState().settings;
+    const currentMode = state.cycle[state.counter];
+    dispatch(setTimerModeAndReset(currentMode, autoStart));
+  };
+
+/**
+ * Go back one step in the cycle counter and reset timer accordingly.
+ * Optionally auto-start the timer.
+ *
+ * @param {boolean} [autoStart=false] - Whether to start the timer immediately
+ * @returns {Function} Thunk action
+ */
+export const retreatCycle =
+  (autoStart = false) =>
+  (dispatch, getState) => {
+    dispatch(counterDecrement());
+
+    const state = getState().settings;
+    const currentMode = state.cycle[state.counter];
+    dispatch(setTimerModeAndReset(currentMode, autoStart));
+  };
+
+/**
+ * Reset the entire cycle and timer to initial state.
+ * Optionally keep audio playing.
+ *
+ * @param {Object} [options={}] - Options object
+ * @param {boolean} [options.keepAudio=false] - Whether to keep audio playing
+ * @returns {Function} Thunk action
  */
 export const resetCycleAndTimer =
   ({ keepAudio = false } = {}) =>
-  (dispatch, getState) => {
-    let preserved = {};
-    if (keepAudio) {
-      const { settings } = getState();
-      preserved = {
-        alarmenabled: settings.alarmenabled,
-        alarmsound: settings.alarmsound,
-        alarmvolume: settings.alarmvolume,
-        buttonsound: settings.buttonsound,
-      };
-    }
+  (dispatch) => {
+    dispatch(setCounter(0));
+    dispatch(setTimerModeAndReset(1, false));
+    dispatch(setCycleComplete(false));
+    dispatch(setCyclePaused(false));
+    // Additional reset logic can be added here if needed
 
-    // reset everything to defaults
-    dispatch(setDefault());
-
-    // if preserving audio, reapply them
-    if (keepAudio) {
-      const { alarmenabled, alarmsound, alarmvolume, buttonsound } = preserved;
-      dispatch(setAlarmState(alarmenabled));
-      dispatch(setAlarmSound(alarmsound));
-      dispatch(setAlarmVolume(alarmvolume));
-      dispatch(setButtonSoundState(buttonsound));
+    if (!keepAudio) {
+      // If you want to stop audio here, you can dispatch an action or handle it in component
     }
   };

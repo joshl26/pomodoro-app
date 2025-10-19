@@ -6,7 +6,13 @@ import "./SecondaryButtons.css";
 import { resetCycleAndTimer } from "../store/settingsThunks";
 
 // Import selectors
-import { selectAlarmSettings } from "../store/selectors/settingsSelectors";
+import {
+  selectAlarmSettings,
+  selectPomodoro,
+  selectShortBreak,
+  selectLongBreak,
+  selectIsAutoStart,
+} from "../store/selectors/settingsSelectors";
 
 // Import actions
 import {
@@ -25,54 +31,16 @@ import {
 
 const SecondaryButtons = () => {
   const dispatch = useDispatch();
+
+  // Select all needed state once
   const alarmSettings = useSelector(selectAlarmSettings);
+  const pomoTime = useSelector(selectPomodoro);
+  const shortTime = useSelector(selectShortBreak);
+  const longTime = useSelector(selectLongBreak);
+  const autoStart = useSelector(selectIsAutoStart);
 
   const handleReset = () => {
     dispatch(resetCycleAndTimer({ keepAudio: true }));
-  };
-
-  const handlePomoIncrement = () => {
-    dispatch(pomoIncrement());
-  };
-
-  const handlePomoDecrement = () => {
-    dispatch(pomoDecrement());
-  };
-
-  const handleShortIncrement = () => {
-    dispatch(shortIncrement());
-  };
-
-  const handleShortDecrement = () => {
-    dispatch(shortDecrement());
-  };
-
-  const handleLongIncrement = () => {
-    dispatch(longIncrement());
-  };
-
-  const handleLongDecrement = () => {
-    dispatch(longDecrement());
-  };
-
-  const handleAutoStartChange = (e) => {
-    dispatch(setAutoStart(e.target.checked));
-  };
-
-  const handleAlarmStateChange = (e) => {
-    dispatch(setAlarmState(e.target.checked));
-  };
-
-  const handleAlarmSoundChange = (e) => {
-    dispatch(setAlarmSound(e.target.value));
-  };
-
-  const handleAlarmVolumeChange = (e) => {
-    dispatch(setAlarmVolume(parseFloat(e.target.value)));
-  };
-
-  const handleButtonSoundChange = (e) => {
-    dispatch(setButtonSoundState(e.target.checked));
   };
 
   return (
@@ -85,16 +53,14 @@ const SecondaryButtons = () => {
           <div className="setting-controls">
             <button
               className="setting-btn decrement"
-              onClick={handlePomoDecrement}
+              onClick={() => dispatch(pomoDecrement())}
             >
               -
             </button>
-            <span className="setting-value">
-              {useSelector((state) => state.settings.pomodoro)} min
-            </span>
+            <span className="setting-value">{pomoTime} min</span>
             <button
               className="setting-btn increment"
-              onClick={handlePomoIncrement}
+              onClick={() => dispatch(pomoIncrement())}
             >
               +
             </button>
@@ -106,16 +72,14 @@ const SecondaryButtons = () => {
           <div className="setting-controls">
             <button
               className="setting-btn decrement"
-              onClick={handleShortDecrement}
+              onClick={() => dispatch(shortDecrement())}
             >
               -
             </button>
-            <span className="setting-value">
-              {useSelector((state) => state.settings.short)} min
-            </span>
+            <span className="setting-value">{shortTime} min</span>
             <button
               className="setting-btn increment"
-              onClick={handleShortIncrement}
+              onClick={() => dispatch(shortIncrement())}
             >
               +
             </button>
@@ -127,16 +91,14 @@ const SecondaryButtons = () => {
           <div className="setting-controls">
             <button
               className="setting-btn decrement"
-              onClick={handleLongDecrement}
+              onClick={() => dispatch(longDecrement())}
             >
               -
             </button>
-            <span className="setting-value">
-              {useSelector((state) => state.settings.long)} min
-            </span>
+            <span className="setting-value">{longTime} min</span>
             <button
               className="setting-btn increment"
-              onClick={handleLongIncrement}
+              onClick={() => dispatch(longIncrement())}
             >
               +
             </button>
@@ -151,8 +113,8 @@ const SecondaryButtons = () => {
           <label className="setting-label checkbox-label">
             <input
               type="checkbox"
-              checked={alarmSettings.autoStart}
-              onChange={handleAutoStartChange}
+              checked={autoStart}
+              onChange={(e) => dispatch(setAutoStart(e.target.checked))}
               className="setting-checkbox"
             />
             Auto Start Breaks
@@ -164,7 +126,7 @@ const SecondaryButtons = () => {
             <input
               type="checkbox"
               checked={alarmSettings.enabled}
-              onChange={handleAlarmStateChange}
+              onChange={(e) => dispatch(setAlarmState(e.target.checked))}
               className="setting-checkbox"
             />
             Enable Alarm
@@ -175,7 +137,7 @@ const SecondaryButtons = () => {
           <label className="setting-label">Alarm Sound</label>
           <select
             value={alarmSettings.sound}
-            onChange={handleAlarmSoundChange}
+            onChange={(e) => dispatch(setAlarmSound(e.target.value))}
             className="setting-select"
           >
             <option value="No Sound">No Sound</option>
@@ -195,7 +157,9 @@ const SecondaryButtons = () => {
             max="1"
             step="0.1"
             value={alarmSettings.volume}
-            onChange={handleAlarmVolumeChange}
+            onChange={(e) =>
+              dispatch(setAlarmVolume(parseFloat(e.target.value)))
+            }
             className="setting-slider"
           />
         </div>
@@ -205,7 +169,7 @@ const SecondaryButtons = () => {
             <input
               type="checkbox"
               checked={alarmSettings.buttonSound}
-              onChange={handleButtonSoundChange}
+              onChange={(e) => dispatch(setButtonSoundState(e.target.checked))}
               className="setting-checkbox"
             />
             Button Sound

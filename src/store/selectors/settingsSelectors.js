@@ -11,9 +11,18 @@ export const selectCounter = (state) => state.settings.counter;
 export const selectCycleComplete = (state) => state.settings.cyclecomplete;
 
 export const selectIsAutoStart = (state) => Boolean(state.settings.autostart);
+
 export const selectAlarmSettings = (state) => ({
   enabled: state.settings.alarmenabled,
   sound: state.settings.alarmsound,
   volume: state.settings.alarmvolume,
   buttonSound: state.settings.buttonsound,
 });
+
+// Additional selectors
+export const selectPomodoro = (state) => state.settings.pomodoro;
+export const selectShortBreak = (state) => state.settings.short;
+export const selectLongBreak = (state) => state.settings.long;
+
+export const selectCyclePaused = (state) => state.settings.cyclepaused;
+export const selectCycleStarted = (state) => state.settings.cyclestarted;

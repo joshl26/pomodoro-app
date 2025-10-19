@@ -22,46 +22,44 @@ import {
 
 // Import selectors
 import {
-  selectTimerMode,
   selectSecondsLeft,
-  selectCycle,
-  selectCounter,
   selectIsAutoStart,
   selectAlarmSettings,
   selectCurrentTime,
   selectCycleComplete,
+  selectCyclePaused,
 } from "../store/selectors/settingsSelectors";
 
-// Import actions
-import {
-  setSecondsLeft,
-  setCounter,
-  counterIncrement,
-  setCycleComplete,
-  setCyclePaused,
-  counterDecrement,
-  setAutoStart,
-} from "../store/settingsSlice";
+// Import custom hooks
+import { useTimerMode } from "../hooks/useTimerMode";
+import { useTimerControls } from "../hooks/useTimerControls";
+import { useAutoStartCycle } from "../hooks/useAutoStartCycle";
+import { setAutoStart } from "../store/settingsSlice";
 
 export default function Timer() {
-  // Use selectors instead of direct state access
+  const dispatch = useDispatch();
+
+  // Selectors
   const pomoTimeState = useSelector((state) => state.settings.pomodoro);
   const shortTimeState = useSelector((state) => state.settings.short);
   const longTimeState = useSelector((state) => state.settings.long);
-  const timerModeState = useSelector(selectTimerMode);
   const autoStartState = useSelector(selectIsAutoStart);
-  const cyclePausedState = useSelector((state) => state.settings.cyclepaused);
+  const cyclePausedState = useSelector(selectCyclePaused);
   const currentTime = useSelector(selectCurrentTime);
-  const counter = useSelector(selectCounter);
   const secondsLeft = useSelector(selectSecondsLeft);
   const alarmSettings = useSelector(selectAlarmSettings);
-
-  // Derived values from alarmSettings
-  const alarmVolume = alarmSettings.volume;
-  const buttonSoundState = alarmSettings.buttonSound;
-
-  const cycle = useSelector(selectCycle);
   const cycleComplete = useSelector(selectCycleComplete);
+
+  const { volume: alarmVolume, buttonSound: buttonSoundState } = alarmSettings;
+
+  // Custom hooks
+  const { currentMode, switchMode, getModeName } = useTimerMode();
+  const { isPaused, handleStart, handlePause, handleResume } = useTimerControls(
+    startTimer,
+    pauseTimer,
+    resumeTimer
+  );
+  const { advance, retreat } = useAutoStartCycle();
 
   const {
     play: playAudio,
@@ -74,8 +72,6 @@ export default function Timer() {
   // Calculate expiry timestamp using currentTime from Redux
   const expiryTimestamp = new Date();
   expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + currentTime * 60);
-
-  const dispatch = useDispatch();
 
   const {
     seconds,
@@ -99,51 +95,17 @@ export default function Timer() {
         autoplay: true,
         initialVolume: alarmVolume,
       });
+    } else {
+      stopAudio();
     }
-  }, [isRunning, alarmVolume, loadAudio]);
+  }, [isRunning, alarmVolume, loadAudio, stopAudio]);
 
   const cycleExpired = () => {
-    dispatch(setCycleComplete(true));
+    dispatch(resetCycleAndTimer({ keepAudio: true }));
 
-    if (autoStartState === true) {
-      const expiryTimestamp = new Date();
-      expiryTimestamp.setSeconds(
-        expiryTimestamp.getSeconds() + currentTime * 60
-      );
-      restartTimer(expiryTimestamp);
-      startTimer();
+    if (autoStartState) {
+      handleStart();
     }
-  };
-
-  // Use thunks for setting timer modes
-  const setShortTimeState = (shouldAutoStart) => {
-    dispatch(setTimerModeAndReset(2));
-    // Update expiry timestamp with the new time
-    const expiryTimestamp = new Date();
-    expiryTimestamp.setSeconds(
-      expiryTimestamp.getSeconds() + shortTimeState * 60
-    );
-    restartTimer(expiryTimestamp, shouldAutoStart);
-  };
-
-  const setLongTimeState = (shouldAutoStart) => {
-    dispatch(setTimerModeAndReset(3));
-    // Update expiry timestamp with the new time
-    const expiryTimestamp = new Date();
-    expiryTimestamp.setSeconds(
-      expiryTimestamp.getSeconds() + longTimeState * 60
-    );
-    restartTimer(expiryTimestamp, shouldAutoStart);
-  };
-
-  const setPomoTimeState = (shouldAutoStart) => {
-    dispatch(setTimerModeAndReset(1));
-    // Update expiry timestamp with the new time
-    const expiryTimestamp = new Date();
-    expiryTimestamp.setSeconds(
-      expiryTimestamp.getSeconds() + pomoTimeState * 60
-    );
-    restartTimer(expiryTimestamp, shouldAutoStart);
   };
 
   const buttonClickSound = () => {
@@ -155,101 +117,44 @@ export default function Timer() {
     }
   };
 
-  const startButtonClicked = () => {
-    startTimer();
-    buttonClickSound();
-  };
-
-  const pauseButtonClicked = () => {
-    pauseTimer();
-    dispatch(setCyclePaused(true));
-    buttonClickSound();
-  };
-
-  const resumeButtonClicked = () => {
-    resumeTimer();
-    dispatch(setCyclePaused(false));
-    buttonClickSound();
-  };
-
   const forwardButtonClicked = () => {
     buttonClickSound();
-    dispatch(setCyclePaused(false));
 
-    if (autoStartState === true) {
-      dispatch(counterIncrement());
-
-      // Use mode handlers based on cycle
-      const nextMode = cycle[(counter + 1) % cycle.length];
-
-      if (nextMode === 1) {
-        setPomoTimeState(true);
-      } else if (nextMode === 2) {
-        setShortTimeState(true);
-      } else if (nextMode === 3) {
-        setLongTimeState(true);
-      }
+    if (autoStartState) {
+      advance(true);
+      handleStart();
     } else {
-      // Manual mode transition
-      if (timerModeState === 1) {
-        setShortTimeState(false);
-      } else if (timerModeState === 2) {
-        setLongTimeState(false);
-      } else if (timerModeState === 3) {
-        setPomoTimeState(false);
+      // Manual mode transition cycle: pomo -> short -> long -> pomo
+      if (currentMode === 1) {
+        switchMode(2);
+      } else if (currentMode === 2) {
+        switchMode(3);
+      } else {
+        switchMode(1);
       }
     }
   };
 
   const backwardButtonClicked = () => {
     buttonClickSound();
-    dispatch(setCyclePaused(false));
 
-    if (autoStartState === true) {
-      dispatch(counterDecrement());
-
-      // Calculate previous counter value
-      const cycleLength = cycle.length;
-      const prevCounter = (counter - 1 + cycleLength) % cycleLength;
-      const prevMode = cycle[prevCounter];
-
-      if (prevMode === 1) {
-        setPomoTimeState(true);
-      } else if (prevMode === 2) {
-        setShortTimeState(true);
-      } else if (prevMode === 3) {
-        setLongTimeState(true);
-      }
+    if (autoStartState) {
+      retreat(true);
+      handleStart();
     } else {
-      // Manual mode transition
-      if (timerModeState === 1) {
-        setLongTimeState(false);
-      } else if (timerModeState === 2) {
-        setPomoTimeState(false);
-      } else if (timerModeState === 3) {
-        setShortTimeState(false);
+      // Manual mode transition cycle: pomo <- short <- long <- pomo
+      if (currentMode === 1) {
+        switchMode(3);
+      } else if (currentMode === 2) {
+        switchMode(1);
+      } else {
+        switchMode(2);
       }
     }
   };
 
   // Format time with leading zeros
-  const formatTime = (value) => {
-    return value.toString().padStart(2, "0");
-  };
-
-  // Get mode name for display
-  const getModeName = () => {
-    switch (timerModeState) {
-      case 1:
-        return "Focus";
-      case 2:
-        return "Short Break";
-      case 3:
-        return "Long Break";
-      default:
-        return "Focus";
-    }
-  };
+  const formatTime = (value) => value.toString().padStart(2, "0");
 
   return (
     <div className="timer-container">
@@ -271,9 +176,9 @@ export default function Timer() {
             style={{
               width: `${((currentTime * 60 - secondsLeft) / (currentTime * 60)) * 100}%`,
               backgroundColor:
-                timerModeState === 1
+                currentMode === 1
                   ? "var(--primary-color)"
-                  : timerModeState === 2
+                  : currentMode === 2
                     ? "var(--secondary-color)"
                     : "var(--tertiary-color)",
             }}
@@ -285,7 +190,10 @@ export default function Timer() {
           {!isRunning && !cyclePausedState ? (
             <button
               className="control-btn start-btn"
-              onClick={startButtonClicked}
+              onClick={() => {
+                handleStart();
+                buttonClickSound();
+              }}
             >
               <FaPlay /> Start
             </button>
@@ -301,14 +209,20 @@ export default function Timer() {
               {cyclePausedState ? (
                 <button
                   className="control-btn pause-btn"
-                  onClick={resumeButtonClicked}
+                  onClick={() => {
+                    handleResume();
+                    buttonClickSound();
+                  }}
                 >
                   <FaPlay /> Resume
                 </button>
               ) : (
                 <button
                   className="control-btn pause-btn"
-                  onClick={pauseButtonClicked}
+                  onClick={() => {
+                    handlePause();
+                    buttonClickSound();
+                  }}
                 >
                   <FaPause /> Pause
                 </button>
@@ -344,13 +258,10 @@ export default function Timer() {
               type="checkbox"
               checked={autoStartState}
               onChange={(e) => {
-                dispatch(setAutoStart(e.target.checked));
-                if (e.target.checked) {
-                  dispatch(setCounter(1));
-                  dispatch(setTimerModeAndReset(1));
-                } else {
-                  dispatch(setCounter(0));
-                  dispatch(setTimerModeAndReset(1));
+                const isChecked = e.target.checked;
+                dispatch(setAutoStart(isChecked));
+                if (isChecked) {
+                  switchMode(1);
                 }
               }}
             />

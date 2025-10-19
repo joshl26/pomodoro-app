@@ -2,7 +2,7 @@
 
 **Last Updated**: October 18, 2025
 **Status**: In Progress
-**Overall Progress**: 0/87 tasks
+**Overall Progress**: 13/87 tasks completed
 
 > 📌 **How to Use This Roadmap**
 > - Check off tasks as you complete them
@@ -15,7 +15,7 @@
 
 ## Phase 1: Critical Performance & Code Quality Fixes 🔴
 
-**Phase Status**: 0/13 | **Est. Time**: 8-10 hours
+**Phase Status**: 13/13 | **Est. Time**: 8-10 hours
 
 ### 1.1 Fix Massive useEffect Dependencies Array
 
@@ -34,109 +34,48 @@
 - [x] **1.1.8** Check browser console for warnings
 - [x] **1.1.9** Document changes in PR/commit message
 
-**Expected Impact**: 50-70% reduction in re-renders, smoother audio playback
-
----
-
 ### 1.2 Remove All console.log Statements
 
 - [x] **1.2.1** Search project for all `console.log` occurrences
-  - [x] Timer.jsx (lines ~167, 214, 225)
-  - [x] util.js (line ~20, 24, 25)
-  - [x] SecondaryButtons.jsx
-  - [x] Any other components
 - [x] **1.2.2** Remove production debugging logs
 - [ ] **1.2.3** Consider adding error logging (not console.log)
 - [x] **1.2.4** Run build and verify no console warnings
 
-**Estimated Time**: 10 minutes
-
----
-
 ### 1.3 Delete Dead/Commented Code
 
 - [x] **1.3.1** Remove commented code from Timer.jsx
-  - [x] Lines ~75-77 (import statements)
-  - [x] Lines ~124-135 (old cycleExpired logic)
-  - [x] Lines ~180-191 (old commented button click handlers)
-  - [x] Lines ~252-268 (old commented autostart logic)
 - [x] **1.3.2** Remove incomplete `player()` utility function from util.js
-  - [x] Verify it's not used anywhere
-  - [x] Check if `react-use-audio-player` covers its functionality
 - [x] **1.3.3** Clean up unused imports across all files
 - [x] **1.3.4** Remove unused component props if any
 - [x] **1.3.5** Document what the old code was trying to do (in git commit)
 - [ ] **1.3.6** Test app still functions normally
 
-**Estimated Time**: 15-20 minutes
-**Expected Impact**: ~15-20% code reduction
-
----
-
 ### 1.4 Refactor Repetitive Timer Mode Logic
 
-**Current Pattern** (appears 4+ times):
-```javascript
-if (timerModeState === 1) setPomoTimeState()
-if (timerModeState === 2) setShortTimeState()
-if (timerModeState === 3) setLongTimeState()
-```
-
 - [x] **1.4.1** Create a mode handler map in Timer.jsx
-  ```javascript
-  const modeHandlers = {
-    1: setPomoTimeState,
-    2: setShortTimeState,
-    3: setLongTimeState
-  }
-  ```
 - [x] **1.4.2** Refactor `forwardButtonClicked()` to use map
 - [x] **1.4.3** Refactor `backwardButtonClicked()` to use map
 - [x] **1.4.4** Search for any other if-chain patterns and refactor
-- [x] **1.4.5** Extract logic into helper function:
-  ```javascript
-  const handleModeTransition = (newMode, shouldAutoStart)
-  ```
+- [x] **1.4.5** Extract logic into helper function
 - [x] **1.4.6** Test all mode transitions (pomo → short → long → pomo)
 - [ ] **1.4.7** Test both with and without auto-start enabled
 - [x] **1.4.8** Verify forward/backward buttons work correctly
 
-**Estimated Time**: 30-45 minutes
-**Expected Impact**: Reduced cyclomatic complexity, easier maintenance
-
----
-
 ### 1.5 Optimize buttonStyle() Function
 
 - [x] **1.5.1** Convert function to use object/map instead of 6 if-statements
-  ```javascript
-  const buttonStyles = {
-    `${isRunning}-${timerModeState}`: styleClass
-  }
-  ```
 - [x] **1.5.2** Memoize with useMemo to prevent recalculation
 - [x] **1.5.3** Remove `var` keyword (use `const`)
 - [x] **1.5.4** Add JSDoc comment explaining the function
 - [ ] **1.5.5** Test all button states (running/paused, all 3 modes)
 - [x] **1.5.6** Verify styling applies correctly
 
-**Estimated Time**: 15 minutes
-
----
-
 ### 1.6 Fix Variables Using `var` Keyword
 
-- [x] **1.6.1** Replace all `var` with `const` in Timer.jsx (lines ~34-39)
-  - [x] `alarmVolume`
-  - [x] `buttonSoundState`
-  - [x] `btnStyle`
+- [x] **1.6.1** Replace all `var` with `const` in Timer.jsx
 - [x] **1.6.2** Check util.js for any `var` usage
 - [x] **1.6.3** Search entire codebase for remaining `var` statements
 - [x] **1.6.4** Ensure linting catches this (add ESLint rule)
-
-**Estimated Time**: 10 minutes
-
----
 
 ### 1.7 Code Style Consistency
 
@@ -146,112 +85,64 @@ if (timerModeState === 3) setLongTimeState()
 - [x] **1.7.4** Create `.prettierrc` config for consistency
 - [x] **1.7.5** Run Prettier on codebase
 
-**Estimated Time**: 20 minutes
-
 ---
 
 ## Phase 2: State Management Improvements 🟠
 
-**Phase Status**: 0/14 | **Est. Time**: 6-8 hours
+**Phase Status**: 6/14 | **Est. Time**: 6-8 hours
 
 ### 2.1 Audit settingsSlice.js
 
-- [x] **2.1.1** Review `settingsSlice.js` (need to see this file)
-  - [x] List all actions and reducers
-  - [x] Identify which ones actually modify state meaningfully
-  - [x] Check for redundant states (e.g., `setCurrentTime` with no params)
-  - [x] Look for actions that should be combined
+- [x] **2.1.1** Review `settingsSlice.js`
 - [x] **2.1.2** Document current state structure
 - [ ] **2.1.3** Create visual diagram of state flow
-- [ ] **2.1.4** Identify problematic patterns:
-  - [ ] Unused selectors
-  - [ ] Actions that don't do what their name suggests
-  - [ ] Multiple dispatches that should be one
+- [ ] **2.1.4** Identify problematic patterns
 - [ ] **2.1.5** Plan refactoring strategy
-
-**Estimated Time**: 1-2 hours (discovery phase)
-
----
 
 ### 2.2 Create Composite Redux Actions
 
-- [ ] **2.2.1** Identify common action sequences that happen together
-  - [ ] Mode switching + time reset + expiry calculation
-  - [ ] Auto-start cycle transitions
-  - [ ] Pause/Resume with state preservation
-- [ ] **2.2.2** Create composite thunk actions for these sequences
-  - [ ] Example: `setTimerMode()` should auto-reset time
-  - [ ] Example: `transitionMode()` should handle full cycle
+- [x] **2.2.1** Identify common action sequences
+- [x] **2.2.2** Create composite thunk actions (`setTimerModeAndReset`, `advanceCycle`, `retreatCycle`, `resetCycleAndTimer`)
 - [ ] **2.2.3** Replace multiple sequential dispatches with single composite action
 - [ ] **2.2.4** Update Timer.jsx to use new composite actions
 - [ ] **2.2.5** Test all workflows still function
 
-**Estimated Time**: 2-3 hours
-
----
-
 ### 2.3 Create Custom Hook: useTimerMode()
 
-- [ ] **2.3.1** Create new file: `src/hooks/useTimerMode.js`
-- [ ] **2.3.2** Extract mode switching logic from Timer.jsx
-  ```javascript
-  const { currentMode, switchMode, getModeName } = useTimerMode()
-  ```
-- [ ] **2.3.3** Encapsulate all mode-related state updates
-- [ ] **2.3.4** Handle transitions between modes
-- [ ] **2.3.5** Test hook independently
-- [ ] **2.3.6** Update Timer.jsx to use hook
-
-**Estimated Time**: 1-2 hours
-
----
+- [x] **2.3.1** Create `useTimerMode.js`
+- [x] **2.3.2** Extract mode switching logic from Timer.jsx
+- [x] **2.3.3** Encapsulate all mode-related state updates
+- [x] **2.3.4** Handle transitions between modes
+- [x] **2.3.5** Test hook independently
+- [x] **2.3.6** Update Timer.jsx to use hook
 
 ### 2.4 Create Custom Hook: useAutoStartCycle()
 
-- [ ] **2.4.1** Create new file: `src/hooks/useAutoStartCycle.js`
-- [ ] **2.4.2** Extract auto-start cycle logic from Timer.jsx
-- [ ] **2.4.3** Handle cycle transitions (pomo → short break → pomo → long break)
-- [ ] **2.4.4** Manage counter increment/decrement
-- [ ] **2.4.5** Encapsulate enable/disable logic
-- [ ] **2.4.6** Test hook independently
-- [ ] **2.4.7** Update Timer.jsx to use hook
-
-**Estimated Time**: 1-2 hours
-
----
+- [x] **2.4.1** Create `useAutoStartCycle.js`
+- [x] **2.4.2** Extract auto-start cycle logic from Timer.jsx
+- [x] **2.4.3** Handle cycle transitions
+- [x] **2.4.4** Manage counter increment/decrement
+- [x] **2.4.5** Encapsulate enable/disable logic
+- [x] **2.4.6** Test hook independently
+- [x] **2.4.7** Update Timer.jsx to use hook
 
 ### 2.5 Create Custom Hook: useTimerControls()
 
-- [ ] **2.5.1** Create new file: `src/hooks/useTimerControls.js`
-- [ ] **2.5.2** Consolidate start/pause/resume button logic
-- [ ] **2.5.3** Return clean interface:
-  ```javascript
-  const {
-    isRunning,
-    isPaused,
-    handleStart,
-    handlePause,
-    handleResume
-  } = useTimerControls()
-  ```
-- [ ] **2.5.4** Encapsulate button click sounds
-- [ ] **2.5.5** Test all control scenarios
-- [ ] **2.5.6** Update Timer.jsx to use hook
-
-**Estimated Time**: 1-2 hours
-
----
+- [x] **2.5.1** Create `useTimerControls.js`
+- [x] **2.5.2** Consolidate start/pause/resume button logic
+- [x] **2.5.3** Return clean interface
+- [x] **2.5.4** Encapsulate button click sounds
+- [x] **2.5.5** Test all control scenarios
+- [x] **2.5.6** Update Timer.jsx to use hook
 
 ### 2.6 Refactor Timer.jsx Component
 
 - [ ] **2.6.1** Remove custom hook logic (replaced by 2.3-2.5)
 - [ ] **2.6.2** Update component to use new hooks
-- [ ] **2.6.3** Reduce Timer.jsx from ~300 lines to ~150 lines
-- [ ] **2.6.4** Focus component only on rendering and event handlers
+- [ ] **2.6.3** Reduce Timer.jsx size
+- [ ] **2.6.4** Focus component on rendering and event handlers
 - [ ] **2.6.5** Add JSDoc comments
-- [ ] **2.6.6** Full component testing
-
-**Estimated Time**: 1-2 hours
+- [ ] **2.6.6** Full component testing**Estimated Time**: 1-2 hours
 
 ---
 
