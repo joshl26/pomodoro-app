@@ -1,62 +1,83 @@
-import React, { useEffect, useMemo, useCallback } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTimer } from "react-timer-hook";
-import { Row, Col, Container } from "react-bootstrap";
 import {
-  setSecondsLeft,
-  setAutoStart,
-  setCounter,
-  setTimerMode,
-  setCurrentTime,
-  setTotalSeconds,
-  counterIncrement,
-  setCycleComplete,
-  setCyclePaused,
-  counterDecrement,
-} from "../store/settingsSlice";
-import { FaStepForward, FaStepBackward } from "react-icons/fa";
+  FaPlay,
+  FaPause,
+  FaRedo,
+  FaStepForward,
+  FaStepBackward,
+} from "react-icons/fa";
 import "./Timer.css";
 import SecondaryButtons from "./SecondaryButtons";
 import { useGlobalAudioPlayer } from "react-use-audio-player";
 import ButtonPressSound from "../assets/sounds/button-press.wav";
 import TickingSlowSound from "../assets/sounds/ticking-slow.mp3";
 
-/**
- * Timer Component
- * Manages the Pomodoro timer display and controls
- * @component
- * @returns {React.ReactElement} The timer interface
- */
+// Import thunks
+import {
+  setTimerModeAndReset,
+  resetCycleAndTimer,
+} from "../store/settingsThunks";
+
+// Import selectors
+import {
+  selectTimerMode,
+  selectSecondsLeft,
+  selectCycle,
+  selectCounter,
+  selectIsAutoStart,
+  selectAlarmSettings,
+  selectCurrentTime,
+  selectCycleComplete,
+} from "../store/selectors/settingsSelectors";
+
+// Import actions
+import {
+  setSecondsLeft,
+  setCounter,
+  counterIncrement,
+  setCycleComplete,
+  setCyclePaused,
+  counterDecrement,
+  setAutoStart,
+} from "../store/settingsSlice";
+
 export default function Timer() {
-  // ============================================
-  // SELECTORS - Redux State
-  // ============================================
+  // Use selectors instead of direct state access
   const pomoTimeState = useSelector((state) => state.settings.pomodoro);
   const shortTimeState = useSelector((state) => state.settings.short);
   const longTimeState = useSelector((state) => state.settings.long);
-  const timerModeState = useSelector((state) => state.settings.timermode);
-  const autoStartState = useSelector((state) => state.settings.autostart);
+  const timerModeState = useSelector(selectTimerMode);
+  const autoStartState = useSelector(selectIsAutoStart);
   const cyclePausedState = useSelector((state) => state.settings.cyclepaused);
-  const currentTime = useSelector((state) => state.settings.currenttime);
-  const counter = useSelector((state) => state.settings.counter);
-  // const secondsLeft = useSelector((state) => state.settings.secondsleft);
-  const alarmVolume = useSelector((state) => state.settings.alarmvolume);
-  const buttonSoundState = useSelector((state) => state.settings.buttonsound);
+  const currentTime = useSelector(selectCurrentTime);
+  const counter = useSelector(selectCounter);
+  const secondsLeft = useSelector(selectSecondsLeft);
+  const alarmSettings = useSelector(selectAlarmSettings);
 
-  // ============================================
-  // HOOKS & STATE
-  // ============================================
-  const dispatch = useDispatch();
+  // Derived values from alarmSettings
+  const alarmVolume = alarmSettings.volume;
+  const buttonSoundState = alarmSettings.buttonSound;
+
+  const cycle = useSelector(selectCycle);
+  const cycleComplete = useSelector(selectCycleComplete);
+
   const {
-    // play: playAudio,
+    play: playAudio,
+    pause: pauseAudio,
+    stop: stopAudio,
+    playing: isPlaying,
     load: loadAudio,
   } = useGlobalAudioPlayer();
 
+  // Calculate expiry timestamp using currentTime from Redux
   const expiryTimestamp = new Date();
   expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + currentTime * 60);
 
+  const dispatch = useDispatch();
+
   const {
-    totalSeconds,
     seconds,
     minutes,
     isRunning,
@@ -67,25 +88,11 @@ export default function Timer() {
   } = useTimer({
     autoStart: autoStartState,
     expiryTimestamp,
-    onExpire: () => cycleExpired(),
+    onExpire: () => {
+      cycleExpired();
+    },
   });
 
-  // ============================================
-  // EFFECTS - Separated by Concern
-  // ============================================
-
-  /**
-   * Effect: Update Redux with current total seconds
-   * Runs only when totalSeconds changes
-   */
-  useEffect(() => {
-    dispatch(setSecondsLeft(totalSeconds));
-  }, [totalSeconds, dispatch]);
-
-  /**
-   * Effect: Manage ticking audio based on timer state
-   * Runs only when isRunning or alarmVolume changes
-   */
   useEffect(() => {
     if (isRunning) {
       loadAudio(TickingSlowSound, {
@@ -95,328 +102,265 @@ export default function Timer() {
     }
   }, [isRunning, alarmVolume, loadAudio]);
 
-  // ============================================
-  // CALLBACKS - Memoized Event Handlers
-  // ============================================
-
-  /**
-   * Handle end of timer cycle
-   * Triggers cycle complete action and auto-restart if enabled
-   */
-  const cycleExpired = useCallback(() => {
+  const cycleExpired = () => {
     dispatch(setCycleComplete(true));
 
     if (autoStartState === true) {
-      const nextExpiryTimestamp = new Date();
-      nextExpiryTimestamp.setSeconds(
-        nextExpiryTimestamp.getSeconds() + currentTime * 60
+      const expiryTimestamp = new Date();
+      expiryTimestamp.setSeconds(
+        expiryTimestamp.getSeconds() + currentTime * 60
       );
-      restartTimer(nextExpiryTimestamp);
+      restartTimer(expiryTimestamp);
       startTimer();
     }
-  }, [autoStartState, currentTime, dispatch, restartTimer, startTimer]);
+  };
 
-  /**
-   * Update expiry timestamp for a given time in minutes
-   */
-  const updateExpiryTimestamp = useCallback(
-    (minutesValue) => {
-      const newExpiryTimestamp = new Date();
-      newExpiryTimestamp.setSeconds(
-        newExpiryTimestamp.getSeconds() + minutesValue * 60
-      );
-      restartTimer(newExpiryTimestamp, false);
-    },
-    [restartTimer]
-  );
+  // Use thunks for setting timer modes
+  const setShortTimeState = (shouldAutoStart) => {
+    dispatch(setTimerModeAndReset(2));
+    // Update expiry timestamp with the new time
+    const expiryTimestamp = new Date();
+    expiryTimestamp.setSeconds(
+      expiryTimestamp.getSeconds() + shortTimeState * 60
+    );
+    restartTimer(expiryTimestamp, shouldAutoStart);
+  };
 
-  /**
-   * Set Pomodoro timer (mode 1)
-   */
-  const setPomoTimeState = useCallback(() => {
-    dispatch(setTimerMode(1));
-    dispatch(setCurrentTime());
-    dispatch(setTotalSeconds(pomoTimeState * 60));
-    dispatch(setSecondsLeft(pomoTimeState * 60));
-    updateExpiryTimestamp(pomoTimeState);
-  }, [dispatch, pomoTimeState, updateExpiryTimestamp]);
+  const setLongTimeState = (shouldAutoStart) => {
+    dispatch(setTimerModeAndReset(3));
+    // Update expiry timestamp with the new time
+    const expiryTimestamp = new Date();
+    expiryTimestamp.setSeconds(
+      expiryTimestamp.getSeconds() + longTimeState * 60
+    );
+    restartTimer(expiryTimestamp, shouldAutoStart);
+  };
 
-  /**
-   * Set Short break timer (mode 2)
-   */
-  const setShortTimeState = useCallback(() => {
-    dispatch(setTimerMode(2));
-    dispatch(setCurrentTime());
-    dispatch(setTotalSeconds(shortTimeState * 60));
-    dispatch(setSecondsLeft(shortTimeState * 60));
-    updateExpiryTimestamp(shortTimeState);
-  }, [dispatch, shortTimeState, updateExpiryTimestamp]);
+  const setPomoTimeState = (shouldAutoStart) => {
+    dispatch(setTimerModeAndReset(1));
+    // Update expiry timestamp with the new time
+    const expiryTimestamp = new Date();
+    expiryTimestamp.setSeconds(
+      expiryTimestamp.getSeconds() + pomoTimeState * 60
+    );
+    restartTimer(expiryTimestamp, shouldAutoStart);
+  };
 
-  /**
-   * Set Long break timer (mode 3)
-   */
-  const setLongTimeState = useCallback(() => {
-    dispatch(setTimerMode(3));
-    dispatch(setCurrentTime());
-    dispatch(setTotalSeconds(longTimeState * 60));
-    dispatch(setSecondsLeft(longTimeState * 60));
-    updateExpiryTimestamp(longTimeState);
-  }, [dispatch, longTimeState, updateExpiryTimestamp]);
-
-  // ============================================
-  // MEMOIZED VALUES (moved before forward/backward callbacks)
-  // ============================================
-
-  /**
-   * Mode handler map - reduces if-chain patterns
-   * Maps timer modes (1, 2, 3) to their handler functions
-   * Defined before callbacks that depend on it
-   */
-  const modeHandlers = useMemo(
-    () => ({
-      1: setPomoTimeState,
-      2: setShortTimeState,
-      3: setLongTimeState,
-    }),
-    [setPomoTimeState, setShortTimeState, setLongTimeState]
-  );
-
-  /**
-   * Play button click sound if enabled
-   */
-  const buttonClickSound = useCallback(() => {
+  const buttonClickSound = () => {
     if (buttonSoundState) {
       loadAudio(ButtonPressSound, {
         autoplay: true,
         initialVolume: 0.5,
       });
     }
-  }, [buttonSoundState, loadAudio]);
+  };
 
-  /**
-   * Handle start button click
-   */
-  const startButtonClicked = useCallback(() => {
+  const startButtonClicked = () => {
     startTimer();
     buttonClickSound();
-  }, [startTimer, buttonClickSound]);
+  };
 
-  /**
-   * Handle pause button click
-   */
-  const pauseButtonClicked = useCallback(() => {
+  const pauseButtonClicked = () => {
     pauseTimer();
     dispatch(setCyclePaused(true));
     buttonClickSound();
-  }, [pauseTimer, dispatch, buttonClickSound]);
+  };
 
-  /**
-   * Handle resume button click
-   */
-  const resumeButtonClicked = useCallback(() => {
+  const resumeButtonClicked = () => {
     resumeTimer();
     dispatch(setCyclePaused(false));
     buttonClickSound();
-  }, [resumeTimer, dispatch, buttonClickSound]);
+  };
 
-  /**
-   * Handle forward button - transition to next cycle
-   */
-  const forwardButtonClicked = useCallback(() => {
+  const forwardButtonClicked = () => {
     buttonClickSound();
     dispatch(setCyclePaused(false));
 
     if (autoStartState === true) {
       dispatch(counterIncrement());
-      // When autoStart is enabled, handlers will set mode/time as needed.
-      modeHandlers[timerModeState]?.();
-    } else {
-      // Cycle through modes: 1→2, 2→3, 3→1
-      const nextMode = timerModeState === 3 ? 1 : timerModeState + 1;
-      modeHandlers[nextMode]?.();
-    }
-  }, [
-    buttonClickSound,
-    dispatch,
-    autoStartState,
-    timerModeState,
-    modeHandlers,
-  ]);
 
-  /**
-   * Handle backward button - transition to previous cycle
-   */
-  const backwardButtonClicked = useCallback(() => {
+      // Use mode handlers based on cycle
+      const nextMode = cycle[(counter + 1) % cycle.length];
+
+      if (nextMode === 1) {
+        setPomoTimeState(true);
+      } else if (nextMode === 2) {
+        setShortTimeState(true);
+      } else if (nextMode === 3) {
+        setLongTimeState(true);
+      }
+    } else {
+      // Manual mode transition
+      if (timerModeState === 1) {
+        setShortTimeState(false);
+      } else if (timerModeState === 2) {
+        setLongTimeState(false);
+      } else if (timerModeState === 3) {
+        setPomoTimeState(false);
+      }
+    }
+  };
+
+  const backwardButtonClicked = () => {
     buttonClickSound();
     dispatch(setCyclePaused(false));
 
     if (autoStartState === true) {
       dispatch(counterDecrement());
-      const prevMode = timerModeState === 1 ? 3 : timerModeState - 1;
-      modeHandlers[prevMode]?.();
+
+      // Calculate previous counter value
+      const cycleLength = cycle.length;
+      const prevCounter = (counter - 1 + cycleLength) % cycleLength;
+      const prevMode = cycle[prevCounter];
+
+      if (prevMode === 1) {
+        setPomoTimeState(true);
+      } else if (prevMode === 2) {
+        setShortTimeState(true);
+      } else if (prevMode === 3) {
+        setLongTimeState(true);
+      }
     } else {
-      const prevMode = timerModeState === 1 ? 3 : timerModeState - 1;
-      modeHandlers[prevMode]?.();
+      // Manual mode transition
+      if (timerModeState === 1) {
+        setLongTimeState(false);
+      } else if (timerModeState === 2) {
+        setPomoTimeState(false);
+      } else if (timerModeState === 3) {
+        setShortTimeState(false);
+      }
     }
-  }, [
-    buttonClickSound,
-    dispatch,
-    autoStartState,
-    timerModeState,
-    modeHandlers,
-  ]);
+  };
 
-  /**
-   * Toggle auto-start mode
-   */
-  const toggleAutoStart = useCallback(() => {
-    const newAutoStart = !autoStartState;
-    dispatch(setAutoStart(newAutoStart));
-    dispatch(setCounter(newAutoStart ? 1 : 0));
-    dispatch(setTimerMode(1));
-    dispatch(setCurrentTime(pomoTimeState));
-    dispatch(setTotalSeconds(pomoTimeState * 60));
-    dispatch(setSecondsLeft(pomoTimeState * 60));
+  // Format time with leading zeros
+  const formatTime = (value) => {
+    return value.toString().padStart(2, "0");
+  };
 
-    const newExpiryTimestamp = new Date();
-    newExpiryTimestamp.setSeconds(
-      newExpiryTimestamp.getSeconds() + pomoTimeState * 60
-    );
-    restartTimer(newExpiryTimestamp, false);
-  }, [autoStartState, dispatch, pomoTimeState, restartTimer]);
-
-  /**
-   * Button style based on running state and mode
-   * Memoized to prevent recalculation on every render
-   */
-  const buttonStyle = useMemo(() => {
-    const styleMap = {
-      "false-1": "action-btn1",
-      "true-1": "action-btn1-active",
-      "false-2": "action-btn2",
-      "true-2": "action-btn2-active",
-      "false-3": "action-btn3",
-      "true-3": "action-btn3-active",
-    };
-    return styleMap[`${isRunning}-${timerModeState}`] || "action-btn1";
-  }, [isRunning, timerModeState]);
-
-  // ============================================
-  // RENDER
-  // ============================================
+  // Get mode name for display
+  const getModeName = () => {
+    switch (timerModeState) {
+      case 1:
+        return "Focus";
+      case 2:
+        return "Short Break";
+      case 3:
+        return "Long Break";
+      default:
+        return "Focus";
+    }
+  };
 
   return (
-    <Container>
+    <div className="timer-container">
       <div className="timer-content">
-        <Row>
-          <Col className="align-center">
-            {autoStartState === true ? (
-              <h3>Pomodoro Cycle: {Number(counter)}</h3>
-            ) : (
-              <h3> </h3>
-            )}
-          </Col>
-          <div className="spacer" />
-        </Row>
+        {/* Mode indicator */}
+        <div className="mode-indicator">{getModeName()}</div>
 
-        <SecondaryButtons
-          buttonSoundState={buttonSoundState}
-          alarmVolume={alarmVolume}
-          autoStartState={autoStartState}
-          isRunning={isRunning}
-          currentTime={currentTime}
-          pomoTimeState={pomoTimeState}
-          timerModeState={timerModeState}
-          shortTimeState={shortTimeState}
-          longTimeState={longTimeState}
-          updateExpiryTimestamp={updateExpiryTimestamp}
-          restart={restartTimer}
-        />
-
-        {/* Main Timer Display */}
-        <div className="main-timer-text">
-          <span>{minutes}</span>
-          <span>:</span>
-          {seconds < 10 ? <span>0</span> : ""}
-          <span>{seconds}</span>
+        {/* Time display */}
+        <div className="time-display">
+          <span className="time-minutes">{formatTime(minutes)}</span>
+          <span className="time-separator">:</span>
+          <span className="time-seconds">{formatTime(seconds)}</span>
         </div>
 
-        {/* Timer Controls */}
-        <Container>
-          <Row className="timer-control">
-            {isRunning === false && cyclePausedState === false ? (
-              <Col
-                style={{ width: "auto" }}
-                className="step-column"
-                md={12}
-                xs={10}
+        {/* Progress bar */}
+        <div className="progress-container">
+          <div
+            className="progress-bar"
+            style={{
+              width: `${((currentTime * 60 - secondsLeft) / (currentTime * 60)) * 100}%`,
+              backgroundColor:
+                timerModeState === 1
+                  ? "var(--primary-color)"
+                  : timerModeState === 2
+                    ? "var(--secondary-color)"
+                    : "var(--tertiary-color)",
+            }}
+          ></div>
+        </div>
+
+        {/* Control buttons */}
+        <div className="timer-controls">
+          {!isRunning && !cyclePausedState ? (
+            <button
+              className="control-btn start-btn"
+              onClick={startButtonClicked}
+            >
+              <FaPlay /> Start
+            </button>
+          ) : (
+            <div className="running-controls">
+              <button
+                className="control-btn nav-btn"
+                onClick={backwardButtonClicked}
               >
-                <button className={buttonStyle} onClick={startButtonClicked}>
-                  Start
-                </button>
-              </Col>
-            ) : (
-              <>
-                <Col
-                  style={{ width: "auto" }}
-                  className="action-button"
-                  md={2}
-                  xs={1}
+                <FaStepBackward />
+              </button>
+
+              {cyclePausedState ? (
+                <button
+                  className="control-btn pause-btn"
+                  onClick={resumeButtonClicked}
                 >
-                  {autoStartState === false ? (
-                    <FaStepBackward
-                      className="step-button"
-                      onClick={backwardButtonClicked}
-                    />
-                  ) : null}
-                </Col>
+                  <FaPlay /> Resume
+                </button>
+              ) : (
+                <button
+                  className="control-btn pause-btn"
+                  onClick={pauseButtonClicked}
+                >
+                  <FaPause /> Pause
+                </button>
+              )}
 
-                <Col style={{ width: "auto" }} md={8} xs={10}>
-                  {cyclePausedState === true ? (
-                    <button
-                      className={buttonStyle}
-                      onClick={resumeButtonClicked}
-                    >
-                      Resume
-                    </button>
-                  ) : (
-                    <button
-                      className={buttonStyle}
-                      onClick={pauseButtonClicked}
-                    >
-                      Pause
-                    </button>
-                  )}
-                </Col>
+              <button
+                className="control-btn nav-btn"
+                onClick={forwardButtonClicked}
+              >
+                <FaStepForward />
+              </button>
+            </div>
+          )}
+        </div>
 
-                <Col style={{ width: "auto" }} md={2} xs={1}>
-                  {autoStartState === false ? (
-                    <FaStepForward
-                      className="step-button"
-                      onClick={forwardButtonClicked}
-                    />
-                  ) : null}
-                </Col>
-              </>
-            )}
-          </Row>
-        </Container>
+        {/* Reset button */}
+        <div className="reset-container">
+          <button
+            className="control-btn reset-btn"
+            onClick={() => {
+              buttonClickSound();
+              dispatch(resetCycleAndTimer({ keepAudio: true }));
+            }}
+          >
+            <FaRedo /> Reset Timer
+          </button>
+        </div>
+
+        {/* Auto-start toggle */}
+        <div className="autobreak-container">
+          <label className="autobreak-toggle">
+            <input
+              type="checkbox"
+              checked={autoStartState}
+              onChange={(e) => {
+                dispatch(setAutoStart(e.target.checked));
+                if (e.target.checked) {
+                  dispatch(setCounter(1));
+                  dispatch(setTimerModeAndReset(1));
+                } else {
+                  dispatch(setCounter(0));
+                  dispatch(setTimerModeAndReset(1));
+                }
+              }}
+            />
+            <span>Auto Start Breaks</span>
+          </label>
+        </div>
       </div>
 
-      {/* Auto-Start Toggle */}
-      <Container>
-        <Row>
-          <div className="spacer" />
-          <Col sm={12} className="align-center">
-            <p>
-              <button onClick={toggleAutoStart} className="autobreak-btn">
-                Auto Start Breaks:
-              </button>
-              {autoStartState ? "ENABLED" : "DISABLED"}
-            </p>
-          </Col>
-        </Row>
-      </Container>
-    </Container>
+      {/* Secondary buttons */}
+      <SecondaryButtons />
+    </div>
   );
 }

@@ -1,18 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+/**
+ * Helper to clamp a value between min and max (inclusive)
+ * @param {number} value
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
+ */
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+const DEFAULT_CYCLE = [1, 2, 1, 2, 1, 2, 1, 2, 3];
+
 export const settingsSlice = createSlice({
   name: "settings",
   initialState: {
-    pomodoro: 25,
+    pomodoro: 25, // minutes
     short: 5,
     long: 15,
     autostart: false,
+    // timermode values: 1 = pomodoro, 2 = short break, 3 = long break
     timermode: 1,
-    currenttime: 25,
+    currenttime: 25, // minutes
     totalseconds: 1500,
     secondsleft: 1500,
-    cycle: [1, 2, 1, 2, 1, 2, 1, 2, 3],
-    counter: 0,
+    cycle: DEFAULT_CYCLE,
+    counter: 0, // index into cycle (0..cycle.length-1)
     cyclecomplete: false,
     cyclestarted: false,
     cyclepaused: false,
@@ -22,8 +34,10 @@ export const settingsSlice = createSlice({
     alarmvolume: 0.5,
   },
   reducers: {
+    /**
+     * Reset settings to defaults
+     */
     setDefault: (state) => {
-      console.log("Reset to defaults...");
       state.pomodoro = 25;
       state.short = 5;
       state.long = 15;
@@ -32,7 +46,7 @@ export const settingsSlice = createSlice({
       state.currenttime = 25;
       state.totalseconds = 1500;
       state.secondsleft = 1500;
-      state.cycle = [1, 2, 1, 2, 1, 2, 1, 2, 3];
+      state.cycle = [...DEFAULT_CYCLE];
       state.counter = 0;
       state.cyclecomplete = false;
       state.cyclestarted = false;
@@ -42,181 +56,198 @@ export const settingsSlice = createSlice({
       state.alarmsound = "No Sound";
       state.alarmvolume = 0.5;
     },
+
+    /* -------------------- increments / decrements -------------------- */
+
     pomoIncrement: (state) => {
-      // console.log("Pomo increment...");
-      //limit pomodoro state to 40 minutes (max)
-      if (Number(state.pomodoro) >= 40) {
-        state.pomodoro = 40;
-      } else {
-        state.pomodoro += 1;
-      }
+      state.pomodoro = clamp(Number(state.pomodoro) + 1, 1, 40);
     },
     pomoDecrement: (state) => {
-      // console.log("Pomo decrement...");
-      //limit pomodoro state to 20 minutes (min)
-      if (Number(state.pomodoro) <= 1) {
-        state.pomodoro = 1;
-      } else {
-        state.pomodoro -= 1;
-      }
+      state.pomodoro = clamp(Number(state.pomodoro) - 1, 1, 40);
     },
+
     shortIncrement: (state) => {
-      // console.log("Short increment...");
-      //limit short state to 10 minutes (max)
-      if (Number(state.short) >= 10) {
-        state.short = 10;
-      } else {
-        state.short += 1;
-      }
+      state.short = clamp(Number(state.short) + 1, 1, 10);
     },
     shortDecrement: (state) => {
-      // console.log("Short decrement...");
-      //limit short state to 5 minutes (min)
-      if (Number(state.short) <= 1) {
-        state.short = 1;
-      } else {
-        state.short -= 1;
-      }
+      state.short = clamp(Number(state.short) - 1, 1, 10);
     },
+
     longIncrement: (state) => {
-      // console.log("Long increment...");
-      //limit long state to 25 minutes (max)
-      if (Number(state.long) >= 30) {
-        state.long = 30;
-      } else {
-        state.long += 1;
-      }
+      state.long = clamp(Number(state.long) + 1, 1, 30);
     },
     longDecrement: (state) => {
-      // console.log("Long decrement...");
-      //limit short state to 10 minutes (min)
-      if (Number(state.long) <= 1) {
-        state.long = 1;
-      } else {
-        state.long -= 1;
-      }
+      state.long = clamp(Number(state.long) - 1, 1, 30);
     },
+
+    /* -------------------- basic setters -------------------- */
+
     setAutoStart: (state, action) => {
-      console.log("Auto start state set: " + action.payload);
-      state.autostart = action.payload;
+      state.autostart = Boolean(action.payload);
     },
+
     setCyclePaused: (state, action) => {
-      console.log("Cycle paused state set: " + action.payload);
-      state.cyclepaused = action.payload;
+      state.cyclepaused = Boolean(action.payload);
     },
 
+    /**
+     * Set timer mode.
+     * Accepts 1 (pomodoro), 2 (short), 3 (long).
+     * Note: this reducer only sets the mode; consider using a thunk
+     * to reset timer seconds when changing mode (see suggested thunks).
+     */
     setTimerMode: (state, action) => {
-      console.log("Timer mode state set: " + action.payload);
-      state.timermode = action.payload;
-    },
-    setCurrentTime: (state) => {
-      console.log("Current time state set...");
-      //Check timermode and set current time accordingly
-      if (Number(state.timermode) > 3) {
-        return;
-      }
-      if (Number(state.timermode) < 0) {
-        return;
-      }
-      if (Number(state.timermode) === 0) {
-        state.currenttime = state.pomodoro;
-      }
-      if (Number(state.timermode) === 1) {
-        state.currenttime = state.pomodoro;
-      }
-      if (Number(state.timermode) === 2) {
-        state.currenttime = state.short;
-      }
-      if (Number(state.timermode) === 3) {
-        state.currenttime = state.long;
-      }
-    },
-    counterIncrement: (state) => {
-      console.log("Counter increment...");
-      if (Number(state.counter) < 9) {
-        state.counter += 1;
-        return;
-      } else if (Number(state.counter) > 9) {
-        state.counter = 1;
-        return;
+      const m = Number(action.payload);
+      if (m >= 1 && m <= 3) {
+        state.timermode = m;
       }
     },
 
+    /**
+     * Compute currenttime (minutes) from timermode.
+     * This can be invoked after changing timers or settings.
+     */
+    setCurrentTimeFromMode: (state) => {
+      switch (Number(state.timermode)) {
+        case 1:
+          state.currenttime = Number(state.pomodoro);
+          break;
+        case 2:
+          state.currenttime = Number(state.short);
+          break;
+        case 3:
+          state.currenttime = Number(state.long);
+          break;
+        default:
+          // keep existing value if mode is invalid
+          break;
+      }
+    },
+
+    /**
+     * Set counter by value (validated and clamped to cycle range)
+     */
     setCounter: (state, action) => {
-      console.log("Set Counter: " + action.payload);
-      state.counter = action.payload;
+      const v = Number(action.payload);
+      if (Number.isFinite(v)) {
+        // clamp to valid indices [0, cycle.length - 1]
+        const maxIdx = Math.max(0, (state.cycle || DEFAULT_CYCLE).length - 1);
+        state.counter = clamp(Math.floor(v), 0, maxIdx);
+      }
     },
-    setCycleComplete: (state) => {
-      console.log("setCycleComplete");
-      state.cyclecomplete = true;
+
+    /**
+     * Increment counter (advance cycle). Wraps to 0 when reaching the end.
+     */
+    counterIncrement: (state) => {
+      const cycleLen = (state.cycle || DEFAULT_CYCLE).length || 1;
+      state.counter = (Number(state.counter) + 1) % cycleLen;
     },
+
+    /**
+     * Decrement counter (go back in cycle). Wraps to last index when below 0.
+     */
+    counterDecrement: (state) => {
+      const cycleLen = (state.cycle || DEFAULT_CYCLE).length || 1;
+      const newVal = Number(state.counter) - 1;
+      state.counter = ((newVal % cycleLen) + cycleLen) % cycleLen; // ensures positive wrap
+    },
+
+    /**
+     * Set cycle complete (boolean)
+     */
+    setCycleComplete: (state, action) => {
+      state.cyclecomplete = Boolean(action?.payload ?? true);
+    },
+
+    /**
+     * Mark cycle as started
+     */
     setCycleStart: (state) => {
       state.cyclecomplete = false;
-    },
-    setCycle: (state, action) => {
-      console.log("Set Cycle Complete: " + action.payload);
-      state.cyclecomplete = action.payload;
+      state.cyclestarted = true;
     },
 
+    /**
+     * Replace the cycle array (validate payload is array)
+     */
+    setCycle: (state, action) => {
+      if (Array.isArray(action.payload) && action.payload.length > 0) {
+        state.cycle = [...action.payload];
+        // ensure counter within new bounds
+        state.counter = clamp(state.counter, 0, state.cycle.length - 1);
+      }
+    },
+
+    /* -------------------- alarm / sound -------------------- */
+
     setAlarmState: (state, action) => {
-      console.log("Toggle Alarm State");
-      state.alarmenabled = action.payload;
+      state.alarmenabled = Boolean(action.payload);
     },
 
     setButtonSoundState: (state, action) => {
-      console.log("Button Sound State");
-      state.buttonsound = action.payload;
+      state.buttonsound = Boolean(action.payload);
     },
 
     setAlarmVolume: (state, action) => {
-      console.log("Set Alarm Volume" + action.payload);
-      state.alarmvolume = action.payload;
+      const v = Number(action.payload);
+      if (Number.isFinite(v)) {
+        state.alarmvolume = clamp(v, 0, 1);
+      }
     },
 
     setAlarmSound: (state, action) => {
-      console.log("Set Alarm Sound" + action.payload);
-      state.alarmsound = action.payload;
+      if (typeof action.payload === "string") {
+        state.alarmsound = action.payload;
+      }
     },
+
+    /* -------------------- seconds / totals -------------------- */
+
     setSecondsLeft: (state, action) => {
-      // console.log("Set seconds left" + action.payload);
-      state.secondsleft = action.payload;
+      const v = Number(action.payload);
+      if (Number.isFinite(v) && v >= 0) {
+        state.secondsleft = Math.max(0, Math.floor(v));
+      }
     },
+
     setTotalSeconds: (state, action) => {
-      console.log("Set Total Seconds" + action.payload);
-      state.totalseconds = action.payload;
+      const v = Number(action.payload);
+      if (Number.isFinite(v) && v >= 0) {
+        state.totalseconds = Math.max(0, Math.floor(v));
+      }
     },
   },
 });
 
-// Action creators are generated for each case reducer function
+// Export actual action creators implemented above
 export const {
+  setDefault,
   pomoIncrement,
   pomoDecrement,
-  pomoIncrementByAmount,
   shortIncrement,
   shortDecrement,
-  shortIncrementByAmount,
   longIncrement,
   longDecrement,
-  longDecrementByAmount,
-  autoPomo,
   setAutoStart,
+  setCyclePaused,
   setTimerMode,
-  setCurrentTime,
-  setDefault,
+  setCurrentTimeFromMode,
   counterIncrement,
   counterDecrement,
   setCounter,
   setCycleComplete,
   setCycleStart,
   setCycle,
-  setCyclePaused,
   setAlarmState,
+  setButtonSoundState,
   setAlarmVolume,
   setAlarmSound,
   setSecondsLeft,
   setTotalSeconds,
-  setButtonSoundState,
 } = settingsSlice.actions;
+
+// Backwards-compat alias for older imports (optional)
+export { setCurrentTimeFromMode as setCurrentTime };
 
 export default settingsSlice.reducer;

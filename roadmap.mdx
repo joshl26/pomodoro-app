@@ -1,7 +1,7 @@
 # PomoBreak Optimization Roadmap
 
-**Last Updated**: October 18, 2025  
-**Status**: In Progress  
+**Last Updated**: October 18, 2025
+**Status**: In Progress
 **Overall Progress**: 0/87 tasks
 
 > 📌 **How to Use This Roadmap**
@@ -68,7 +68,7 @@
 - [x] **1.3.5** Document what the old code was trying to do (in git commit)
 - [ ] **1.3.6** Test app still functions normally
 
-**Estimated Time**: 15-20 minutes  
+**Estimated Time**: 15-20 minutes
 **Expected Impact**: ~15-20% code reduction
 
 ---
@@ -101,7 +101,7 @@ if (timerModeState === 3) setLongTimeState()
 - [ ] **1.4.7** Test both with and without auto-start enabled
 - [x] **1.4.8** Verify forward/backward buttons work correctly
 
-**Estimated Time**: 30-45 minutes  
+**Estimated Time**: 30-45 minutes
 **Expected Impact**: Reduced cyclomatic complexity, easier maintenance
 
 ---
@@ -132,7 +132,7 @@ if (timerModeState === 3) setLongTimeState()
   - [x] `btnStyle`
 - [x] **1.6.2** Check util.js for any `var` usage
 - [x] **1.6.3** Search entire codebase for remaining `var` statements
-- [ ] **1.6.4** Ensure linting catches this (add ESLint rule)
+- [x] **1.6.4** Ensure linting catches this (add ESLint rule)
 
 **Estimated Time**: 10 minutes
 
@@ -140,11 +140,11 @@ if (timerModeState === 3) setLongTimeState()
 
 ### 1.7 Code Style Consistency
 
-- [ ] **1.7.1** Review naming conventions across components
-- [ ] **1.7.2** Ensure consistent import/export style
-- [ ] **1.7.3** Check for inconsistent spacing/indentation
-- [ ] **1.7.4** Create `.prettierrc` config for consistency
-- [ ] **1.7.5** Run Prettier on codebase
+- [x] **1.7.1** Review naming conventions across components
+- [x] **1.7.2** Ensure consistent import/export style
+- [x] **1.7.3** Check for inconsistent spacing/indentation
+- [x] **1.7.4** Create `.prettierrc` config for consistency
+- [x] **1.7.5** Run Prettier on codebase
 
 **Estimated Time**: 20 minutes
 
@@ -156,12 +156,12 @@ if (timerModeState === 3) setLongTimeState()
 
 ### 2.1 Audit settingsSlice.js
 
-- [ ] **2.1.1** Review `settingsSlice.js` (need to see this file)
-  - [ ] List all actions and reducers
-  - [ ] Identify which ones actually modify state meaningfully
-  - [ ] Check for redundant states (e.g., `setCurrentTime` with no params)
-  - [ ] Look for actions that should be combined
-- [ ] **2.1.2** Document current state structure
+- [x] **2.1.1** Review `settingsSlice.js` (need to see this file)
+  - [x] List all actions and reducers
+  - [x] Identify which ones actually modify state meaningfully
+  - [x] Check for redundant states (e.g., `setCurrentTime` with no params)
+  - [x] Look for actions that should be combined
+- [x] **2.1.2** Document current state structure
 - [ ] **2.1.3** Create visual diagram of state flow
 - [ ] **2.1.4** Identify problematic patterns:
   - [ ] Unused selectors
@@ -226,12 +226,12 @@ if (timerModeState === 3) setLongTimeState()
 - [ ] **2.5.2** Consolidate start/pause/resume button logic
 - [ ] **2.5.3** Return clean interface:
   ```javascript
-  const { 
-    isRunning, 
-    isPaused, 
-    handleStart, 
-    handlePause, 
-    handleResume 
+  const {
+    isRunning,
+    isPaused,
+    handleStart,
+    handlePause,
+    handleResume
   } = useTimerControls()
   ```
 - [ ] **2.5.4** Encapsulate button click sounds

@@ -1,6 +1,6 @@
-import { Route, Switch } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Switch, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
 import { Container } from "react-bootstrap";
 import Timer from "./components/Timer";
 import ResponsiveHeader from "./components/ResponsiveHeader";
@@ -10,7 +10,7 @@ import Report from "./components/Report";
 import Login from "./components/Login";
 import Help from "./components/Help";
 import Progress from "./components/Progress";
-import "./App.css";
+import "./layout.css";
 
 function getFaviconEl() {
   return document.getElementById("favicon");
@@ -19,40 +19,57 @@ function getFaviconEl() {
 function App() {
   const secondsLeftState = useSelector((state) => state.settings.secondsleft);
   const totalSecondsState = useSelector((state) => state.settings.totalseconds);
-
-  const percentComplete =
-    ((totalSecondsState - secondsLeftState) / totalSecondsState) * 100;
-
   const timerMode = useSelector((state) => state.settings.timermode);
 
-  if (Number(timerMode) === 1) {
-    const favicon = getFaviconEl();
-    favicon.href =
-      "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/pomo/favicon.ico";
-  }
+  const percentComplete =
+    totalSecondsState > 0
+      ? ((totalSecondsState - secondsLeftState) / totalSecondsState) * 100
+      : 0;
 
-  if (Number(timerMode) === 2) {
-    const favicon = getFaviconEl();
-    favicon.href =
-      "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/short/favicon.ico";
-  }
-
-  if (Number(timerMode) === 3) {
-    const favicon = getFaviconEl();
-    favicon.href =
-      "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/long/favicon.ico";
-  }
-
+  // Update favicon based on timer mode
   useEffect(() => {
     const favicon = getFaviconEl();
-    favicon.href =
-      "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/pomo/favicon.ico";
+    if (!favicon) return;
+
+    let faviconUrl;
+    switch (Number(timerMode)) {
+      case 1: // Pomodoro
+        faviconUrl =
+          "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/pomo/favicon.ico";
+        break;
+      case 2: // Short break
+        faviconUrl =
+          "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/short/favicon.ico";
+        break;
+      case 3: // Long break
+        faviconUrl =
+          "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/long/favicon.ico";
+        break;
+      default:
+        faviconUrl =
+          "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/pomo/favicon.ico";
+    }
+
+    favicon.href = faviconUrl;
+  }, [timerMode]);
+
+  // Set initial favicon
+  useEffect(() => {
+    const favicon = getFaviconEl();
+    if (favicon) {
+      favicon.href =
+        "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/pomo/favicon.ico";
+    }
   }, []);
 
   const activeClass =
-    `${Number(timerMode) === 1 ? `pomodoro` : ``}` +
-    `${Number(timerMode) === 2 ? `short` : ``}` +
-    `${Number(timerMode) === 3 ? `long` : ``}`;
+    Number(timerMode) === 1
+      ? "pomodoro"
+      : Number(timerMode) === 2
+        ? "short"
+        : Number(timerMode) === 3
+          ? "long"
+          : "pomodoro";
 
   return (
     <div className={activeClass}>

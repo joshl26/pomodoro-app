@@ -17,7 +17,7 @@ import {
   shortDecrement,
   longIncrement,
   longDecrement,
-  setCurrentTime,
+  setCurrentTimeFromMode,
   setDefault,
   setAutoStart,
   setCounter,
@@ -227,7 +227,7 @@ const Settings = () => {
             onClick={() => {
               buttonClickSound();
               increment && dispatch(increment());
-              dispatch(setCurrentTime());
+              dispatch(setCurrentTimeFromMode());
             }}
             variant="custom"
             className="time-buttons"
@@ -240,7 +240,7 @@ const Settings = () => {
             onClick={() => {
               buttonClickSound();
               decrement && dispatch(decrement());
-              dispatch(setCurrentTime());
+              dispatch(setCurrentTimeFromMode());
             }}
             variant="custom"
             className="time-buttons"

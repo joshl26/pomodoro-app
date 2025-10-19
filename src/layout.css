@@ -1,0 +1,162 @@
+/* Layout-specific styles */
+ul {
+  list-style-type: none;
+}
+
+button {
+  background-color: rgba(256, 256, 256, 0.2);
+  border: none;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 5px;
+  cursor: pointer;
+  color: white;
+}
+
+.container {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  padding-bottom: 0.75rem;
+  color: white;
+  transition: background-color 0.5s ease-in-out 0s;
+}
+
+.spacer {
+  height: 50px;
+}
+
+.spacer_small {
+  height: 25px;
+}
+
+.pomodoro {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  padding-bottom: 0.75rem;
+  color: white;
+  transition: background-color 0.5s ease-in-out 0s;
+  background-color: var(--primary-color);
+}
+
+.short {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  padding-bottom: 0.75rem;
+  color: white;
+  transition: background-color 0.5s ease-in-out 0s;
+  background-color: var(--secondary-color);
+}
+
+.long {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  padding-bottom: 0.75rem;
+  color: white;
+  transition: background-color 0.5s ease-in-out 0s;
+  background-color: var(--tertiary-color);
+}
+
+.content {
+  padding: 0 0.75rem;
+  max-width: 38.75rem;
+  font-weight: 300;
+  display: flex;
+  flex-grow: 1;
+  align-self: center;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.message {
+  text-align: center;
+}
+
+/* App header styles */
+.app-header {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.app-title {
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.app-footer {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: auto;
+}
+
+.footer-text {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .app-header {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .app-title {
+    font-size: 1.75rem;
+  }
+
+  .app-main {
+    padding: 0.75rem;
+  }
+
+  .app-footer {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .footer-text {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header {
+    padding: 1rem 0.5rem;
+  }
+
+  .app-title {
+    font-size: 1.5rem;
+  }
+
+  .app-main {
+    padding: 0.5rem;
+  }
+
+  .app-footer {
+    padding: 1rem 0.5rem;
+  }
+
+  .footer-text {
+    font-size: 0.8rem;
+  }
+}

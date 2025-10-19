@@ -1,111 +1,225 @@
-import { useDispatch } from "react-redux";
-import {
-  setTimerMode,
-  setCurrentTime,
-  setSecondsLeft,
-  setTotalSeconds,
-  setCyclePaused,
-} from "../store/settingsSlice";
-import { Row, Col } from "react-bootstrap";
-import TimerStepSound from "../assets/sounds/step-sound.mp3";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import "./SecondaryButtons.css";
-import { useAudioPlayer } from "react-use-audio-player";
 
-const SecondaryButtons = ({
-  autoStartState,
-  isRunning,
-  pomoTimeState,
-  timerModeState,
-  shortTimeState,
-  longTimeState,
-  updateExpiryTimestamp,
-  alarmVolume,
-  buttonSoundState,
-}) => {
+// Import thunks
+import { resetCycleAndTimer } from "../store/settingsThunks";
+
+// Import selectors
+import { selectAlarmSettings } from "../store/selectors/settingsSelectors";
+
+// Import actions
+import {
+  pomoIncrement,
+  pomoDecrement,
+  shortIncrement,
+  shortDecrement,
+  longIncrement,
+  longDecrement,
+  setAutoStart,
+  setAlarmState,
+  setAlarmSound,
+  setAlarmVolume,
+  setButtonSoundState,
+} from "../store/settingsSlice";
+
+const SecondaryButtons = () => {
   const dispatch = useDispatch();
+  const alarmSettings = useSelector(selectAlarmSettings);
 
-  const {
-    // play: playAudio,
-    // pause: pauseAudio,
-    // stop: stopAudio,
-    // playing: isPlaying,
-    load: loadAudio,
-  } = useAudioPlayer();
+  const handleReset = () => {
+    dispatch(resetCycleAndTimer({ keepAudio: true }));
+  };
 
-  function handleClick(event) {
-    // Normalize target access
-    const target = event.currentTarget || event.target;
-    const modeId = Number(target.id);
-    const value = Number(target.value);
+  const handlePomoIncrement = () => {
+    dispatch(pomoIncrement());
+  };
 
-    if (timerModeState !== modeId && !isRunning) {
-      if (buttonSoundState) {
-        loadAudio(TimerStepSound, {
-          autoplay: true,
-          initialVolume: alarmVolume,
-        });
-      }
+  const handlePomoDecrement = () => {
+    dispatch(pomoDecrement());
+  };
 
-      if (autoStartState === false && isRunning === false) {
-        dispatch(setCyclePaused(false));
-        dispatch(setTimerMode(modeId));
-        dispatch(setCurrentTime());
-        dispatch(setSecondsLeft(value * 60));
-        dispatch(setTotalSeconds(value * 60));
-        updateExpiryTimestamp(value);
-      }
-    }
-  }
+  const handleShortIncrement = () => {
+    dispatch(shortIncrement());
+  };
+
+  const handleShortDecrement = () => {
+    dispatch(shortDecrement());
+  };
+
+  const handleLongIncrement = () => {
+    dispatch(longIncrement());
+  };
+
+  const handleLongDecrement = () => {
+    dispatch(longDecrement());
+  };
+
+  const handleAutoStartChange = (e) => {
+    dispatch(setAutoStart(e.target.checked));
+  };
+
+  const handleAlarmStateChange = (e) => {
+    dispatch(setAlarmState(e.target.checked));
+  };
+
+  const handleAlarmSoundChange = (e) => {
+    dispatch(setAlarmSound(e.target.value));
+  };
+
+  const handleAlarmVolumeChange = (e) => {
+    dispatch(setAlarmVolume(parseFloat(e.target.value)));
+  };
+
+  const handleButtonSoundChange = (e) => {
+    dispatch(setButtonSoundState(e.target.checked));
+  };
 
   return (
-    <div className="container">
-      <Row className="secondary-btn-row">
-        <Col sm={4} md={4}>
-          <button
-            value={pomoTimeState}
-            id={1}
-            name={"Pomodoro"}
-            className={
-              Number(timerModeState) === 1
-                ? `btn-background-pomodoro`
-                : `btn-secondary`
-            }
-            onClick={handleClick}
+    <div className="settings-container">
+      <div className="settings-section">
+        <h3 className="settings-title">Timer Durations</h3>
+
+        <div className="setting-group">
+          <label className="setting-label">Focus Time</label>
+          <div className="setting-controls">
+            <button
+              className="setting-btn decrement"
+              onClick={handlePomoDecrement}
+            >
+              -
+            </button>
+            <span className="setting-value">
+              {useSelector((state) => state.settings.pomodoro)} min
+            </span>
+            <button
+              className="setting-btn increment"
+              onClick={handlePomoIncrement}
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        <div className="setting-group">
+          <label className="setting-label">Short Break</label>
+          <div className="setting-controls">
+            <button
+              className="setting-btn decrement"
+              onClick={handleShortDecrement}
+            >
+              -
+            </button>
+            <span className="setting-value">
+              {useSelector((state) => state.settings.short)} min
+            </span>
+            <button
+              className="setting-btn increment"
+              onClick={handleShortIncrement}
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        <div className="setting-group">
+          <label className="setting-label">Long Break</label>
+          <div className="setting-controls">
+            <button
+              className="setting-btn decrement"
+              onClick={handleLongDecrement}
+            >
+              -
+            </button>
+            <span className="setting-value">
+              {useSelector((state) => state.settings.long)} min
+            </span>
+            <button
+              className="setting-btn increment"
+              onClick={handleLongIncrement}
+            >
+              +
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="settings-section">
+        <h3 className="settings-title">Preferences</h3>
+
+        <div className="setting-group">
+          <label className="setting-label checkbox-label">
+            <input
+              type="checkbox"
+              checked={alarmSettings.autoStart}
+              onChange={handleAutoStartChange}
+              className="setting-checkbox"
+            />
+            Auto Start Breaks
+          </label>
+        </div>
+
+        <div className="setting-group">
+          <label className="setting-label checkbox-label">
+            <input
+              type="checkbox"
+              checked={alarmSettings.enabled}
+              onChange={handleAlarmStateChange}
+              className="setting-checkbox"
+            />
+            Enable Alarm
+          </label>
+        </div>
+
+        <div className="setting-group">
+          <label className="setting-label">Alarm Sound</label>
+          <select
+            value={alarmSettings.sound}
+            onChange={handleAlarmSoundChange}
+            className="setting-select"
           >
-            Pomodoro
+            <option value="No Sound">No Sound</option>
+            <option value="Bell">Bell</option>
+            <option value="Beep">Beep</option>
+            <option value="Chime">Chime</option>
+          </select>
+        </div>
+
+        <div className="setting-group">
+          <label className="setting-label">
+            Volume: {Math.round(alarmSettings.volume * 100)}%
+          </label>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.1"
+            value={alarmSettings.volume}
+            onChange={handleAlarmVolumeChange}
+            className="setting-slider"
+          />
+        </div>
+
+        <div className="setting-group">
+          <label className="setting-label checkbox-label">
+            <input
+              type="checkbox"
+              checked={alarmSettings.buttonSound}
+              onChange={handleButtonSoundChange}
+              className="setting-checkbox"
+            />
+            Button Sound
+          </label>
+        </div>
+      </div>
+
+      <div className="settings-section">
+        <div className="setting-group">
+          <button onClick={handleReset} className="reset-all-btn">
+            Reset All Settings
           </button>
-        </Col>
-        <Col sm={4} md={4}>
-          <button
-            value={shortTimeState}
-            id={2}
-            name={"Short Break"}
-            className={
-              Number(timerModeState) === 2
-                ? `btn-background-short`
-                : `btn-secondary`
-            }
-            onClick={handleClick}
-          >
-            Short Break
-          </button>
-        </Col>
-        <Col sm={4} md={4}>
-          <button
-            value={longTimeState}
-            id={3}
-            name={"Long Break"}
-            className={
-              Number(timerModeState) === 3
-                ? `btn-background-long`
-                : `btn-secondary`
-            }
-            onClick={handleClick}
-          >
-            Long Break
-          </button>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </div>
   );
 };

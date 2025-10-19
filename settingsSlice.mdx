@@ -1,0 +1,40 @@
+# settingsSlice State and Reducers Documentation
+
+## State Structure
+
+- `pomodoro` (number): Pomodoro duration in minutes (default 25)
+- `short` (number): Short break duration in minutes (default 5)
+- `long` (number): Long break duration in minutes (default 15)
+- `autostart` (boolean): Whether timer auto-starts on mode change
+- `timermode` (number): Current timer mode (1 = pomodoro, 2 = short break, 3 = long break)
+- `currenttime` (number): Current timer duration in minutes (syncs with mode)
+- `totalseconds` (number): Total seconds for current timer
+- `secondsleft` (number): Seconds left in current timer
+- `cycle` (array): Array representing the cycle sequence (default `[1,2,1,2,1,2,1,2,3]`)
+- `counter` (number): Index into `cycle` array (0-based)
+- `cyclecomplete` (boolean): Whether the current cycle is complete
+- `cyclestarted` (boolean): Whether the cycle has started
+- `cyclepaused` (boolean): Whether the cycle is paused
+- `buttonsound` (boolean): Whether button sounds are enabled
+- `alarmenabled` (boolean): Whether alarm sound is enabled
+- `alarmsound` (string): Selected alarm sound name
+- `alarmvolume` (number): Alarm volume (0.0 to 1.0)
+
+## Reducers
+
+- `setDefault`: Reset all settings to default values
+- Increment/Decrement duration actions for pomodoro, short, and long timers with clamping
+- Basic setters for autostart, cycle paused, timer mode (with validation)
+- `setCurrentTimeFromMode`: Sync `currenttime` with `timermode`
+- Cycle counter management: set, increment, decrement with wrapping
+- Cycle state flags: complete, started, paused
+- Cycle array replacement with validation
+- Alarm and button sound settings: enable/disable, volume, sound selection
+- Seconds left and total seconds setters with validation
+
+## Notes
+
+- Reducers are pure and use Immer for immutable updates
+- Validation and clamping prevent invalid state
+- Composite actions (thunks) recommended for complex workflows (e.g., mode switch + reset)
+- Selectors should be created for consistent state access
