@@ -1,5 +1,5 @@
-import { Fragment, useEffect, useCallback, useState } from "react";
-import { player } from "../utilities/util";
+/* eslint-disable no-unused-vars */
+import { useEffect, useCallback, useState } from "react";
 import {
   Container,
   Row,
@@ -34,15 +34,19 @@ import digitalSound from "../assets/sounds/alarm-digital.mp3";
 import kitchenSound from "../assets/sounds/alarm-kitchen.mp3";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import ButtonPressSound from "../assets/sounds/button-press.wav";
-
-import "./Settings.css";
 import { useGlobalAudioPlayer } from "react-use-audio-player";
+import "./Settings.css";
 
-function getNavBarHomeLink() {
-  return document.getElementById("home-nav");
-}
-
+/**
+ * Settings Component
+ * Manages user preferences for timer durations, sounds, and auto-start behavior
+ * @component
+ * @returns {React.ReactElement} The settings interface
+ */
 const Settings = () => {
+  // ============================================
+  // SELECTORS - Redux State
+  // ============================================
   const pomodoroCount = useSelector((state) => state.settings.pomodoro);
   const shortCount = useSelector((state) => state.settings.short);
   const longCount = useSelector((state) => state.settings.long);
@@ -55,48 +59,174 @@ const Settings = () => {
   const alarmSoundState = useSelector((state) => state.settings.alarmsound);
   const buttonSoundState = useSelector((state) => state.settings.buttonsound);
 
-  console.log(alarmVolumeState);
-
+  // ============================================
+  // HOOKS & STATE
+  // ============================================
   const [volume, setVolume] = useState(alarmVolumeState);
-
   const dispatch = useDispatch();
 
-  const {
-    play: playAudio,
-    pause: pauseAudio,
-    stop: stopAudio,
-    playing: isPlaying,
-    load: loadAudio,
-  } = useGlobalAudioPlayer();
+  const { play: playAudio, load: loadAudio } = useGlobalAudioPlayer();
 
-  const buttonClickSound = () => {
-    console.log(buttonSoundState);
+  // ============================================
+  // EFFECTS
+  // ============================================
 
+  /**
+   * Sync local volume state with Redux alarm volume
+   */
+  useEffect(() => {
+    setVolume(alarmVolumeState);
+  }, [alarmVolumeState]);
+
+  // ============================================
+  // CALLBACKS
+  // ============================================
+
+  /**
+   * Play button click sound if enabled
+   */
+  const buttonClickSound = useCallback(() => {
     if (buttonSoundState) {
       loadAudio(ButtonPressSound, {
-        autoplay: false,
+        autoplay: true,
         initialVolume: alarmVolumeState,
       });
-      playAudio();
     }
-  };
+  }, [buttonSoundState, alarmVolumeState, loadAudio]);
 
+  /**
+   * Get home navigation link element
+   */
+  const getNavBarHomeLink = useCallback(() => {
+    return document.getElementById("home-nav");
+  }, []);
+
+  /**
+   * Handle back button - save changes and navigate home
+   */
+  const backClickHandler = useCallback(() => {
+    dispatch(setAlarmVolume(volume));
+    buttonClickSound();
+
+    const modeToSecondsMap = {
+      1: pomoTime * 60,
+      2: shortTime * 60,
+      3: longTime * 60,
+    };
+
+    dispatch(setTotalSeconds(modeToSecondsMap[timerMode] || pomoTime * 60));
+    getNavBarHomeLink().click();
+  }, [
+    volume,
+    dispatch,
+    buttonClickSound,
+    timerMode,
+    pomoTime,
+    shortTime,
+    longTime,
+    getNavBarHomeLink,
+  ]);
+
+  /**
+   * Handle auto-start toggle
+   */
+  const autostartClickHandler = useCallback(() => {
+    buttonClickSound();
+    if (autoStartState) {
+      dispatch(setCounter(0));
+      dispatch(setTimerMode(1));
+      dispatch(setAutoStart(false));
+    } else {
+      dispatch(setCounter(1));
+      dispatch(setTimerMode(1));
+      dispatch(setAutoStart(true));
+    }
+  }, [autoStartState, dispatch, buttonClickSound]);
+
+  /**
+   * Handle button sound toggle
+   */
+  const buttonSoundClickHandler = useCallback(() => {
+    buttonClickSound();
+    dispatch(setButtonSoundState(!buttonSoundState));
+  }, [buttonSoundState, dispatch, buttonClickSound]);
+
+  /**
+   * Handle alarm sound selection
+   */
+  const alarmClickHandler = useCallback(
+    (e) => {
+      const selectedSound = e.target.outerText;
+      buttonClickSound();
+      dispatch(setAlarmSound(selectedSound));
+
+      if (selectedSound === "No Sound") {
+        dispatch(setAlarmState(false));
+      } else {
+        dispatch(setAlarmState(true));
+      }
+    },
+    [dispatch, buttonClickSound]
+  );
+
+  /**
+   * Handle alarm volume slider changes
+   */
+  const sliderClickHandler = useCallback(
+    (e) => {
+      const newVolume = Number(e.target.value);
+      setVolume(newVolume);
+      dispatch(setAlarmVolume(newVolume));
+
+      // Play preview sound based on current selection
+      const soundMap = {
+        Bell: bellSound,
+        Digital: digitalSound,
+        Kitchen: kitchenSound,
+      };
+
+      if (soundMap[alarmSoundState]) {
+        loadAudio(soundMap[alarmSoundState], {
+          autoplay: true,
+          initialVolume: newVolume,
+        });
+      }
+    },
+    [alarmSoundState, dispatch, loadAudio]
+  );
+
+  /**
+   * Handle restore defaults button
+   */
+  const defaultSettingsClickHandler = useCallback(() => {
+    buttonClickSound();
+    setVolume(0.5);
+    dispatch(setDefault());
+  }, [dispatch, buttonClickSound]);
+
+  // ============================================
+  // COMPONENTS
+  // ============================================
+
+  /**
+   * Time adjustment buttons (increment/decrement)
+   */
   const TimeButtons = ({ buttonTime }) => {
+    const timerMap = {
+      pomo: { increment: pomoIncrement, decrement: pomoDecrement },
+      short: { increment: shortIncrement, decrement: shortDecrement },
+      long: { increment: longIncrement, decrement: longDecrement },
+    };
+
+    const { increment, decrement } = timerMap[buttonTime] || {};
+
     return (
       <Col className="padding-right">
         <Col>
           <Button
             onClick={() => {
               buttonClickSound();
-              if (buttonTime === "pomo") {
-                dispatch(pomoIncrement());
-              }
-              if (buttonTime === "short") {
-                dispatch(shortIncrement());
-              }
-              if (buttonTime === "long") {
-                dispatch(longIncrement());
-              }
+              increment && dispatch(increment());
               dispatch(setCurrentTime());
             }}
             variant="custom"
@@ -109,15 +239,7 @@ const Settings = () => {
           <Button
             onClick={() => {
               buttonClickSound();
-              if (buttonTime === "pomo") {
-                dispatch(pomoDecrement());
-              }
-              if (buttonTime === "short") {
-                dispatch(shortDecrement());
-              }
-              if (buttonTime === "long") {
-                dispatch(longDecrement());
-              }
+              decrement && dispatch(decrement());
               dispatch(setCurrentTime());
             }}
             variant="custom"
@@ -130,112 +252,14 @@ const Settings = () => {
     );
   };
 
-  useEffect(() => {
-    setVolume(alarmVolumeState);
-  }, [setVolume, alarmVolumeState]);
-
-  const backClickHandler = () => {
-    dispatch(setAlarmVolume(volume));
-    buttonClickSound();
-
-    if (timerMode === 1) {
-      dispatch(setTotalSeconds(pomoTime * 60));
-    }
-
-    if (timerMode === 2) {
-      dispatch(setTotalSeconds(shortTime * 60));
-    }
-
-    if (timerMode === 3) {
-      dispatch(setTotalSeconds(longTime * 60));
-    }
-
-    getNavBarHomeLink().click();
-    // console.log(getFaviconEl().click());
-  };
-
-  const autostartClickHandler = () => {
-    // dispatch(setTimerEnabled(false));
-    // dispatch(setCurrentTime());
-    buttonClickSound();
-    if (autoStartState) {
-      dispatch(setCounter(0));
-      dispatch(setTimerMode(1));
-      dispatch(setAutoStart(false));
-    } else {
-      dispatch(setCounter(1));
-      dispatch(setTimerMode(1));
-      dispatch(setAutoStart(true));
-    }
-  };
-
-  const buttonSoundClickHandler = () => {
-    buttonClickSound();
-    dispatch(setButtonSoundState(!buttonSoundState));
-  };
-
-  const alarmClickHandler = (e) => {
-    console.log("Event target value" + e.target.outerText);
-    buttonClickSound();
-    dispatch(setAlarmSound(e.target.outerText));
-
-    if (e.target.outerText === "No Sound") {
-      dispatch(setAlarmState(false));
-    } else {
-      dispatch(setAlarmState(true));
-    }
-  };
-
-  const defaultSettingsClickHandler = () => {
-    buttonClickSound();
-    setVolume(0.5);
-    dispatch(setDefault());
-  };
-
-  const sliderClickHandler = useCallback(
-    (e) => {
-      if (alarmSoundState === "Bell") {
-        player({
-          asset: bellSound,
-          volume: alarmVolumeState,
-          loop: false,
-        }).play();
-      }
-
-      if (alarmSoundState === "Digital") {
-        player({
-          asset: digitalSound,
-          volume: alarmVolumeState,
-          loop: false,
-        }).play();
-      }
-
-      if (alarmSoundState === "Kitchen") {
-        player({
-          asset: kitchenSound,
-          volume: alarmVolumeState,
-          loop: false,
-        }).play();
-      }
-
-      if (alarmSoundState === "No Sound") {
-        return;
-      }
-
-      setVolume(Number(e.target.value));
-      dispatch(setAlarmVolume(Number(e.target.value)));
-
-      console.log(`Adjusted volume: ${alarmVolumeState}`);
-
-      console.log("slider click handler");
-    },
-    [dispatch, alarmVolumeState, alarmSoundState]
-  );
+  // ============================================
+  // RENDER
+  // ============================================
 
   return (
     <Container className="settings-container">
       <h1>Settings</h1>
-      <div className="spacer-small"></div>
+      <div className="spacer-small" />
 
       <div className="settings-card">
         <Row>
@@ -257,9 +281,12 @@ const Settings = () => {
             </Link>
           </Col>
         </Row>
-        <div className="spacer-small"></div>
-        <div className="divider"></div>
-        <div className="spacer-small"></div>
+
+        <div className="spacer-small" />
+        <div className="divider" />
+        <div className="spacer-small" />
+
+        {/* Time Settings */}
         <h4 className="card-text">Time (minutes)</h4>
         <Row>
           <Col md={4} className="card-text">
@@ -270,7 +297,7 @@ const Settings = () => {
                   <h4 className="time-text">{pomodoroCount}</h4>
                 </div>
               </Col>
-              <TimeButtons buttonTime={"pomo"} />
+              <TimeButtons buttonTime="pomo" />
             </Row>
           </Col>
           <Col md={4} className="card-text">
@@ -281,7 +308,7 @@ const Settings = () => {
                   <h4 className="time-text">{shortCount}</h4>
                 </div>
               </Col>
-              <TimeButtons buttonTime={"short"} />
+              <TimeButtons buttonTime="short" />
             </Row>
           </Col>
           <Col md={4} className="card-text">
@@ -292,13 +319,16 @@ const Settings = () => {
                   <h4 className="time-text">{longCount}</h4>
                 </div>
               </Col>
-              <TimeButtons buttonTime={"long"} />
+              <TimeButtons buttonTime="long" />
             </Row>
           </Col>
-          <div className="spacer"></div>
+          <div className="spacer" />
         </Row>
-        <div className="divider"></div>
-        <div className="spacer"></div>
+
+        <div className="divider" />
+        <div className="spacer" />
+
+        {/* Auto-start Toggle */}
         <Row>
           <Col>
             <h4 className="card-text">Auto start Breaks?</h4>
@@ -313,14 +343,16 @@ const Settings = () => {
               value="1"
               onClick={autostartClickHandler}
             >
-              {!autoStartState && "No"}
-              {autoStartState && "Yes"}
+              {autoStartState ? "Yes" : "No"}
             </ToggleButton>
           </Col>
         </Row>
-        <div className="spacer"></div>
-        <div className="divider"></div>
-        <div className="spacer"></div>
+
+        <div className="spacer" />
+        <div className="divider" />
+        <div className="spacer" />
+
+        {/* Button Sounds Toggle */}
         <Row>
           <Col>
             <h4 className="card-text">Button sounds?</h4>
@@ -335,14 +367,16 @@ const Settings = () => {
               value="1"
               onClick={buttonSoundClickHandler}
             >
-              {!buttonSoundState && "No"}
-              {buttonSoundState && "Yes"}
+              {buttonSoundState ? "Yes" : "No"}
             </ToggleButton>
           </Col>
         </Row>
-        <div className="spacer"></div>
-        <div className="divider"></div>
-        <div className="spacer"></div>
+
+        <div className="spacer" />
+        <div className="divider" />
+        <div className="spacer" />
+
+        {/* Alarm Sound Dropdown */}
         <Row>
           <Col>
             <h4 className="card-text">Alarm Sounds</h4>
@@ -353,26 +387,27 @@ const Settings = () => {
                 {alarmSoundState}
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item value="Bell" onClick={alarmClickHandler}>
-                  Bell
-                </Dropdown.Item>
-                <Dropdown.Item value="Digital" onClick={alarmClickHandler}>
+                <Dropdown.Item onClick={alarmClickHandler}>Bell</Dropdown.Item>
+                <Dropdown.Item onClick={alarmClickHandler}>
                   Digital
                 </Dropdown.Item>
-                <Dropdown.Item value="Kitchen" onClick={alarmClickHandler}>
+                <Dropdown.Item onClick={alarmClickHandler}>
                   Kitchen
                 </Dropdown.Item>
-                <Dropdown.Item value="No Sound" onClick={alarmClickHandler}>
+                <Dropdown.Item onClick={alarmClickHandler}>
                   No Sound
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Col>
-          <Col></Col>
+          <Col />
         </Row>
-        <div className="spacer"></div>
-        <div className="divider"></div>
-        <div className="spacer"></div>
+
+        <div className="spacer" />
+        <div className="divider" />
+        <div className="spacer" />
+
+        {/* Alarm Volume Slider */}
         <Row className="alarm-volume">
           <Col xs={12} md={4}>
             <h4 className="card-text">Alarm Volume</h4>
@@ -388,8 +423,11 @@ const Settings = () => {
             <h2>{Math.round(alarmVolumeState * 100)}</h2>
           </Col>
         </Row>
-        <div className="divider"></div>
-        <div className="spacer"></div>
+
+        <div className="divider" />
+        <div className="spacer" />
+
+        {/* Restore Defaults Button */}
         <Row>
           <Col className="align-center">
             <Button
@@ -401,7 +439,8 @@ const Settings = () => {
             </Button>
           </Col>
         </Row>
-        <div className="spacer"></div>
+
+        <div className="spacer" />
       </div>
     </Container>
   );

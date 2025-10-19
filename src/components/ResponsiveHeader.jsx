@@ -9,7 +9,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import "./ResponsiveHeader.css";
 import { Link } from "react-router-dom";
-import { Col, NavDropdown, Row } from "react-bootstrap";
+import { Col } from "react-bootstrap";
 
 const ResponsiveHeader = () => {
   return (
@@ -37,7 +37,10 @@ const ResponsiveHeader = () => {
           </Col>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse className="responsive-navbar-nav" id="responsive-navbar-nav">
+        <Navbar.Collapse
+          className="responsive-navbar-nav"
+          id="responsive-navbar-nav"
+        >
           <Nav className="me-auto"></Nav>
           <Nav defaultActiveKey="/pomodor/">
             <Nav.Link

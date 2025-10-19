@@ -46,7 +46,9 @@
     "start-windows": "set PORT=3051 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "lint": "npx eslint --fix \"src/**/*.{js,jsx}\""
   },
   "eslintConfig": {
     "extends": [
@@ -68,6 +70,9 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@redux-devtools/core": "^3.13.1"
+    "@redux-devtools/core": "^3.13.1",
+    "eslint": "^8.57.1",
+    "eslint-config-react-app": "^7.0.1",
+    "prettier": "^3.6.2"
   }
 }

@@ -6,7 +6,7 @@ import {
   setTotalSeconds,
   setCyclePaused,
 } from "../store/settingsSlice";
-import { Row, Col, Container } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import TimerStepSound from "../assets/sounds/step-sound.mp3";
 import "./SecondaryButtons.css";
 import { useAudioPlayer } from "react-use-audio-player";
@@ -25,15 +25,20 @@ const SecondaryButtons = ({
   const dispatch = useDispatch();
 
   const {
-    play: playAudio,
-    pause: pauseAudio,
-    stop: stopAudio,
-    playing: isPlaying,
+    // play: playAudio,
+    // pause: pauseAudio,
+    // stop: stopAudio,
+    // playing: isPlaying,
     load: loadAudio,
   } = useAudioPlayer();
 
   function handleClick(event) {
-    if (timerModeState !== Number(event.target.id) && !isRunning) {
+    // Normalize target access
+    const target = event.currentTarget || event.target;
+    const modeId = Number(target.id);
+    const value = Number(target.value);
+
+    if (timerModeState !== modeId && !isRunning) {
       if (buttonSoundState) {
         loadAudio(TimerStepSound, {
           autoplay: true,
@@ -41,15 +46,13 @@ const SecondaryButtons = ({
         });
       }
 
-      console.log(event.target);
-
       if (autoStartState === false && isRunning === false) {
         dispatch(setCyclePaused(false));
-        dispatch(setTimerMode(Number(event.target.id)));
+        dispatch(setTimerMode(modeId));
         dispatch(setCurrentTime());
-        dispatch(setSecondsLeft(event.target.value * 60));
-        dispatch(setTotalSeconds(event.target.value * 60));
-        updateExpiryTimestamp(event.target.value);
+        dispatch(setSecondsLeft(value * 60));
+        dispatch(setTotalSeconds(value * 60));
+        updateExpiryTimestamp(value);
       }
     }
   }

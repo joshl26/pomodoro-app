@@ -20,7 +20,7 @@ function App() {
   const secondsLeftState = useSelector((state) => state.settings.secondsleft);
   const totalSecondsState = useSelector((state) => state.settings.totalseconds);
 
-  var percentComplete =
+  const percentComplete =
     ((totalSecondsState - secondsLeftState) / totalSecondsState) * 100;
 
   const timerMode = useSelector((state) => state.settings.timermode);
