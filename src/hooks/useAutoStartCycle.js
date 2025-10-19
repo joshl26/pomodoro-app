@@ -3,8 +3,8 @@
 import { useSelector, useDispatch } from "react-redux";
 import { advanceCycle, retreatCycle } from "../store/settingsThunks";
 import {
-  selectCounter,
-  selectCycle,
+  selectProgress,
+  selectCycleComplete,
   selectIsAutoStart,
 } from "../store/selectors/settingsSelectors";
 
@@ -19,8 +19,8 @@ import {
 export const useAutoStartCycle = () => {
   const dispatch = useDispatch();
   const isAutoStart = useSelector(selectIsAutoStart);
-  const counter = useSelector(selectCounter);
-  const cycle = useSelector(selectCycle);
+  const counter = useSelector(selectProgress);
+  const cycle = useSelector(selectCycleComplete);
 
   /**
    * Advance to the next cycle mode

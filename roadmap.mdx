@@ -104,7 +104,7 @@
 - [x] **2.2.1** Identify common action sequences
 - [x] **2.2.2** Create composite thunk actions (`setTimerModeAndReset`, `advanceCycle`, `retreatCycle`, `resetCycleAndTimer`)
 - [ ] **2.2.3** Replace multiple sequential dispatches with single composite action
-- [ ] **2.2.4** Update Timer.jsx to use new composite actions
+- [x] **2.2.4** Update Timer.jsx to use new composite actions
 - [ ] **2.2.5** Test all workflows still function
 
 ### 2.3 Create Custom Hook: useTimerMode()
@@ -137,26 +137,26 @@
 
 ### 2.6 Refactor Timer.jsx Component
 
-- [ ] **2.6.1** Remove custom hook logic (replaced by 2.3-2.5)
-- [ ] **2.6.2** Update component to use new hooks
-- [ ] **2.6.3** Reduce Timer.jsx size
-- [ ] **2.6.4** Focus component on rendering and event handlers
-- [ ] **2.6.5** Add JSDoc comments
-- [ ] **2.6.6** Full component testing**Estimated Time**: 1-2 hours
+- [x] **2.6.1** Remove custom hook logic (replaced by 2.3-2.5)
+- [x] **2.6.2** Update component to use new hooks
+- [x] **2.6.3** Reduce Timer.jsx size
+- [x] **2.6.4** Focus component on rendering and event handlers
+- [x] **2.6.5** Add JSDoc comments
+- [x] **2.6.6** Full component testing**Estimated Time**: 1-2 hours
 
 ---
 
 ### 2.7 Redux Selector Optimization
 
-- [ ] **2.7.1** Create `src/store/selectors.js` file
-- [ ] **2.7.2** Define all selectors in one place:
+- [x] **2.7.1** Create `src/store/selectors.js` file
+- [x] **2.7.2** Define all selectors in one place:
   ```javascript
   export const selectTimerMode = state => state.settings.timermode
   export const selectIsRunning = state => state.settings.isrunning
   ```
-- [ ] **2.7.3** Update all components to import selectors instead of inline
-- [ ] **2.7.4** Add memoized selectors using Reselect library (if needed)
-- [ ] **2.7.5** Document selector patterns
+- [x] **2.7.3** Update all components to import selectors instead of inline
+- [x] **2.7.4** Add memoized selectors using Reselect library (if needed)
+- [x] **2.7.5** Document selector patterns
 
 **Estimated Time**: 1 hour
 

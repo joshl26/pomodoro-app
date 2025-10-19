@@ -1,7 +1,7 @@
 // src/hooks/useTimerControls.js
 
 import { useSelector, useDispatch } from "react-redux";
-import { setCyclePaused, setCycleStart } from "../store/settingsSlice";
+import { setCyclePaused } from "../store/settingsSlice";
 import { selectCyclePaused } from "../store/selectors/settingsSelectors";
 
 /**

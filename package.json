@@ -24,10 +24,8 @@
   "dependencies": {
     "@redux-devtools/core": "^3.13.1",
     "@reduxjs/toolkit": "^1.9.1",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.2.2",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-bootstrap": "^2.6.0",
     "react-dom": "^18.2.0",
@@ -39,13 +37,14 @@
     "react-use-audio-player": "^2.1.1",
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
+    "reselect": "^5.1.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "export PORT=3051 && react-scripts start",
     "start-windows": "set PORT=3051 && react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "lint": "npx eslint --fix \"src/**/*.{js,jsx}\""
@@ -70,10 +69,29 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/preset-react": "^7.27.1",
     "@redux-devtools/core": "^3.13.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react-router-dom": "^5.3.3",
     "eslint": "^8.57.1",
     "eslint-config-react-app": "^7.0.1",
+    "jest": "^27.5.1",
     "prettier": "^3.6.2"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css|less|scss|sass)$": "<rootDir>/__mocks__/styleMock.js",
+      "\\.(gif|ttf|eot|svg|png|mp3|wav)$": "<rootDir>/__mocks__/fileMock.js",
+      "^react-use-audio-player$": "<rootDir>/__mocks__/react-use-audio-player.js"
+    },
+    "transform": {
+      "^.+\\.[jt]sx?$": "babel-jest"
+    },
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.js"
+    ],
+    "testEnvironment": "jsdom"
   }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTimer } from "react-timer-hook";
 import {
@@ -14,65 +14,73 @@ import { useGlobalAudioPlayer } from "react-use-audio-player";
 import ButtonPressSound from "../assets/sounds/button-press.wav";
 import TickingSlowSound from "../assets/sounds/ticking-slow.mp3";
 
-// Import thunks
-import {
-  setTimerModeAndReset,
-  resetCycleAndTimer,
-} from "../store/settingsThunks";
+import { resetCycleAndTimer } from "../store/settingsThunks";
 
-// Import selectors
 import {
   selectSecondsLeft,
   selectIsAutoStart,
   selectAlarmSettings,
   selectCurrentTime,
-  selectCycleComplete,
   selectCyclePaused,
-} from "../store/selectors/settingsSelectors";
+} from "../store/selectors";
 
-// Import custom hooks
 import { useTimerMode } from "../hooks/useTimerMode";
 import { useTimerControls } from "../hooks/useTimerControls";
 import { useAutoStartCycle } from "../hooks/useAutoStartCycle";
 import { setAutoStart } from "../store/settingsSlice";
 
+/**
+ * Small pure ProgressBar component extracted to avoid ambiguous useMemo deps.
+ * React.memo ensures it only re-renders when props change.
+ */
+const ProgressBar = React.memo(function ProgressBar({
+  progressPercent,
+  currentMode,
+}) {
+  const bgColor =
+    currentMode === 1
+      ? "var(--primary-color)"
+      : currentMode === 2
+        ? "var(--secondary-color)"
+        : "var(--tertiary-color)";
+
+  return (
+    <div className="progress-container" aria-hidden>
+      <div
+        className="progress-bar"
+        style={{
+          width: `${progressPercent}%`,
+          backgroundColor: bgColor,
+        }}
+      />
+    </div>
+  );
+});
+
+/**
+ * Timer component - renders pomodoro timer and controls.
+ * Uses centralized selectors and custom hooks for mode, controls and audio.
+ */
 export default function Timer() {
   const dispatch = useDispatch();
 
-  // Selectors
-  const pomoTimeState = useSelector((state) => state.settings.pomodoro);
-  const shortTimeState = useSelector((state) => state.settings.short);
-  const longTimeState = useSelector((state) => state.settings.long);
+  // Redux selectors (centralized)
   const autoStartState = useSelector(selectIsAutoStart);
   const cyclePausedState = useSelector(selectCyclePaused);
-  const currentTime = useSelector(selectCurrentTime);
+  const currentTime = useSelector(selectCurrentTime); // minutes for current mode
   const secondsLeft = useSelector(selectSecondsLeft);
-  const alarmSettings = useSelector(selectAlarmSettings);
-  const cycleComplete = useSelector(selectCycleComplete);
+  const alarmSettings = useSelector(selectAlarmSettings) || {};
+  const { volume: alarmVolume = 0.8, buttonSound: buttonSoundState = true } =
+    alarmSettings;
 
-  const { volume: alarmVolume, buttonSound: buttonSoundState } = alarmSettings;
+  // Compute expiry timestamp from currentTime (minutes)
+  const expiryTimestamp = useMemo(() => {
+    const ts = new Date();
+    ts.setSeconds(ts.getSeconds() + Math.max(1, Number(currentTime) || 1) * 60);
+    return ts;
+  }, [currentTime]);
 
-  // Custom hooks
-  const { currentMode, switchMode, getModeName } = useTimerMode();
-  const { isPaused, handleStart, handlePause, handleResume } = useTimerControls(
-    startTimer,
-    pauseTimer,
-    resumeTimer
-  );
-  const { advance, retreat } = useAutoStartCycle();
-
-  const {
-    play: playAudio,
-    pause: pauseAudio,
-    stop: stopAudio,
-    playing: isPlaying,
-    load: loadAudio,
-  } = useGlobalAudioPlayer();
-
-  // Calculate expiry timestamp using currentTime from Redux
-  const expiryTimestamp = new Date();
-  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + currentTime * 60);
-
+  // useTimer from react-timer-hook
   const {
     seconds,
     minutes,
@@ -80,7 +88,6 @@ export default function Timer() {
     start: startTimer,
     resume: resumeTimer,
     pause: pauseTimer,
-    restart: restartTimer,
   } = useTimer({
     autoStart: autoStartState,
     expiryTimestamp,
@@ -89,6 +96,21 @@ export default function Timer() {
     },
   });
 
+  // Provide timer control functions into hook that composes control behavior
+  const { handleStart, handlePause, handleResume } = useTimerControls(
+    startTimer,
+    pauseTimer,
+    resumeTimer
+  );
+
+  // Mode & cycle hooks
+  const { currentMode, switchMode, getModeName } = useTimerMode();
+  const { advance, retreat } = useAutoStartCycle();
+
+  // Audio player — only use load/stop which are actually used
+  const { stop: stopAudio, load: loadAudio } = useGlobalAudioPlayer();
+
+  // Tick sound: load while running, stop when not running
   useEffect(() => {
     if (isRunning) {
       loadAudio(TickingSlowSound, {
@@ -100,177 +122,225 @@ export default function Timer() {
     }
   }, [isRunning, alarmVolume, loadAudio, stopAudio]);
 
-  const cycleExpired = () => {
-    dispatch(resetCycleAndTimer({ keepAudio: true }));
+  // Helpers & derived values
+  const totalSeconds = Math.max(1, Number(currentTime) * 60);
+  const elapsedSeconds = Math.max(
+    0,
+    totalSeconds - (secondsLeft ?? totalSeconds)
+  );
+  const progressPercent = Math.min(
+    100,
+    Math.max(0, (elapsedSeconds / totalSeconds) * 100)
+  );
 
+  const formatTime = (value) => value.toString().padStart(2, "0");
+
+  const playButtonSound = useCallback(() => {
+    if (buttonSoundState) {
+      loadAudio(ButtonPressSound, { autoplay: true, initialVolume: 0.5 });
+    }
+  }, [buttonSoundState, loadAudio]);
+
+  function cycleExpired() {
+    dispatch(resetCycleAndTimer({ keepAudio: true }));
     if (autoStartState) {
       handleStart();
     }
-  };
+  }
 
-  const buttonClickSound = () => {
-    if (buttonSoundState) {
-      loadAudio(ButtonPressSound, {
-        autoplay: true,
-        initialVolume: 0.5,
-      });
-    }
-  };
-
-  const forwardButtonClicked = () => {
-    buttonClickSound();
-
+  // Navigation handlers (memoized)
+  const forwardButtonClicked = useCallback(() => {
+    playButtonSound();
     if (autoStartState) {
       advance(true);
       handleStart();
-    } else {
-      // Manual mode transition cycle: pomo -> short -> long -> pomo
-      if (currentMode === 1) {
-        switchMode(2);
-      } else if (currentMode === 2) {
-        switchMode(3);
-      } else {
-        switchMode(1);
-      }
+      return;
     }
-  };
+    // manual cycle: 1 -> 2 -> 3 -> 1
+    const next = currentMode === 1 ? 2 : currentMode === 2 ? 3 : 1;
+    switchMode(next);
+  }, [
+    playButtonSound,
+    autoStartState,
+    advance,
+    handleStart,
+    currentMode,
+    switchMode,
+  ]);
 
-  const backwardButtonClicked = () => {
-    buttonClickSound();
-
+  const backwardButtonClicked = useCallback(() => {
+    playButtonSound();
     if (autoStartState) {
       retreat(true);
       handleStart();
-    } else {
-      // Manual mode transition cycle: pomo <- short <- long <- pomo
-      if (currentMode === 1) {
-        switchMode(3);
-      } else if (currentMode === 2) {
-        switchMode(1);
-      } else {
-        switchMode(2);
-      }
+      return;
     }
-  };
+    // manual cycle: 1 <- 2 <- 3 <- 1
+    const prev = currentMode === 1 ? 3 : currentMode === 2 ? 1 : 2;
+    switchMode(prev);
+  }, [
+    playButtonSound,
+    autoStartState,
+    retreat,
+    handleStart,
+    currentMode,
+    switchMode,
+  ]);
 
-  // Format time with leading zeros
-  const formatTime = (value) => value.toString().padStart(2, "0");
+  // Presentational subcomponents (inline, memoized)
+  const ModeIndicator = useMemo(
+    () => () => <div className="mode-indicator">{getModeName()}</div>,
+    [getModeName]
+  );
 
-  return (
-    <div className="timer-container">
-      <div className="timer-content">
-        {/* Mode indicator */}
-        <div className="mode-indicator">{getModeName()}</div>
+  const TimeDisplay = useMemo(
+    () => () => (
+      <div className="time-display" aria-live="polite" aria-atomic="true">
+        <span className="time-minutes">{formatTime(minutes)}</span>
+        <span className="time-separator">:</span>
+        <span className="time-seconds">{formatTime(seconds)}</span>
+      </div>
+    ),
+    [minutes, seconds]
+  );
 
-        {/* Time display */}
-        <div className="time-display">
-          <span className="time-minutes">{formatTime(minutes)}</span>
-          <span className="time-separator">:</span>
-          <span className="time-seconds">{formatTime(seconds)}</span>
-        </div>
-
-        {/* Progress bar */}
-        <div className="progress-container">
-          <div
-            className="progress-bar"
-            style={{
-              width: `${((currentTime * 60 - secondsLeft) / (currentTime * 60)) * 100}%`,
-              backgroundColor:
-                currentMode === 1
-                  ? "var(--primary-color)"
-                  : currentMode === 2
-                    ? "var(--secondary-color)"
-                    : "var(--tertiary-color)",
-            }}
-          ></div>
-        </div>
-
-        {/* Control buttons */}
-        <div className="timer-controls">
-          {!isRunning && !cyclePausedState ? (
+  const ControlButtons = useMemo(
+    () =>
+      function ControlButtonsInner() {
+        if (!isRunning && !cyclePausedState) {
+          return (
             <button
               className="control-btn start-btn"
               onClick={() => {
                 handleStart();
-                buttonClickSound();
+                playButtonSound();
               }}
+              data-testid="start-btn"
             >
               <FaPlay /> Start
             </button>
-          ) : (
-            <div className="running-controls">
+          );
+        }
+
+        return (
+          <div className="running-controls">
+            <button
+              className="control-btn nav-btn"
+              onClick={backwardButtonClicked}
+              aria-label="Previous cycle"
+              data-testid="previous-cycle-btn"
+            >
+              <FaStepBackward />
+            </button>
+
+            {cyclePausedState ? (
               <button
-                className="control-btn nav-btn"
-                onClick={backwardButtonClicked}
+                className="control-btn pause-btn"
+                onClick={() => {
+                  handleResume();
+                  playButtonSound();
+                }}
+                aria-label="Resume timer"
+                data-testid="resume-btn"
               >
-                <FaStepBackward />
+                <FaPlay /> Resume
               </button>
-
-              {cyclePausedState ? (
-                <button
-                  className="control-btn pause-btn"
-                  onClick={() => {
-                    handleResume();
-                    buttonClickSound();
-                  }}
-                >
-                  <FaPlay /> Resume
-                </button>
-              ) : (
-                <button
-                  className="control-btn pause-btn"
-                  onClick={() => {
-                    handlePause();
-                    buttonClickSound();
-                  }}
-                >
-                  <FaPause /> Pause
-                </button>
-              )}
-
+            ) : (
               <button
-                className="control-btn nav-btn"
-                onClick={forwardButtonClicked}
+                className="control-btn pause-btn"
+                onClick={() => {
+                  handlePause();
+                  playButtonSound();
+                }}
+                aria-label="Pause timer"
+                data-testid="pause-btn"
               >
-                <FaStepForward />
+                <FaPause /> Pause
+              </button>
+            )}
+
+            <button
+              className="control-btn nav-btn"
+              onClick={forwardButtonClicked}
+              aria-label="Next cycle"
+              data-testid="next-cycle-btn"
+            >
+              <FaStepForward />
+            </button>
+          </div>
+        );
+      },
+    [
+      isRunning,
+      cyclePausedState,
+      handleStart,
+      handlePause,
+      handleResume,
+      forwardButtonClicked,
+      backwardButtonClicked,
+      playButtonSound,
+    ]
+  );
+
+  const ResetAndAuto = useMemo(
+    () =>
+      function ResetAutoInner() {
+        return (
+          <>
+            <div className="reset-container">
+              <button
+                className="control-btn reset-btn"
+                onClick={() => {
+                  playButtonSound();
+                  dispatch(resetCycleAndTimer({ keepAudio: true }));
+                }}
+                data-testid="reset-btn"
+              >
+                <FaRedo /> Reset Timer
               </button>
             </div>
-          )}
+
+            <div className="autobreak-container">
+              <label className="autobreak-toggle">
+                <input
+                  type="checkbox"
+                  data-testid="auto-start-breaks-timer"
+                  checked={autoStartState}
+                  onChange={(e) => {
+                    const isChecked = e.target.checked;
+                    dispatch(setAutoStart(isChecked));
+                    if (isChecked) {
+                      switchMode(1);
+                    }
+                  }}
+                />
+                <span>Auto Start Breaks</span>
+              </label>
+            </div>
+          </>
+        );
+      },
+    [autoStartState, dispatch, switchMode, playButtonSound]
+  );
+
+  // Render
+  return (
+    <div className="timer-container">
+      <div className="timer-content">
+        <ModeIndicator />
+        <TimeDisplay />
+        <ProgressBar
+          progressPercent={progressPercent}
+          currentMode={currentMode}
+        />
+
+        <div className="timer-controls">
+          <ControlButtons />
         </div>
 
-        {/* Reset button */}
-        <div className="reset-container">
-          <button
-            className="control-btn reset-btn"
-            onClick={() => {
-              buttonClickSound();
-              dispatch(resetCycleAndTimer({ keepAudio: true }));
-            }}
-          >
-            <FaRedo /> Reset Timer
-          </button>
-        </div>
-
-        {/* Auto-start toggle */}
-        <div className="autobreak-container">
-          <label className="autobreak-toggle">
-            <input
-              type="checkbox"
-              checked={autoStartState}
-              onChange={(e) => {
-                const isChecked = e.target.checked;
-                dispatch(setAutoStart(isChecked));
-                if (isChecked) {
-                  switchMode(1);
-                }
-              }}
-            />
-            <span>Auto Start Breaks</span>
-          </label>
-        </div>
+        <ResetAndAuto />
       </div>
 
-      {/* Secondary buttons */}
       <SecondaryButtons />
     </div>
   );

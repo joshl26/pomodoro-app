@@ -5,16 +5,16 @@ import "./SecondaryButtons.css";
 // Import thunks
 import { resetCycleAndTimer } from "../store/settingsThunks";
 
-// Import selectors
+// Import centralized selectors (from src/store/selectors/index.js)
 import {
   selectAlarmSettings,
   selectPomodoro,
-  selectShortBreak,
-  selectLongBreak,
+  selectShort,
+  selectLong,
   selectIsAutoStart,
-} from "../store/selectors/settingsSelectors";
+} from "../store/selectors";
 
-// Import actions
+// Import actions (assumed present in your settingsSlice)
 import {
   pomoIncrement,
   pomoDecrement,
@@ -32,11 +32,11 @@ import {
 const SecondaryButtons = () => {
   const dispatch = useDispatch();
 
-  // Select all needed state once
+  // Select state from centralized selectors
   const alarmSettings = useSelector(selectAlarmSettings);
   const pomoTime = useSelector(selectPomodoro);
-  const shortTime = useSelector(selectShortBreak);
-  const longTime = useSelector(selectLongBreak);
+  const shortTime = useSelector(selectShort);
+  const longTime = useSelector(selectLong);
   const autoStart = useSelector(selectIsAutoStart);
 
   const handleReset = () => {
@@ -54,6 +54,7 @@ const SecondaryButtons = () => {
             <button
               className="setting-btn decrement"
               onClick={() => dispatch(pomoDecrement())}
+              aria-label="Decrease focus time"
             >
               -
             </button>
@@ -61,6 +62,7 @@ const SecondaryButtons = () => {
             <button
               className="setting-btn increment"
               onClick={() => dispatch(pomoIncrement())}
+              aria-label="Increase focus time"
             >
               +
             </button>
@@ -125,7 +127,7 @@ const SecondaryButtons = () => {
           <label className="setting-label checkbox-label">
             <input
               type="checkbox"
-              checked={alarmSettings.enabled}
+              checked={Boolean(alarmSettings.enabled)}
               onChange={(e) => dispatch(setAlarmState(e.target.checked))}
               className="setting-checkbox"
             />
@@ -136,11 +138,11 @@ const SecondaryButtons = () => {
         <div className="setting-group">
           <label className="setting-label">Alarm Sound</label>
           <select
-            value={alarmSettings.sound}
+            value={alarmSettings.sound ?? ""}
             onChange={(e) => dispatch(setAlarmSound(e.target.value))}
             className="setting-select"
           >
-            <option value="No Sound">No Sound</option>
+            <option value="">No Sound</option>
             <option value="Bell">Bell</option>
             <option value="Beep">Beep</option>
             <option value="Chime">Chime</option>
@@ -149,14 +151,14 @@ const SecondaryButtons = () => {
 
         <div className="setting-group">
           <label className="setting-label">
-            Volume: {Math.round(alarmSettings.volume * 100)}%
+            Volume: {Math.round((alarmSettings.volume ?? 0.8) * 100)}%
           </label>
           <input
             type="range"
             min="0"
             max="1"
-            step="0.1"
-            value={alarmSettings.volume}
+            step="0.01"
+            value={alarmSettings.volume ?? 0.8}
             onChange={(e) =>
               dispatch(setAlarmVolume(parseFloat(e.target.value)))
             }
@@ -168,7 +170,7 @@ const SecondaryButtons = () => {
           <label className="setting-label checkbox-label">
             <input
               type="checkbox"
-              checked={alarmSettings.buttonSound}
+              checked={Boolean(alarmSettings.buttonSound)}
               onChange={(e) => dispatch(setButtonSoundState(e.target.checked))}
               className="setting-checkbox"
             />
