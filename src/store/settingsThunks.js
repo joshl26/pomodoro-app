@@ -22,11 +22,30 @@ import {
 export const setTimerModeAndReset =
   (mode, autoStart = false) =>
   (dispatch, getState) => {
+    // update the mode in state
     dispatch(setTimerMode(mode));
-    dispatch(setCurrentTimeFromMode());
 
+    // compute the minutes for the new mode directly from timers in state
     const state = getState().settings;
-    const totalSeconds = state.currenttime * 60;
+    let currentTime;
+    switch (Number(mode)) {
+      case 1:
+        currentTime = Number(state.timers.pomodoro);
+        break;
+      case 2:
+        currentTime = Number(state.timers.short);
+        break;
+      case 3:
+        currentTime = Number(state.timers.long);
+        break;
+      default:
+        currentTime = Number(state.current.currenttime);
+    }
+
+    const totalSeconds = Math.max(0, Math.floor(currentTime * 60));
+
+    // update derived values
+    dispatch(setCurrentTimeFromMode()); // keeps reducer logic centralized
     dispatch(setTotalSeconds(totalSeconds));
     dispatch(setSecondsLeft(totalSeconds));
 
@@ -51,7 +70,7 @@ export const advanceCycle =
     dispatch(counterIncrement());
 
     const state = getState().settings;
-    const currentMode = state.cycle[state.counter];
+    const currentMode = (state.cycle.sequence || [1])[state.cycle.counter];
     dispatch(setTimerModeAndReset(currentMode, autoStart));
   };
 
@@ -68,7 +87,7 @@ export const retreatCycle =
     dispatch(counterDecrement());
 
     const state = getState().settings;
-    const currentMode = state.cycle[state.counter];
+    const currentMode = (state.cycle.sequence || [1])[state.cycle.counter];
     dispatch(setTimerModeAndReset(currentMode, autoStart));
   };
 

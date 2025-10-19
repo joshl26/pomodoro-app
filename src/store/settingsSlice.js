@@ -57,14 +57,6 @@ const shallowEqual = (objA, objB) => {
 };
 
 /**
- * Validate timer values
- */
-// const validateTimerValue = (value, min = 1, max = 60) => {
-//   const num = Number(value);
-//   return Number.isFinite(num) ? clamp(num, min, max) : null;
-// };
-
-/**
  * Safe number update helper
  */
 const safeNumberUpdate = (state, action, key, min = 0, max = Infinity) => {
