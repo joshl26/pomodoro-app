@@ -2,15 +2,15 @@
 import React from "react";
 import { render, act, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
-import { store } from "../store/store";
+import { store } from "../../store/store";
 import {
   setAlarmVolume,
   setButtonSoundState,
   setAlarmSound,
-} from "../store/settingsSlice";
+} from "../../store/settingsSlice";
 
 // Force Jest to mock the module using doMock + require
-jest.doMock("../audio/AudioManager", () => {
+jest.doMock("../../audio/AudioManager", () => {
   return {
     __esModule: true,
     default: {
@@ -34,7 +34,7 @@ jest.doMock("../audio/AudioManager", () => {
 });
 
 // Now import the hook *after* the mock is set
-const useAudioManager = require("./useAudioManager").default;
+const useAudioManager = require("../useAudioManager").default;
 
 function HookTestComp({ onReady }) {
   const api = useAudioManager();
@@ -76,7 +76,7 @@ describe("useAudioManager hook (integration with Redux)", () => {
     });
 
     // Debug: log mock calls
-    const AudioManager = require("../audio/AudioManager").default;
+    const AudioManager = require("../../audio/AudioManager").default;
 
     // Wait for the mock to be called
     await waitFor(() => expect(AudioManager.load).toHaveBeenCalledWith("Bell"));

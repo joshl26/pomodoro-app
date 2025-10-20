@@ -1,5 +1,5 @@
 // src/audio/AudioManager.extra.test.js
-import audioManager from "./AudioManager";
+import audioManager from "../AudioManager";
 
 describe("AudioManager — extra tests", () => {
   // Minimal global Audio mock for these unit tests

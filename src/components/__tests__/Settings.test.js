@@ -4,12 +4,12 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";
-import Settings from "./Settings";
-import settingsReducer from "../store/settingsSlice";
-import useAudioManager from "../hooks/useAudioManager";
+import Settings from "../Settings";
+import settingsReducer from "../../store/settingsSlice";
+import useAudioManager from "../../hooks/useAudioManager";
 
 // Mock the useAudioManager hook
-jest.mock("../hooks/useAudioManager", () => {
+jest.mock("../../hooks/useAudioManager", () => {
   return jest.fn();
 });
 

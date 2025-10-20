@@ -1,9 +1,9 @@
 // src/components/SecondaryButtons.test.jsx
 import React from "react";
 import { screen, fireEvent } from "@testing-library/react";
-import { renderWithProviders } from "../../test-utils/renderWithProviders";
-import { TEST_IDS } from "../../testIds";
-import SecondaryButtons from "./SecondaryButtons";
+import { renderWithProviders } from "../../utilities/test-utils/renderWithProviders";
+import { TEST_IDS } from "../../constants/testIds";
+import SecondaryButtons from "../SecondaryButtons";
 
 // Mock audio player used by component (prevent real audio)
 jest.mock("react-use-audio-player", () => ({

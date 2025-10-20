@@ -81,13 +81,16 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "\\.(css|less|scss|sass)$": "<rootDir>/__mocks__/styleMock.js",
-      "\\.(gif|ttf|eot|svg|png|mp3|wav)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less|scss|sass)$": "<rootDir>/src/__mocks__/styleMock.js",
+      "\\.(gif|ttf|eot|svg|png|mp3|wav)$": "<rootDir>/src/__mocks__/fileMock.js",
       "^react$": "<rootDir>/node_modules/react",
       "^react-dom$": "<rootDir>/node_modules/react-dom",
       "^react-redux$": "<rootDir>/node_modules/react-redux"
     },
-    "moduleDirectories": ["node_modules", "<rootDir>/node_modules"],
+    "moduleDirectories": [
+      "node_modules",
+      "<rootDir>/node_modules"
+    ],
     "transform": {
       "^.+\\.[jt]sx?$": "babel-jest"
     },

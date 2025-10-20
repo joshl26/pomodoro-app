@@ -3,8 +3,8 @@ import React from "react";
 import { render } from "@testing-library/react";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import settingsReducer from "./store/settingsSlice";
-import timerReducer from "./store/timerSlice";
+import settingsReducer from "../../store/settingsSlice";
+import timerReducer from "../../store/timerSlice";
 
 export function createTestStore(preloadedState = {}) {
   const defaultSettingsState = settingsReducer(undefined, { type: "@@INIT" });

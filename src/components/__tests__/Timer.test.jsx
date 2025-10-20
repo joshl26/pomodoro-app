@@ -2,12 +2,12 @@
 import React from "react";
 import { screen, waitFor, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Timer from "./Timer";
-import { renderWithProviders } from "../test-utils";
+import Timer from "../Timer";
+import { renderWithProviders } from "../../utilities/test-utils/test-utils";
 
 // --- Safe top-level mocks (names prefixed with "mock") ---
 const mockSwitchMode = jest.fn();
-jest.mock("../hooks/useTimerMode", () => ({
+jest.mock("../../hooks/useTimerMode", () => ({
   useTimerMode: () => ({
     currentMode: 1,
     switchMode: mockSwitchMode,
@@ -17,7 +17,7 @@ jest.mock("../hooks/useTimerMode", () => ({
 
 const mockAdvance = jest.fn();
 const mockRetreat = jest.fn();
-jest.mock("../hooks/useAutoStartCycle", () => ({
+jest.mock("../../hooks/useAutoStartCycle", () => ({
   useAutoStartCycle: () => ({
     advance: mockAdvance,
     retreat: mockRetreat,
