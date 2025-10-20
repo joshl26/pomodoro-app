@@ -1,5 +1,5 @@
 // src/components/SecondaryButtons.jsx
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./SecondaryButtons.css";
 
@@ -7,7 +7,7 @@ import { useGlobalAudioPlayer } from "react-use-audio-player";
 import ButtonPressSound from "../assets/sounds/button-press.wav";
 
 // Thunks / actions
-import { resetCycleAndTimer } from "../store/settingsThunks";
+// import { resetCycleAndTimer } from "../store/settingsThunks";
 import {
   setDefault, // Import the setDefault action
   pomoIncrement,
@@ -35,7 +35,28 @@ import {
 export default function SecondaryButtons() {
   const dispatch = useDispatch();
 
-  const alarmSettings = useSelector(selectAlarmSettings) || {};
+  // Keep raw selector result and normalize/memoize derived primitive fields so
+  // callbacks depending on `alarmSettings` don't change on every render.
+  const rawAlarmSettings = useSelector(selectAlarmSettings);
+
+  const alarmSettings = useMemo(
+    () => ({
+      enabled: Boolean(rawAlarmSettings?.enabled),
+      buttonSound: Boolean(rawAlarmSettings?.buttonSound),
+      sound: rawAlarmSettings?.sound ?? "No Sound",
+      volume:
+        typeof rawAlarmSettings?.volume === "number"
+          ? rawAlarmSettings.volume
+          : 0.5,
+    }),
+    [
+      rawAlarmSettings?.enabled,
+      rawAlarmSettings?.buttonSound,
+      rawAlarmSettings?.sound,
+      rawAlarmSettings?.volume,
+    ]
+  );
+
   const pomoTime = useSelector(selectPomodoro);
   const shortTime = useSelector(selectShort);
   const longTime = useSelector(selectLong);
@@ -44,13 +65,13 @@ export default function SecondaryButtons() {
   const { load: loadAudio } = useGlobalAudioPlayer();
 
   const playButtonSound = useCallback(() => {
-    if (alarmSettings?.buttonSound) {
+    if (alarmSettings.buttonSound) {
       loadAudio(ButtonPressSound, {
         autoplay: true,
         initialVolume: alarmSettings.volume ?? 0.5,
       });
     }
-  }, [alarmSettings, loadAudio]);
+  }, [alarmSettings.buttonSound, alarmSettings.volume, loadAudio]);
 
   const handleReset = useCallback(() => {
     playButtonSound();
@@ -107,7 +128,7 @@ export default function SecondaryButtons() {
   const handleButtonSoundToggle = useCallback(() => {
     playButtonSound();
     dispatch(setButtonSoundState(!Boolean(alarmSettings.buttonSound)));
-  }, [dispatch, alarmSettings, playButtonSound]);
+  }, [dispatch, alarmSettings.buttonSound, playButtonSound]);
 
   return (
     <div className="secondary-buttons-root">

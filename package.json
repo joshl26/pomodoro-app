@@ -41,9 +41,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "export PORT=3051 && react-scripts start",
-    "start-windows": "set PORT=3051 && react-scripts start",
-    "build": "react-scripts build",
+    "start": "craco start",
+    "start-windows": "set PORT=3051 && craco start",
+    "build": "craco build",
     "test": "jest",
     "eject": "react-scripts eject",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,md}\"",
@@ -70,6 +70,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-react": "^7.27.1",
+    "@craco/craco": "^7.1.0",
     "@redux-devtools/core": "^3.13.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
