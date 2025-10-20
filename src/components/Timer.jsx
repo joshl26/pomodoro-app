@@ -31,7 +31,7 @@ import TimeDisplay from "./TimeDisplay";
 
 import { tick as tickAction } from "../store/timerSlice";
 
-export default function Timer() {
+function Timer() {
   const dispatch = useDispatch();
 
   // Selectors
@@ -39,48 +39,66 @@ export default function Timer() {
   const cyclePausedState = useSelector(selectCyclePaused);
   const currentTime = useSelector(selectCurrentTime);
   const timer = useSelector(selectTimer);
+  const rawAlarmSettings = useSelector(selectAlarmSettings);
 
-  const rawAlarmSettings = useSelector(selectAlarmSettings) || {};
-
+  // FIX 1: Memoize alarm settings properly
   const alarmSettings = useMemo(() => {
-    // Return a stable object with only the needed properties
+    if (!rawAlarmSettings) {
+      return {
+        enabled: false,
+        sound: "No Sound",
+        volume: 0.8,
+        buttonSound: true,
+      };
+    }
     return {
       enabled: rawAlarmSettings.enabled,
       sound: rawAlarmSettings.sound,
       volume: rawAlarmSettings.volume,
       buttonSound: rawAlarmSettings.buttonSound,
     };
-  }, [
-    rawAlarmSettings.enabled,
-    rawAlarmSettings.sound,
-    rawAlarmSettings.volume,
-    rawAlarmSettings.buttonSound,
-  ]);
+  }, [rawAlarmSettings]);
 
   const {
     running = false,
     totalSeconds: runtimeTotalSeconds,
     secondsLeft: runtimeSecondsLeft,
     alarmTriggered = false,
-  } = timer;
+  } = timer || {};
 
   const { volume: alarmVolume = 0.8, buttonSound: buttonSoundState = true } =
     alarmSettings;
 
-  // Calculate times
-  const totalSeconds = Math.max(
-    1,
-    Number(runtimeTotalSeconds) || Math.max(1, Number(currentTime) * 60)
-  );
-  const secondsLeft = Number.isFinite(Number(runtimeSecondsLeft))
-    ? Math.max(0, Math.floor(Number(runtimeSecondsLeft)))
-    : totalSeconds;
+  // FIX 2: Memoize calculated values
+  const totalSeconds = useMemo(() => {
+    return Math.max(
+      1,
+      Number(runtimeTotalSeconds) || Math.max(1, Number(currentTime) * 60)
+    );
+  }, [runtimeTotalSeconds, currentTime]);
 
-  const elapsedSeconds = Math.max(0, totalSeconds - secondsLeft);
-  const progressPercent = Math.min(
-    100,
-    Math.max(0, (elapsedSeconds / totalSeconds) * 100)
-  );
+  const secondsLeft = useMemo(() => {
+    return Number.isFinite(Number(runtimeSecondsLeft))
+      ? Math.max(0, Math.floor(Number(runtimeSecondsLeft)))
+      : totalSeconds;
+  }, [runtimeSecondsLeft, totalSeconds]);
+
+  const elapsedSeconds = useMemo(() => {
+    return Math.max(0, totalSeconds - secondsLeft);
+  }, [totalSeconds, secondsLeft]);
+
+  // FIX 3: Add missing return statement in progressPercent
+  const progressPercent = useMemo(() => {
+    return Math.min(100, Math.max(0, (elapsedSeconds / totalSeconds) * 100));
+  }, [elapsedSeconds, totalSeconds]);
+
+  // FIX 4: Memoize time display values
+  const { minutes, seconds } = useMemo(() => {
+    return {
+      minutes: Math.floor(secondsLeft / 60),
+      seconds: secondsLeft % 60,
+    };
+  }, [secondsLeft]);
 
   // Audio manager
   const { play, stop, playButtonSound } = useAudioManager();
@@ -149,7 +167,9 @@ export default function Timer() {
     }
   }, [
     alarmTriggered,
-    alarmSettings,
+    alarmSettings.enabled,
+    alarmSettings.sound,
+    alarmSettings.volume,
     autoStartState,
     currentTime,
     dispatch,
@@ -157,10 +177,6 @@ export default function Timer() {
     stop,
     alarmVolume,
   ]);
-
-  // Format time
-  const minutes = Math.floor(secondsLeft / 60);
-  const seconds = secondsLeft % 60;
 
   // Button sound wrapper
   const playBtnSound = useCallback(() => {
@@ -220,6 +236,25 @@ export default function Timer() {
     switchMode,
   ]);
 
+  // FIX 5: Memoize reset handler
+  const handleReset = useCallback(() => {
+    playBtnSound();
+    dispatch(resetTimerForModeThunk({ keepAudio: true }));
+  }, [playBtnSound, dispatch]);
+
+  // FIX 6: Memoize autostart toggle handler
+  const handleToggleAutoStart = useCallback(
+    (checked) => {
+      dispatch(setAutoStart(checked));
+    },
+    [dispatch]
+  );
+
+  // FIX 7: Memoize mode name (avoid recalculation on every render)
+  const currentModeName = useMemo(() => {
+    return getModeName();
+  }, [getModeName]);
+
   // AutoStart side effect
   const prevAutoStartRef = useRef(autoStartState);
   useEffect(() => {
@@ -243,7 +278,7 @@ export default function Timer() {
   return (
     <div className="timer-container">
       <div className="timer-content">
-        <ModeIndicator currentModeName={getModeName()} />
+        <ModeIndicator currentModeName={currentModeName} />
         <TimeDisplay minutes={minutes} seconds={seconds} />
         <ProgressBar
           progressPercent={progressPercent}
@@ -270,11 +305,8 @@ export default function Timer() {
 
         <ResetAndAuto
           autoStartState={autoStartState}
-          onToggleAutoStart={(checked) => dispatch(setAutoStart(checked))}
-          onReset={() => {
-            playBtnSound();
-            dispatch(resetTimerForModeThunk({ keepAudio: true }));
-          }}
+          onToggleAutoStart={handleToggleAutoStart}
+          onReset={handleReset}
           playBtnSound={playBtnSound}
           resetBtnTestId="reset-btn"
           autoStartToggleTestId="auto-start-toggle"
@@ -285,3 +317,6 @@ export default function Timer() {
     </div>
   );
 }
+
+// FIX 8: Wrap Timer in React.memo for Phase 6 optimization
+export default React.memo(Timer);

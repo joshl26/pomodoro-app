@@ -1,7 +1,7 @@
 import React from "react";
 import { FaRedo } from "react-icons/fa";
 
-export default function ResetAndAuto({
+function ResetAndAuto({
   autoStartState,
   onToggleAutoStart,
   onReset,
@@ -36,3 +36,5 @@ export default function ResetAndAuto({
     </>
   );
 }
+
+export default React.memo(ResetAndAuto);

@@ -43,7 +43,8 @@
     "test": "jest",
     "eject": "react-scripts eject",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,md}\"",
-    "lint": "npx eslint --fix \"src/**/*.{js,jsx}\""
+    "lint": "npx eslint --fix \"src/**/*.{js,jsx}\"",
+    "analyze": "cross-env GENERATE_SOURCEMAP=true craco build && source-map-explorer 'build/static/js/*.js'"
   },
   "eslintConfig": {
     "extends": [
@@ -72,13 +73,16 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/react-router-dom": "^5.3.3",
+    "cross-env": "^10.1.0",
     "eslint": "^8.57.1",
     "eslint-config-react-app": "^7.0.1",
     "jest": "^27.5.1",
     "prettier": "^3.6.2",
     "react-scripts": "5.0.1",
     "redux-devtools-extension": "^2.13.9",
-    "redux-mock-store": "^1.5.5"
+    "redux-mock-store": "^1.5.5",
+    "source-map-explorer": "^2.5.3",
+    "webpack-bundle-analyzer": "^4.10.2"
   },
   "jest": {
     "moduleNameMapper": {

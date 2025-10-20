@@ -1,9 +1,9 @@
 // src/audio/AudioManager.js
-import ButtonPressSound from "../assets/sounds/button-press.wav";
-import BellSound from "../assets/sounds/alarm-bell.mp3";
-import DigitalSound from "../assets/sounds/alarm-digital.mp3";
-import KitchenSound from "../assets/sounds/alarm-kitchen.mp3";
-import TickingSlowSound from "../assets/sounds/ticking-slow.mp3";
+import ButtonPressSound from "../sounds/button-press.mp3";
+import BellSound from "../sounds/alarm-bell.mp3";
+import DigitalSound from "../sounds/alarm-digital.mp3";
+import KitchenSound from "../sounds/alarm-kitchen.mp3";
+import TickingSlowSound from "../sounds/ticking-slow.mp3";
 
 /**
  * Lightweight singleton AudioManager.

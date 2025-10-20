@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function TimeDisplay({ minutes, seconds }) {
+function TimeDisplay({ minutes, seconds }) {
   const formatTime = (value) => value.toString().padStart(2, "0");
 
   return (
@@ -16,3 +16,5 @@ export default function TimeDisplay({ minutes, seconds }) {
     </div>
   );
 }
+
+export default React.memo(TimeDisplay);

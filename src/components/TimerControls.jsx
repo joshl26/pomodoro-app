@@ -74,3 +74,5 @@ export function TimerControls({
     </div>
   );
 }
+
+export default React.memo(TimerControls);

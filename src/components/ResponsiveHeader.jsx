@@ -1,5 +1,5 @@
 import React from "react";
-import logoImage from "../assets/tomato.svg";
+import logoImage from "../images/tomato.svg";
 
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";

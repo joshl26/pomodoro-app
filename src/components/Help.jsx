@@ -1,5 +1,5 @@
 import React from "react";
-import howToImage from "../assets/Pomodore_Technique.png";
+import howToImage from "../images/Pomodore_Technique.png";
 import { Container } from "react-bootstrap";
 import "./Help.css";
 

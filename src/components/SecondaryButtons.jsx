@@ -28,7 +28,7 @@ import {
 
 import useAudioManager from "../hooks/useAudioManager";
 
-export default function SecondaryButtons() {
+function SecondaryButtons() {
   const dispatch = useDispatch();
   const rawAlarmSettings = useSelector(selectAlarmSettings);
 
@@ -362,3 +362,5 @@ export default function SecondaryButtons() {
     </div>
   );
 }
+
+export default React.memo(SecondaryButtons);
