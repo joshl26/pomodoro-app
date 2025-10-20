@@ -3,13 +3,10 @@ import React, { useCallback, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./SecondaryButtons.css";
 
-import { useGlobalAudioPlayer } from "react-use-audio-player";
-import ButtonPressSound from "../assets/sounds/button-press.wav";
+// import ButtonPressSound from "../assets/sounds/button-press.wav"; // still imported for bundler
 
-// Thunks / actions
-// import { resetCycleAndTimer } from "../store/settingsThunks";
 import {
-  setDefault, // Import the setDefault action
+  setDefault,
   pomoIncrement,
   pomoDecrement,
   shortIncrement,
@@ -23,7 +20,6 @@ import {
   setButtonSoundState,
 } from "../store/settingsSlice";
 
-// Selectors
 import {
   selectAlarmSettings,
   selectPomodoro,
@@ -32,11 +28,10 @@ import {
   selectIsAutoStart,
 } from "../store/selectors";
 
+import { useAudioManager } from "../hooks/useAudioManager";
+
 export default function SecondaryButtons() {
   const dispatch = useDispatch();
-
-  // Keep raw selector result and normalize/memoize derived primitive fields so
-  // callbacks depending on `alarmSettings` don't change on every render.
   const rawAlarmSettings = useSelector(selectAlarmSettings);
 
   const alarmSettings = useMemo(
@@ -62,20 +57,11 @@ export default function SecondaryButtons() {
   const longTime = useSelector(selectLong);
   const autoStart = useSelector(selectIsAutoStart);
 
-  const { load: loadAudio } = useGlobalAudioPlayer();
-
-  const playButtonSound = useCallback(() => {
-    if (alarmSettings.buttonSound) {
-      loadAudio(ButtonPressSound, {
-        autoplay: true,
-        initialVolume: alarmSettings.volume ?? 0.5,
-      });
-    }
-  }, [alarmSettings.buttonSound, alarmSettings.volume, loadAudio]);
+  // use centralized audio hook
+  const { playButtonSound } = useAudioManager();
 
   const handleReset = useCallback(() => {
     playButtonSound();
-    // Use setDefault action instead of resetCycleAndTimer thunk
     dispatch(setDefault());
   }, [dispatch, playButtonSound]);
 
@@ -106,7 +92,6 @@ export default function SecondaryButtons() {
       const value = e.target.value;
       playButtonSound();
       dispatch(setAlarmSound(value));
-      // enable alarm if a valid sound is selected (consistent with Settings behavior)
       if (value && value !== "No Sound") {
         dispatch(setAlarmState(true));
       } else {

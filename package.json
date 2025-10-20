@@ -20,9 +20,8 @@
     "npm": ">=8.0.0",
     "node": ">=17.0.0"
   },
-  "packageManager": "^pnpm@6.32.4",
+  "packageManager": "npm@8.19.4",
   "dependencies": {
-    "@redux-devtools/core": "^3.13.1",
     "@reduxjs/toolkit": "^1.9.1",
     "bootstrap": "^5.2.2",
     "lodash": "^4.17.21",
@@ -32,11 +31,8 @@
     "react-icons": "^4.11.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^5.3.4",
-    "react-scripts": "5.0.1",
     "react-timer-hook": "^3.0.7",
-    "react-use-audio-player": "^2.1.1",
     "redux": "^4.2.0",
-    "redux-devtools-extension": "^2.13.9",
     "reselect": "^5.1.1",
     "web-vitals": "^2.1.4"
   },
@@ -79,13 +75,14 @@
     "eslint": "^8.57.1",
     "eslint-config-react-app": "^7.0.1",
     "jest": "^27.5.1",
-    "prettier": "^3.6.2"
+    "prettier": "^3.6.2",
+    "react-scripts": "5.0.1",
+    "redux-devtools-extension": "^2.13.9"
   },
   "jest": {
     "moduleNameMapper": {
       "\\.(css|less|scss|sass)$": "<rootDir>/__mocks__/styleMock.js",
-      "\\.(gif|ttf|eot|svg|png|mp3|wav)$": "<rootDir>/__mocks__/fileMock.js",
-      "^react-use-audio-player$": "<rootDir>/__mocks__/react-use-audio-player.js"
+      "\\.(gif|ttf|eot|svg|png|mp3|wav)$": "<rootDir>/__mocks__/fileMock.js"
     },
     "transform": {
       "^.+\\.[jt]sx?$": "babel-jest"

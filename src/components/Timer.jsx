@@ -10,9 +10,6 @@ import {
 } from "react-icons/fa";
 import "./Timer.css";
 import SecondaryButtons from "./SecondaryButtons";
-import { useGlobalAudioPlayer } from "react-use-audio-player";
-import ButtonPressSound from "../assets/sounds/button-press.wav";
-import TickingSlowSound from "../assets/sounds/ticking-slow.mp3";
 
 import { resetCycleAndTimer } from "../store/settingsThunks";
 
@@ -33,6 +30,8 @@ import {
   pauseTimerThunk,
 } from "../store/timerThunks";
 import { tick as tickAction } from "../store/timerSlice";
+
+import { useAudioManager } from "../hooks/useAudioManager";
 
 /* ProgressBar */
 const ProgressBar = React.memo(function ProgressBar({
@@ -93,21 +92,22 @@ export default function Timer() {
     Math.max(0, (elapsedSeconds / totalSeconds) * 100)
   );
 
-  const { stop: stopAudio, load: loadAudio } = useGlobalAudioPlayer();
+  // audio manager hook (centralized audio)
+  const { play, stop, playButtonSound } = useAudioManager();
   const tickIntervalRef = useRef(null);
+  const currentAlarmRef = useRef(null);
 
+  // Play/stop ticking sound while running
   useEffect(() => {
     if (running) {
-      loadAudio(TickingSlowSound, {
-        autoplay: true,
-        initialVolume: alarmVolume,
-        loop: true,
-      });
+      // 'tick' should be registered in AudioManager SOUND_REGISTRY (see AudioManager.js)
+      play("tick", { loop: true, volume: alarmVolume }).catch(() => {});
     } else {
-      stopAudio();
+      stop("tick");
     }
-  }, [running, alarmVolume, loadAudio, stopAudio]);
+  }, [running, alarmVolume, play, stop]);
 
+  // Interval for dispatching ticks to runtime slice
   useEffect(() => {
     if (tickIntervalRef.current) {
       clearInterval(tickIntervalRef.current);
@@ -129,30 +129,61 @@ export default function Timer() {
     };
   }, [running, dispatch]);
 
-  // When alarm triggers: reset & optionally autostart next cycle (compute seconds from currentTime)
+  // When alarm triggers: stop tick, dispatch reset, optionally autostart next cycle,
+  // and play the alarm sound (looping) if enabled.
   useEffect(() => {
     if (alarmTriggered) {
-      stopAudio();
+      // stop tick sound to avoid overlap
+      stop("tick");
+
       dispatch(resetCycleAndTimer({ keepAudio: true }));
+
+      if (alarmSettings.enabled) {
+        const soundName =
+          alarmSettings.sound && alarmSettings.sound !== "No Sound"
+            ? alarmSettings.sound
+            : "alarm";
+
+        currentAlarmRef.current = soundName;
+        // play alarm looped (AudioManager will use provided volume)
+        play(soundName, {
+          loop: true,
+          volume: alarmSettings.volume ?? alarmVolume,
+        }).catch(() => {});
+      }
 
       if (autoStartState) {
         const nextTotal = Math.max(1, Number(currentTime) * 60);
         // start the next timer immediately
         dispatch(startTimerWithSeconds(nextTotal));
       }
+    } else {
+      // alarm cleared => stop any playing alarm
+      if (currentAlarmRef.current) {
+        stop(currentAlarmRef.current);
+        currentAlarmRef.current = null;
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [alarmTriggered]); // intentionally only depend on alarmTriggered
 
+    // intentionally only watch alarmTriggered and alarmSettings.enabled/sound/volume
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [alarmTriggered]);
+
+  // format helpers
   const formatTime = (value) => value.toString().padStart(2, "0");
   const minutes = Math.floor(secondsLeft / 60);
   const seconds = secondsLeft % 60;
 
-  const playButtonSound = useCallback(() => {
-    if (buttonSoundState) {
-      loadAudio(ButtonPressSound, { autoplay: true, initialVolume: 0.5 });
+  // button sound wrapper (uses centralized audio manager)
+  const playBtnSound = useCallback(() => {
+    // the hook's playButtonSound reads settings and respects buttonSound flag;
+    // we still check local fallback for backwards compatibility
+    if (buttonSoundState === false) {
+      // hook will also respect settings; this is a fast guard
+      return;
     }
-  }, [buttonSoundState, loadAudio]);
+    playButtonSound();
+  }, [buttonSoundState, playButtonSound]);
 
   const handleStart = useCallback(() => {
     dispatch(startTimerWithSeconds(totalSeconds));
@@ -170,7 +201,7 @@ export default function Timer() {
   const { advance, retreat } = useAutoStartCycle();
 
   const forwardButtonClicked = useCallback(() => {
-    playButtonSound();
+    playBtnSound();
     if (autoStartState) {
       advance(true);
       handleStart();
@@ -179,7 +210,7 @@ export default function Timer() {
     const next = currentMode === 1 ? 2 : currentMode === 2 ? 3 : 1;
     switchMode(next);
   }, [
-    playButtonSound,
+    playBtnSound,
     autoStartState,
     advance,
     handleStart,
@@ -188,7 +219,7 @@ export default function Timer() {
   ]);
 
   const backwardButtonClicked = useCallback(() => {
-    playButtonSound();
+    playBtnSound();
     if (autoStartState) {
       retreat(true);
       handleStart();
@@ -197,7 +228,7 @@ export default function Timer() {
     const prev = currentMode === 1 ? 3 : currentMode === 2 ? 1 : 2;
     switchMode(prev);
   }, [
-    playButtonSound,
+    playBtnSound,
     autoStartState,
     retreat,
     handleStart,
@@ -239,7 +270,7 @@ export default function Timer() {
               className="control-btn start-btn"
               onClick={() => {
                 handleStart();
-                playButtonSound();
+                playBtnSound();
               }}
               data-testid="start-btn"
             >
@@ -264,7 +295,7 @@ export default function Timer() {
                 className="control-btn pause-btn"
                 onClick={() => {
                   handleResume();
-                  playButtonSound();
+                  playBtnSound();
                 }}
                 aria-label="Resume timer"
                 data-testid="resume-btn"
@@ -276,7 +307,7 @@ export default function Timer() {
                 className="control-btn pause-btn"
                 onClick={() => {
                   handlePause();
-                  playButtonSound();
+                  playBtnSound();
                 }}
                 aria-label="Pause timer"
                 data-testid="pause-btn"
@@ -304,7 +335,7 @@ export default function Timer() {
       handleResume,
       forwardButtonClicked,
       backwardButtonClicked,
-      playButtonSound,
+      playBtnSound,
     ]
   );
 
@@ -317,7 +348,7 @@ export default function Timer() {
               <button
                 className="control-btn reset-btn"
                 onClick={() => {
-                  playButtonSound();
+                  playBtnSound();
                   dispatch(resetCycleAndTimer({ keepAudio: true }));
                 }}
                 data-testid="reset-btn"
@@ -344,8 +375,19 @@ export default function Timer() {
           </>
         );
       },
-    [autoStartState, dispatch, playButtonSound]
+    [autoStartState, dispatch, playBtnSound]
   );
+
+  // Cleanup: stop any playing alarm on unmount
+  useEffect(() => {
+    return () => {
+      if (currentAlarmRef.current) {
+        stop(currentAlarmRef.current);
+        currentAlarmRef.current = null;
+      }
+      stop("tick");
+    };
+  }, [stop]);
 
   return (
     <div className="timer-container">
