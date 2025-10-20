@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SecondaryButtons from "./SecondaryButtons";
 
@@ -38,8 +38,24 @@ export default function Timer() {
   const autoStartState = useSelector(selectIsAutoStart);
   const cyclePausedState = useSelector(selectCyclePaused);
   const currentTime = useSelector(selectCurrentTime);
-  const alarmSettings = useSelector(selectAlarmSettings) || {};
   const timer = useSelector(selectTimer);
+
+  const rawAlarmSettings = useSelector(selectAlarmSettings) || {};
+
+  const alarmSettings = useMemo(() => {
+    // Return a stable object with only the needed properties
+    return {
+      enabled: rawAlarmSettings.enabled,
+      sound: rawAlarmSettings.sound,
+      volume: rawAlarmSettings.volume,
+      buttonSound: rawAlarmSettings.buttonSound,
+    };
+  }, [
+    rawAlarmSettings.enabled,
+    rawAlarmSettings.sound,
+    rawAlarmSettings.volume,
+    rawAlarmSettings.buttonSound,
+  ]);
 
   const {
     running = false,
@@ -244,7 +260,6 @@ export default function Timer() {
             onForward={forwardButtonClicked}
             onBackward={backwardButtonClicked}
             playBtnSound={playBtnSound}
-            // Add test ids or aria-labels for buttons inside TimerControls
             startBtnTestId="start-btn"
             pauseBtnTestId="pause-btn"
             resumeBtnTestId="resume-btn"

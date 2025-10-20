@@ -11,11 +11,11 @@ import { stopTimer, resetTimerForMode } from "../timerSlice";
 
 describe("settingsThunks (integration with real store)", () => {
   beforeEach(() => {
-    // Reset both slices to initial state before each test
+    // Reset settings slice to default state before each test
     store.dispatch(setSettingsDefault());
-    // stop timer and reset it to match default pomodoro (1500s)
+    // Stop timer and reset it to default pomodoro duration (1500s)
     store.dispatch(stopTimer());
-    store.dispatch(resetTimerForMode(1500)); // or resetTimerForMode({ totalSeconds: 1500 })
+    store.dispatch(resetTimerForMode(1500));
   });
 
   afterEach(() => {
@@ -51,7 +51,6 @@ describe("settingsThunks (integration with real store)", () => {
     expect(settingsState.current.timermode).toBe(mode);
     expect(settingsState.current.cyclestarted).toBe(true);
 
-    // timer slice should be reset to same seconds (but not necessarily running)
     expect(timerState.totalSeconds).toBe(1500);
     expect(timerState.secondsLeft).toBe(1500);
   });
@@ -91,11 +90,11 @@ describe("settingsThunks (integration with real store)", () => {
   });
 
   it("resetCycleAndTimer resets cycle and timer to defaults", () => {
-    // alter state
+    // alter state by advancing twice
     store.dispatch(advanceCycle(false));
     store.dispatch(advanceCycle(false));
 
-    // reset
+    // reset cycle and timer
     store.dispatch(resetCycleAndTimer());
 
     const settingsState = store.getState().settings;
