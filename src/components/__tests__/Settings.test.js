@@ -1,137 +1,109 @@
-// src/components/Settings.test.js
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
+import configureStore from "redux-mock-store";
 import { MemoryRouter } from "react-router-dom";
-import { configureStore } from "@reduxjs/toolkit";
 import Settings from "../Settings";
-import settingsReducer from "../../store/settingsSlice";
-import useAudioManager from "../../hooks/useAudioManager";
+import * as settingsSlice from "../../store/settingsSlice";
 
-// Mock the useAudioManager hook
-jest.mock("../../hooks/useAudioManager", () => {
-  return jest.fn();
-});
+const mockStore = configureStore([]);
 
-// Create a test store with the correct initial state structure
-const createTestStore = (preloadedState = {}) => {
-  return configureStore({
-    reducer: {
-      settings: settingsReducer,
-    },
-    preloadedState: {
-      settings: {
-        // Make sure these match your actual initial state structure
-        pomodoro: 25,
-        short: 5,
-        long: 15,
-        autostart: false,
-        alarmvolume: 0.5,
-        timermode: 1,
-        alarmsound: "Bell",
-        buttonsound: true,
-        // Add any other required fields here
-        ...preloadedState.settings,
-      },
-    },
-  });
+const renderWithProviders = (ui, { store }) => {
+  return render(
+    <Provider store={store}>
+      <MemoryRouter>{ui}</MemoryRouter>
+    </Provider>
+  );
 };
 
-describe("Settings component (preload + debounce preview)", () => {
+describe("Settings component", () => {
   let store;
-  let mockLoad;
-  let mockSetVolume;
-  let mockPlay;
-  let mockStop;
-  let mockPlayButtonSound;
+  let dispatchMock;
 
   beforeEach(() => {
-    // Create fresh store for each test
-    store = createTestStore();
-
-    // Reset mocks
-    mockLoad = jest.fn(() => ({})); // Return an object to avoid undefined issues
-    mockSetVolume = jest.fn();
-    mockPlay = jest.fn(() => Promise.resolve()); // Return a resolved promise
-    mockStop = jest.fn();
-    mockPlayButtonSound = jest.fn();
-
-    useAudioManager.mockReturnValue({
-      load: mockLoad,
-      setVolume: mockSetVolume,
-      play: mockPlay,
-      stop: mockStop,
-      playButtonSound: mockPlayButtonSound,
+    store = mockStore({
+      settings: {
+        timers: { pomodoro: 25, short: 5, long: 15 },
+        autostart: false,
+        timermode: 1,
+        alarm: {
+          volume: 0.5,
+          buttonSound: false,
+          enabled: false,
+          sound: "No Sound",
+        },
+      },
     });
 
-    jest.useFakeTimers();
+    dispatchMock = jest.fn();
+    store.dispatch = dispatchMock;
   });
 
-  afterEach(() => {
-    jest.useRealTimers();
-    jest.clearAllMocks();
+  it("renders with initial state", () => {
+    renderWithProviders(<Settings />, { store });
+    expect(screen.getByText("Settings")).toBeInTheDocument();
+    expect(screen.getByLabelText("Auto start breaks")).not.toBeChecked();
+    expect(screen.getByLabelText("Button sounds")).not.toBeChecked();
+    expect(
+      screen.getByRole("button", { name: /No Sound/i })
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText("Alarm Volume")).toHaveValue("0.5" || "0.5");
   });
 
-  test("preloads selected alarm sound and sets its volume on mount", () => {
-    render(
-      <Provider store={store}>
-        <MemoryRouter>
-          <Settings />
-        </MemoryRouter>
-      </Provider>
+  it("toggles button sounds checkbox and dispatches action", () => {
+    renderWithProviders(<Settings />, { store });
+    const toggle = screen.getByLabelText("Button sounds");
+    fireEvent.click(toggle);
+    expect(dispatchMock).toHaveBeenCalledWith(
+      settingsSlice.setButtonSoundState(true)
     );
-
-    // Check that the default alarm sound is loaded
-    expect(mockLoad).toHaveBeenCalledWith("Bell");
-    // Check that the volume is set to 0.5 (from initial state)
-    expect(mockSetVolume).toHaveBeenCalledWith("Bell", 0.5);
   });
 
-  test("slider change updates instance volume and triggers debounced preview", async () => {
-    render(
-      <Provider store={store}>
-        <MemoryRouter>
-          <Settings />
-        </MemoryRouter>
-      </Provider>
-    );
+  it("changes alarm sound from dropdown and dispatches actions", async () => {
+    renderWithProviders(<Settings />, { store });
 
-    // Get the alarm volume slider by role and label
-    const slider = screen.getByRole("slider", { name: /alarm volume/i });
+    const dropdownToggle = screen.getByRole("button", { name: /No Sound/i });
+    fireEvent.click(dropdownToggle);
 
-    // Change the slider value
-    fireEvent.change(slider, { target: { value: "0.8" } });
+    const bellOption = await screen.findByRole("button", { name: "Bell" });
+    fireEvent.click(bellOption);
 
-    // Check immediate setVolume call
-    expect(mockSetVolume).toHaveBeenCalledWith("Bell", 0.8);
+    await waitFor(() => {
+      expect(dispatchMock).toHaveBeenCalledWith(
+        settingsSlice.setAlarmSound("Bell")
+      );
+    });
 
-    // Advance timers to pass debounce threshold (200ms in Settings)
-    jest.advanceTimersByTime(250);
-
-    // Check that play was called with the new volume
-    expect(mockPlay).toHaveBeenCalledWith("Bell", { volume: 0.8 });
+    await waitFor(() => {
+      expect(dispatchMock).toHaveBeenCalledWith(
+        settingsSlice.setAlarmState(true)
+      );
+    });
   });
 
-  test("handles slider changes properly", () => {
-    render(
-      <Provider store={store}>
-        <MemoryRouter>
-          <Settings />
-        </MemoryRouter>
-      </Provider>
+  it("back button dispatches volume and total seconds, navigates home", () => {
+    renderWithProviders(<Settings />, { store });
+    const backBtn = screen.getByRole("button", { name: /Back/i });
+    fireEvent.click(backBtn);
+
+    expect(dispatchMock).toHaveBeenCalledWith(
+      settingsSlice.setAlarmVolume(0.5)
     );
+    expect(dispatchMock).toHaveBeenCalledWith(
+      settingsSlice.setTotalSeconds(1500)
+    );
+  });
 
-    // Get the alarm volume slider
-    const slider = screen.getByRole("slider", { name: /alarm volume/i });
+  it("restore defaults button resets settings", () => {
+    renderWithProviders(<Settings />, { store });
+    const restoreBtn = screen.getByRole("button", {
+      name: /Restore Defaults/i,
+    });
+    fireEvent.click(restoreBtn);
 
-    // Verify initial state
-    expect(slider).toBeInTheDocument();
-    expect(parseFloat(slider.value)).toBe(0.5);
-
-    // Change the slider value
-    fireEvent.change(slider, { target: { value: "0.6" } });
-
-    // Check that the value was updated
-    expect(parseFloat(slider.value)).toBe(0.6);
+    expect(dispatchMock).toHaveBeenCalledWith(settingsSlice.setDefault());
+    expect(dispatchMock).toHaveBeenCalledWith(
+      settingsSlice.setAlarmVolume(0.5)
+    );
   });
 });

@@ -1,13 +1,5 @@
-// src/components/Settings.jsx
 import React, { useEffect, useCallback, useState, useRef } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Dropdown,
-  ToggleButton,
-  Button,
-} from "react-bootstrap";
+import { Container, Row, Col, Dropdown, Button } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -33,55 +25,40 @@ import { FaPlus, FaMinus } from "react-icons/fa";
 import useAudioManager from "../hooks/useAudioManager";
 import "./Settings.css";
 
-/**
- * Settings Component (patched to use the new useAudioManager hook)
- * - preloads sounds (load)
- * - stops previous previews before playing
- * - updates loaded instance volume with setVolume
- * - debounces slider-driven previews
- * - cleans up timers and stops on unmount
- */
 const Settings = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  // Hook (default export) exposes: play, stop, load, playButtonSound, setVolume, ...
   const { play, stop, playButtonSound, load, setVolume } = useAudioManager();
 
   const {
-    pomodoro: pomodoroCount,
-    short: shortCount,
-    long: longCount,
+    timers: { pomodoro: pomodoroCount, short: shortCount, long: longCount },
     autostart: autoStartState,
-    alarmvolume: alarmVolumeState,
     timermode: timerMode,
-    alarmsound: alarmSoundState,
-    buttonsound: buttonSoundState,
+    alarm: {
+      volume: alarmVolumeState = 0.5,
+      sound: alarmSoundState = "No Sound",
+      buttonSound: buttonSoundState = false,
+    } = {},
   } = useSelector((state) => state.settings);
 
-  // Ensure volume is always a number
-  const [volume, setLocalVolume] = useState(
-    typeof alarmVolumeState === "number" ? alarmVolumeState : 0
-  );
+  const [volume, setLocalVolume] = useState(alarmVolumeState);
   const sliderPreviewTimer = useRef(null);
 
   useEffect(() => {
-    setLocalVolume(typeof alarmVolumeState === "number" ? alarmVolumeState : 0);
+    setLocalVolume(alarmVolumeState);
   }, [alarmVolumeState]);
 
-  // Preload the selected alarm sound when it changes (unless it's "No Sound")
   useEffect(() => {
     if (!load) return;
     if (alarmSoundState && alarmSoundState !== "No Sound") {
-      const inst = load(alarmSoundState);
-      // ensure the preloaded instance has the stored volume
-      if (inst && typeof setVolume === "function") {
+      load(alarmSoundState);
+      if (typeof setVolume === "function") {
         setVolume(alarmSoundState, volume);
       }
     }
   }, [alarmSoundState, load, setVolume, volume]);
 
-  // Preload button sound when button sounds are enabled
   useEffect(() => {
     if (!load) return;
     if (buttonSoundState) {
@@ -89,7 +66,6 @@ const Settings = () => {
     }
   }, [buttonSoundState, load]);
 
-  // cleanup on unmount: clear timer and stop any playing sounds
   useEffect(() => {
     return () => {
       if (sliderPreviewTimer.current) {
@@ -104,17 +80,14 @@ const Settings = () => {
     };
   }, [stop]);
 
-  // Play button click sound via audio manager — stop previous button sound first
   const buttonClickSound = useCallback(() => {
     if (!buttonSoundState) return;
     try {
       stop("button");
     } catch {}
-    // playButtonSound will respect settings internally
     playButtonSound();
   }, [buttonSoundState, playButtonSound, stop]);
 
-  // Back: persist volume and total seconds, navigate home
   const backClickHandler = useCallback(() => {
     dispatch(setAlarmVolume(volume));
     buttonClickSound();
@@ -140,7 +113,6 @@ const Settings = () => {
     history,
   ]);
 
-  // Auto-start toggle
   const autostartClickHandler = useCallback(() => {
     buttonClickSound();
     if (autoStartState) {
@@ -154,13 +126,11 @@ const Settings = () => {
     }
   }, [autoStartState, dispatch, buttonClickSound]);
 
-  // Button sound toggle
   const buttonSoundClickHandler = useCallback(() => {
     buttonClickSound();
     dispatch(setButtonSoundState(!buttonSoundState));
   }, [buttonSoundState, dispatch, buttonClickSound]);
 
-  // Alarm selection handler (previews selection). Stop previous preview before playing new.
   const alarmClickHandler = useCallback(
     (selectedSound) => {
       buttonClickSound();
@@ -174,12 +144,10 @@ const Settings = () => {
         stop("Kitchen");
       } else {
         dispatch(setAlarmState(true));
-        // stop previous previews
         stop("alarm");
         stop("Bell");
         stop("Digital");
         stop("Kitchen");
-        // set instance volume if available then play preview
         if (typeof setVolume === "function") {
           setVolume(selectedSound, volume);
         }
@@ -189,14 +157,12 @@ const Settings = () => {
     [dispatch, buttonClickSound, play, stop, setVolume, volume]
   );
 
-  // Volume slider change: update local state, persist, update live instance volume, debounced preview
   const sliderClickHandler = useCallback(
     (e) => {
       const newVolume = Number(e.target.value);
       setLocalVolume(newVolume);
       dispatch(setAlarmVolume(newVolume));
 
-      // update loaded instance volume without replaying if possible
       if (
         alarmSoundState &&
         alarmSoundState !== "No Sound" &&
@@ -205,7 +171,6 @@ const Settings = () => {
         setVolume(alarmSoundState, newVolume);
       }
 
-      // debounced preview (200ms)
       if (alarmSoundState && alarmSoundState !== "No Sound") {
         if (sliderPreviewTimer.current) {
           clearTimeout(sliderPreviewTimer.current);
@@ -223,7 +188,6 @@ const Settings = () => {
     [alarmSoundState, dispatch, play, stop, setVolume]
   );
 
-  // Restore defaults
   const defaultSettingsClickHandler = useCallback(() => {
     buttonClickSound();
     const defaultVol = 0.5;
@@ -239,7 +203,6 @@ const Settings = () => {
     }
   }, [dispatch, buttonClickSound, alarmSoundState, setVolume]);
 
-  // Time adjustment buttons (increment/decrement)
   const TimeButtons = ({ buttonTime }) => {
     const timerMap = {
       pomo: { increment: pomoIncrement, decrement: pomoDecrement },
@@ -249,10 +212,18 @@ const Settings = () => {
 
     const { increment, decrement } = timerMap[buttonTime] || {};
 
+    const labelMap = {
+      pomo: "Pomodoro",
+      short: "Short Break",
+      long: "Long Break",
+    };
+    const label = labelMap[buttonTime] || "Timer";
+
     return (
       <Col className="padding-right">
         <Col>
           <Button
+            aria-label={`Increment ${label}`}
             onClick={() => {
               buttonClickSound();
               if (increment) dispatch(increment());
@@ -266,6 +237,7 @@ const Settings = () => {
         </Col>
         <Col>
           <Button
+            aria-label={`Decrement ${label}`}
             onClick={() => {
               buttonClickSound();
               if (decrement) dispatch(decrement());
@@ -359,17 +331,16 @@ const Settings = () => {
             <h4 className="card-text">Auto start Breaks?</h4>
           </Col>
           <Col style={{ textAlign: "left" }}>
-            <ToggleButton
-              className="btn-break"
-              id="toggle-check"
+            <input
               type="checkbox"
-              variant="outline-light"
+              id="toggle-autostart"
               checked={autoStartState}
-              value="1"
-              onClick={autostartClickHandler}
-            >
+              onChange={autostartClickHandler}
+              aria-label="Auto start breaks"
+            />
+            <label htmlFor="toggle-autostart" className="toggle-label">
               {autoStartState ? "Yes" : "No"}
-            </ToggleButton>
+            </label>
           </Col>
         </Row>
 
@@ -383,17 +354,16 @@ const Settings = () => {
             <h4 className="card-text">Button sounds?</h4>
           </Col>
           <Col style={{ textAlign: "left" }}>
-            <ToggleButton
-              className="btn-sound"
-              id="toggle-sound"
+            <input
               type="checkbox"
-              variant="outline-light"
+              id="toggle-buttonsound"
               checked={buttonSoundState}
-              value="1"
-              onClick={buttonSoundClickHandler}
-            >
+              onChange={buttonSoundClickHandler}
+              aria-label="Button sounds"
+            />
+            <label htmlFor="toggle-buttonsound" className="toggle-label">
               {buttonSoundState ? "Yes" : "No"}
-            </ToggleButton>
+            </label>
           </Col>
         </Row>
 

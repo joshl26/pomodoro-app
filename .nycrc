@@ -1,0 +1,12 @@
+{
+  "extends": "@istanbuljs/nyc-config-react",
+  "all": true,
+  "reporter": ["lcov", "text", "html"],
+  "include": ["src/**/*.js", "src/**/*.jsx"],
+  "exclude": ["src/__mocks__/**", "src/index.jsx", "src/reportWebVitals.js"],
+  "check-coverage": true,
+  "branches": 80,
+  "functions": 80,
+  "lines": 80,
+  "statements": 80
+}

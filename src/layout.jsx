@@ -26,22 +26,21 @@ function App() {
       ? ((totalSecondsState - secondsLeftState) / totalSecondsState) * 100
       : 0;
 
-  // Update favicon based on timer mode
   useEffect(() => {
     const favicon = getFaviconEl();
     if (!favicon) return;
 
     let faviconUrl;
     switch (Number(timerMode)) {
-      case 1: // Pomodoro
+      case 1:
         faviconUrl =
           "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/pomo/favicon.ico";
         break;
-      case 2: // Short break
+      case 2:
         faviconUrl =
           "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/short/favicon.ico";
         break;
-      case 3: // Long break
+      case 3:
         faviconUrl =
           "https://raw.githubusercontent.com/joshl26/pomodoro-app/master/src/assets/favicons/long/favicon.ico";
         break;
@@ -53,7 +52,6 @@ function App() {
     favicon.href = faviconUrl;
   }, [timerMode]);
 
-  // Set initial favicon
   useEffect(() => {
     const favicon = getFaviconEl();
     if (favicon) {
@@ -72,30 +70,40 @@ function App() {
           : "pomodoro";
 
   return (
-    <div className={activeClass}>
+    <div data-testid="app-root" className={activeClass}>
       <div className="spacer_small" />
       <ResponsiveHeader />
-      <div className="spacer_small"></div>
+      <div className="spacer_small" />
       <Container>
         <Progress percent={percentComplete} />
       </Container>
-      <div className="spacer_small"></div>
+      <div className="spacer_small" />
       <Container className="content">
         <Switch>
           <Route path="/pomodor/" exact>
-            <Timer />
+            <div data-testid="timer">
+              <Timer />
+            </div>
           </Route>
           <Route path="/pomodor/settings">
-            <Settings />
+            <div data-testid="settings">
+              <Settings />
+            </div>
           </Route>
           <Route path="/pomodor/report">
-            <Report />
+            <div data-testid="report">
+              <Report />
+            </div>
           </Route>
           <Route path="/pomodor/login">
-            <Login />
+            <div data-testid="login">
+              <Login />
+            </div>
           </Route>
           <Route path="/pomodor/help">
-            <Help />
+            <div data-testid="help">
+              <Help />
+            </div>
           </Route>
         </Switch>
       </Container>

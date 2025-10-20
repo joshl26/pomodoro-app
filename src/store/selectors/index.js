@@ -3,7 +3,9 @@
 // Adjust paths if your slices live in different files.
 
 export const selectSettings = (state) => state.settings || {};
-export const selectTimer = (state) => state.timer || {};
+const EMPTY_TIMER = {};
+
+export const selectTimer = (state) => state.timer || EMPTY_TIMER;
 
 // Settings-specific selectors
 export const selectIsAutoStart = (state) =>
