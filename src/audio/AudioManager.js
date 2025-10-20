@@ -1,3 +1,4 @@
+// src/audio/AudioManager.js
 import ButtonPressSound from "../assets/sounds/button-press.wav";
 import BellSound from "../assets/sounds/alarm-bell.mp3";
 import DigitalSound from "../assets/sounds/alarm-digital.mp3";
@@ -64,12 +65,19 @@ class AudioManager {
     if (typeof volume === "number") {
       instance.volume = Math.max(0, Math.min(1, volume));
     }
+
     try {
       const p = instance.play();
-      // In some environments play returns undefined; normalize to Promise
-      return p instanceof Promise ? p : Promise.resolve();
+
+      // Normalize:
+      // - If play() returns a promise, attach a catch so rejections are swallowed.
+      // - If it returns undefined (non-promise), resolve immediately.
+      if (p && typeof p.then === "function") {
+        return p.catch(() => undefined);
+      }
+      return Promise.resolve();
     } catch (err) {
-      // swallow and resolve, tests can still assert instance.play was called
+      // Swallow synchronous errors and resolve
       return Promise.resolve();
     }
   }

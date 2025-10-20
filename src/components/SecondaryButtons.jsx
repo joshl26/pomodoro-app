@@ -1,9 +1,7 @@
 // src/components/SecondaryButtons.jsx
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./SecondaryButtons.css";
-
-// import ButtonPressSound from "../assets/sounds/button-press.wav"; // still imported for bundler
 
 import {
   setDefault,
@@ -28,7 +26,7 @@ import {
   selectIsAutoStart,
 } from "../store/selectors";
 
-import { useAudioManager } from "../hooks/useAudioManager";
+import useAudioManager from "../hooks/useAudioManager";
 
 export default function SecondaryButtons() {
   const dispatch = useDispatch();
@@ -57,63 +55,117 @@ export default function SecondaryButtons() {
   const longTime = useSelector(selectLong);
   const autoStart = useSelector(selectIsAutoStart);
 
-  // use centralized audio hook
-  const { playButtonSound } = useAudioManager();
+  // use centralized audio hook; include load, stop, setVolume
+  const { playButtonSound, load, stop, setVolume } = useAudioManager();
+
+  // Preload the currently selected alarm sound (unless "No Sound")
+  useEffect(() => {
+    if (!load) return;
+    if (alarmSettings.sound && alarmSettings.sound !== "No Sound") {
+      const inst = load(alarmSettings.sound);
+      // set instance volume to stored volume
+      if (inst && typeof setVolume === "function") {
+        setVolume(alarmSettings.sound, alarmSettings.volume);
+      }
+    }
+  }, [alarmSettings.sound, alarmSettings.volume, load, setVolume]);
+
+  // Preload button sound when button sounds are enabled
+  useEffect(() => {
+    if (!load) return;
+    if (alarmSettings.buttonSound) {
+      load("button");
+    }
+  }, [alarmSettings.buttonSound, load]);
+
+  // stop on unmount
+  useEffect(() => {
+    return () => {
+      stop("button");
+      stop("alarm");
+      stop("Bell");
+      stop("Digital");
+      stop("Kitchen");
+    };
+  }, [stop]);
+
+  const safePlayButton = useCallback(() => {
+    try {
+      stop("button");
+    } catch {}
+    return playButtonSound();
+  }, [playButtonSound, stop]);
 
   const handleReset = useCallback(() => {
-    playButtonSound();
+    safePlayButton();
     dispatch(setDefault());
-  }, [dispatch, playButtonSound]);
+  }, [dispatch, safePlayButton]);
 
   const incDec = useCallback(
     (action) => {
-      playButtonSound();
+      safePlayButton();
       dispatch(action());
     },
-    [dispatch, playButtonSound]
+    [dispatch, safePlayButton]
   );
 
   const handleAutoStartChange = useCallback(() => {
-    playButtonSound();
+    safePlayButton();
     dispatch(setAutoStart(!autoStart));
-  }, [dispatch, autoStart, playButtonSound]);
+  }, [dispatch, autoStart, safePlayButton]);
 
   const handleAlarmToggle = useCallback(
     (e) => {
       const enabled = e.target.checked;
-      playButtonSound();
+      safePlayButton();
       dispatch(setAlarmState(enabled));
     },
-    [dispatch, playButtonSound]
+    [dispatch, safePlayButton]
   );
 
   const handleAlarmSoundChange = useCallback(
     (e) => {
       const value = e.target.value;
-      playButtonSound();
+      safePlayButton();
       dispatch(setAlarmSound(value));
       if (value && value !== "No Sound") {
         dispatch(setAlarmState(true));
+        // ensure instance exists and set its volume
+        if (load) {
+          const inst = load(value);
+          if (inst && typeof setVolume === "function") {
+            setVolume(value, alarmSettings.volume);
+          }
+        }
       } else {
         dispatch(setAlarmState(false));
       }
     },
-    [dispatch, playButtonSound]
+    [dispatch, safePlayButton, load, setVolume, alarmSettings.volume]
   );
 
   const handleVolumeChange = useCallback(
     (e) => {
       const v = parseFloat(e.target.value);
-      playButtonSound();
-      dispatch(setAlarmVolume(Number.isFinite(v) ? v : 0));
+      safePlayButton();
+      const numeric = Number.isFinite(v) ? v : 0;
+      dispatch(setAlarmVolume(numeric));
+      // update loaded instance if present
+      if (
+        alarmSettings.sound &&
+        alarmSettings.sound !== "No Sound" &&
+        typeof setVolume === "function"
+      ) {
+        setVolume(alarmSettings.sound, numeric);
+      }
     },
-    [dispatch, playButtonSound]
+    [dispatch, safePlayButton, alarmSettings.sound, setVolume]
   );
 
   const handleButtonSoundToggle = useCallback(() => {
-    playButtonSound();
+    safePlayButton();
     dispatch(setButtonSoundState(!Boolean(alarmSettings.buttonSound)));
-  }, [dispatch, alarmSettings.buttonSound, playButtonSound]);
+  }, [dispatch, alarmSettings.buttonSound, safePlayButton]);
 
   return (
     <div className="secondary-buttons-root">

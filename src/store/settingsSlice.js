@@ -57,7 +57,7 @@ const shallowEqual = (objA, objB) => {
 };
 
 /**
- * Safe number update helper
+ * Safe number update helper (assigns directly to state[key])
  */
 const safeNumberUpdate = (state, action, key, min = 0, max = Infinity) => {
   try {
@@ -263,6 +263,10 @@ export const settingsSlice = createSlice({
     },
 
     setAlarmVolume: (state, action) => {
+      // Ensure the alarm object exists before updating nested properties
+      if (!state.alarm || typeof state.alarm !== "object") {
+        state.alarm = { ...initialState.alarm };
+      }
       safeNumberUpdate(state.alarm, action, "volume", 0, 1);
     },
 

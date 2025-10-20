@@ -1,3 +1,4 @@
+// src/timerSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 
 /**
@@ -42,7 +43,6 @@ const slice = createSlice({
     pauseTimer(state) {
       state.running = false;
       // endTimestamp kept to allow recalculation in thunks if needed
-      // optionally we clear it.
       state.endTimestamp = null;
     },
     stopTimer(state) {
@@ -73,14 +73,18 @@ const slice = createSlice({
       state.running = false;
     },
     resetTimerForMode(state, action) {
-      // payload: { totalSeconds }
-      const total = Number(
-        action?.payload?.totalSeconds ?? action?.payload ?? state.totalSeconds
-      );
+      // Accept either a plain number payload or an object: { totalSeconds }
+      const payload = action?.payload;
+      const total =
+        typeof payload === "number"
+          ? payload
+          : Number(payload?.totalSeconds ?? payload ?? state.totalSeconds);
+
       if (Number.isFinite(total) && total >= 0) {
         state.totalSeconds = Math.floor(total);
         state.secondsLeft = Math.floor(total);
       }
+
       state.running = false;
       state.endTimestamp = null;
       state.alarmTriggered = false;

@@ -1,3 +1,4 @@
+// __tests__/settingsThunks.test.js
 import { store } from "../store";
 import {
   setTimerModeAndReset,
@@ -12,7 +13,9 @@ describe("settingsThunks (integration with real store)", () => {
   beforeEach(() => {
     // Reset both slices to initial state before each test
     store.dispatch(setSettingsDefault());
+    // stop timer and reset it to match default pomodoro (1500s)
     store.dispatch(stopTimer());
+    store.dispatch(resetTimerForMode(1500)); // or resetTimerForMode({ totalSeconds: 1500 })
   });
 
   afterEach(() => {

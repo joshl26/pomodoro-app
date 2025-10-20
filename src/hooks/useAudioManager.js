@@ -21,24 +21,52 @@ export function useAudioManager() {
             ? alarmSettings.volume
             : undefined;
 
-      return audioManager.play(name, { ...opts, volume: vol });
+      try {
+        return audioManager.play(name, { ...opts, volume: vol });
+      } catch (err) {
+        return Promise.reject(err);
+      }
     },
-    [alarmSettings.volume]
+    [alarmSettings?.volume]
   );
 
-  const stop = useCallback((name) => audioManager.stop(name), []);
+  const stop = useCallback((name) => {
+    try {
+      return audioManager.stop(name);
+    } catch {
+      return null;
+    }
+  }, []);
 
-  const load = useCallback((name) => audioManager.load(name), []);
+  const load = useCallback((name) => {
+    try {
+      return audioManager.load(name);
+    } catch {
+      return null;
+    }
+  }, []);
 
   const playButtonSound = useCallback(() => {
-    // Only play if button sound is enabled in settings
+    // Only play if button sound is NOT explicitly disabled (undefined = allowed)
     if (alarmSettings.buttonSound === false) return Promise.resolve();
     const vol =
       typeof alarmSettings.volume === "number"
         ? alarmSettings.volume
         : undefined;
-    return audioManager.play("button", { volume: vol });
-  }, [alarmSettings.buttonSound, alarmSettings.volume]);
+    try {
+      return audioManager.play("button", { volume: vol });
+    } catch {
+      return Promise.resolve();
+    }
+  }, [alarmSettings?.buttonSound, alarmSettings?.volume]);
+
+  const setVolume = useCallback((name, vol) => {
+    try {
+      return audioManager.setVolume(name, vol);
+    } catch {
+      return null;
+    }
+  }, []);
 
   const mute = useCallback(() => audioManager.mute(), []);
   const unmute = useCallback(() => audioManager.unmute(), []);
@@ -49,8 +77,11 @@ export function useAudioManager() {
     stop,
     load,
     playButtonSound,
+    setVolume,
     mute,
     unmute,
     isMuted,
   };
 }
+
+export default useAudioManager;
