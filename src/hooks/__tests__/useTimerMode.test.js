@@ -27,7 +27,7 @@ describe("useTimerMode hook", () => {
 
     expect(result.current.currentMode).toBe(2);
   });
-  
+
   it("switchMode dispatches setTimerModeAndReset with correct arguments", () => {
     useSelector.mockReturnValue(1); // pomodoro mode
 

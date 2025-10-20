@@ -11,77 +11,59 @@
 > - Estimated times are for a single developer
 > - Feel free to reorder based on your priorities
 
-#### Notes on updates
-- Phases 1 and 2 remain completed.
-- Phase 3 (Audio Management) and Phase 5 (Testing & Quality) are now marked completed — audio service/hook work, integration into components (Timer/Settings/SecondaryButtons), and audio-related tests have been implemented.
-- Other phases retain original statuses from the file you supplied.
-
 ---
 
 #### Phase 1: Critical Performance & Code Quality Fixes 🔴
 
 **Phase Status**: 13/13 | **Est. Time**: 8-10 hours — ✅ Completed
 
-#### 1.1 Fix Massive useEffect Dependencies Array
-- [x] 1.1.1 Analyze current useEffect in Timer.jsx line ~95
-- [x] 1.1.2 Identify which dependencies actually need to trigger re-renders
-- [x] 1.1.3 Create separate useEffect for audio management
-  - [x] Keep only `isRunning` and `timerModeState` as triggers
-  - [x] Load audio only once on component mount
-  - [x] Handle audio cleanup in return function
-- [x] 1.1.4 Create separate useEffect for button sound
-  - [x] Decouple from timer state changes
-  - [x] Only trigger on explicit button clicks
-- [x] 1.1.5 Remove from dependencies: `pauseAudio`, `playAudio`, `loadAudio` (these are stable functions)
-- [x] 1.1.6 Test timer still works after refactoring
-- [x] 1.1.7 Verify no audio glitches or restart issues
-- [x] 1.1.8 Check browser console for warnings
-- [x] 1.1.9 Document changes in PR/commit message
-
-#### 1.2 Remove All console.log Statements
-- [x] 1.2.1 Search project for all `console.log` occurrences
-- [x] 1.2.2 Remove production debugging logs
-- [x] 1.2.3 Consider adding error logging (not console.log) — ✅ (considered/done)
-- [x] 1.2.4 Run build and verify no console warnings
-
-#### 1.3 Delete Dead/Commented Code
-- [x] 1.3.1 Remove commented code from Timer.jsx
-- [x] 1.3.2 Remove incomplete `player()` utility function from util.js
-- [x] 1.3.3 Clean up unused imports across all files
-- [x] 1.3.4 Remove unused component props if any
-- [x] 1.3.5 Document what the old code was trying to do (in git commit)
-- [x] 1.3.6 Test app still functions normally
-
-#### 1.4 Refactor Repetitive Timer Mode Logic
-- [x] 1.4.1 Create a mode handler map in Timer.jsx
-- [x] 1.4.2 Refactor `forwardButtonClicked()` to use map
-- [x] 1.4.3 Refactor `backwardButtonClicked()` to use map
-- [x] 1.4.4 Search for any other if-chain patterns and refactor
-- [x] 1.4.5 Extract logic into helper function
-- [x] 1.4.6 Test all mode transitions (pomo → short → long → pomo)
-- [x] 1.4.7 Test both with and without auto-start enabled
-- [x] 1.4.8 Verify forward/backward buttons work correctly
-
-#### 1.5 Optimize buttonStyle() Function
-- [x] 1.5.1 Convert function to use object/map instead of 6 if-statements
-- [x] 1.5.2 Memoize with useMemo to prevent recalculation
-- [x] 1.5.3 Remove `var` keyword (use `const`)
-- [x] 1.5.4 Add JSDoc comment explaining the function
-- [x] 1.5.5 Test all button states (running/paused, all 3 modes) — ✅ (done)
-- [x] 1.5.6 Verify styling applies correctly
-
-#### 1.6 Fix Variables Using `var` Keyword
-- [x] 1.6.1 Replace all `var` with `const` in Timer.jsx
-- [x] 1.6.2 Check util.js for any `var` usage
-- [x] 1.6.3 Search entire codebase for remaining `var` statements
-- [x] 1.6.4 Ensure linting catches this (add ESLint rule)
-
-#### 1.7 Code Style Consistency
-- [x] 1.7.1 Review naming conventions across components
-- [x] 1.7.2 Ensure consistent import/export style
-- [x] 1.7.3 Check for inconsistent spacing/indentation
-- [x] 1.7.4 Create `.prettierrc` config for consistency
-- [x] 1.7.5 Run Prettier on codebase
+- [x] Analyze current useEffect in Timer.jsx line ~95
+- [x] Identify which dependencies actually need to trigger re-renders
+- [x] Create separate useEffect for audio management
+- [x] Keep only `isRunning` and `timerModeState` as triggers
+- [x] Load audio only once on component mount
+- [x] Handle audio cleanup in return function
+- [x] Create separate useEffect for button sound
+- [x] Decouple from timer state changes
+- [x] Only trigger on explicit button clicks
+- [x] Remove from dependencies: `pauseAudio`, `playAudio`, `loadAudio` (these are stable functions)
+- [x] Test timer still works after refactoring
+- [x] Verify no audio glitches or restart issues
+- [x] Check browser console for warnings
+- [x] Document changes in PR/commit message
+- [x] Search project for all `console.log` occurrences
+- [x] Remove production debugging logs
+- [x] Consider adding error logging (not console.log)
+- [x] Run build and verify no console warnings
+- [x] Remove commented code from Timer.jsx
+- [x] Remove incomplete `player()` utility function from util.js
+- [x] Clean up unused imports across all files
+- [x] Remove unused component props if any
+- [x] Document what the old code was trying to do (in git commit)
+- [x] Test app still functions normally
+- [x] Create a mode handler map in Timer.jsx
+- [x] Refactor `forwardButtonClicked()` to use map
+- [x] Refactor `backwardButtonClicked()` to use map
+- [x] Search for any other if-chain patterns and refactor
+- [x] Extract logic into helper function
+- [x] Test all mode transitions (pomo → short → long → pomo)
+- [x] Test both with and without auto-start enabled
+- [x] Verify forward/backward buttons work correctly
+- [x] Convert buttonStyle() function to use object/map instead of 6 if-statements
+- [x] Memoize with useMemo to prevent recalculation
+- [x] Remove `var` keyword (use `const`)
+- [x] Add JSDoc comment explaining the function
+- [x] Test all button states (running/paused, all 3 modes)
+- [x] Verify styling applies correctly
+- [x] Replace all `var` with `const` in Timer.jsx
+- [x] Check util.js for any `var` usage
+- [x] Search entire codebase for remaining `var` statements
+- [x] Ensure linting catches this (add ESLint rule)
+- [x] Review naming conventions across components
+- [x] Ensure consistent import/export style
+- [x] Check for inconsistent spacing/indentation
+- [x] Create `.prettierrc` config for consistency
+- [x] Run Prettier on codebase
 
 ---
 
@@ -89,63 +71,46 @@
 
 **Phase Status**: 14/14 | **Est. Time**: 6-8 hours — ✅ Completed
 
-#### 2.1 Audit settingsSlice.js
-- [x] 2.1.1 Review `settingsSlice.js`
-- [x] 2.1.2 Document current state structure
-- [x] 2.1.3 Create visual diagram of state flow — ✅ (done)
-- [x] 2.1.4 Identify problematic patterns — ✅ (done)
-- [x] 2.1.5 Plan refactoring strategy — ✅ (done)
-
-#### 2.2 Create Composite Redux Actions
-- [x] 2.2.1 Identify common action sequences
-- [x] 2.2.2 Create composite thunk actions (`setTimerModeAndReset`, `advanceCycle`, `retreatCycle`, `resetCycleAndTimer`)
-- [x] 2.2.3 Replace multiple sequential dispatches with single composite action — ✅ (done)
-- [x] 2.2.4 Update Timer.jsx to use new composite actions
-- [x] 2.2.5 Test all workflows still function — ✅ (done)
-
-#### 2.3 Create Custom Hook: useTimerMode()
-- [x] 2.3.1 Create `useTimerMode.js`
-- [x] 2.3.2 Extract mode switching logic from Timer.jsx
-- [x] 2.3.3 Encapsulate all mode-related state updates
-- [x] 2.3.4 Handle transitions between modes
-- [x] 2.3.5 Test hook independently
-- [x] 2.3.6 Update Timer.jsx to use hook
-
-#### 2.4 Create Custom Hook: useAutoStartCycle()
-- [x] 2.4.1 Create `useAutoStartCycle.js`
-- [x] 2.4.2 Extract auto-start cycle logic from Timer.jsx
-- [x] 2.4.3 Handle cycle transitions
-- [x] 2.4.4 Manage counter increment/decrement
-- [x] 2.4.5 Encapsulate enable/disable logic
-- [x] 2.4.6 Test hook independently
-- [x] 2.4.7 Update Timer.jsx to use hook
-
-#### 2.5 Create Custom Hook: useTimerControls()
-- [x] 2.5.1 Create `useTimerControls.js`
-- [x] 2.5.2 Consolidate start/pause/resume button logic
-- [x] 2.5.3 Return clean interface
-- [x] 2.5.4 Encapsulate button click sounds
-- [x] 2.5.5 Test all control scenarios
-- [x] 2.5.6 Update Timer.jsx to use hook
-
-#### 2.6 Refactor Timer.jsx Component
-- [x] 2.6.1 Remove custom hook logic (replaced by 2.3-2.5)
-- [x] 2.6.2 Update component to use new hooks
-- [x] 2.6.3 Reduce Timer.jsx size
-- [x] 2.6.4 Focus component on rendering and event handlers
-- [x] 2.6.5 Add JSDoc comments
-- [x] 2.6.6 Full component testing — ✅ (done)
-
-#### 2.7 Redux Selector Optimization
-- [x] 2.7.1 Create `src/store/selectors.js` file
-- [x] 2.7.2 Define all selectors in one place:
-  ```javascript
-  export const selectTimerMode = state => state.settings.timermode
-  export const selectIsRunning = state => state.settings.isrunning
-  ```
-- [x] 2.7.3 Update all components to import selectors instead of inline
-- [x] 2.7.4 Add memoized selectors using Reselect library (if needed)
-- [x] 2.7.5 Document selector patterns
+- [x] Review `settingsSlice.js`
+- [x] Document current state structure
+- [x] Create visual diagram of state flow
+- [x] Identify problematic patterns
+- [x] Plan refactoring strategy
+- [x] Identify common action sequences
+- [x] Create composite thunk actions (`setTimerModeAndReset`, `advanceCycle`, `retreatCycle`, `resetCycleAndTimer`)
+- [x] Replace multiple sequential dispatches with single composite action
+- [x] Update Timer.jsx to use new composite actions
+- [x] Test all workflows still function
+- [x] Create `useTimerMode.js`
+- [x] Extract mode switching logic from Timer.jsx
+- [x] Encapsulate all mode-related state updates
+- [x] Handle transitions between modes
+- [x] Test hook independently
+- [x] Update Timer.jsx to use hook
+- [x] Create `useAutoStartCycle.js`
+- [x] Extract auto-start cycle logic from Timer.jsx
+- [x] Handle cycle transitions
+- [x] Manage counter increment/decrement
+- [x] Encapsulate enable/disable logic
+- [x] Test hook independently
+- [x] Update Timer.jsx to use hook
+- [x] Create `useTimerControls.js`
+- [x] Consolidate start/pause/resume button logic
+- [x] Return clean interface
+- [x] Encapsulate button click sounds
+- [x] Test all control scenarios
+- [x] Update Timer.jsx to use hook
+- [x] Remove custom hook logic (replaced by 2.3-2.5)
+- [x] Update component to use new hooks
+- [x] Reduce Timer.jsx size
+- [x] Focus component on rendering and event handlers
+- [x] Add JSDoc comments
+- [x] Full component testing
+- [x] Create `src/store/selectors.js` file
+- [x] Define all selectors in one place
+- [x] Update all components to import selectors instead of inline
+- [x] Add memoized selectors using Reselect library (if needed)
+- [x] Document selector patterns
 
 ---
 
@@ -153,47 +118,36 @@
 
 **Phase Status**: 11/11 | **Est. Time**: 4-5 hours — ✅ Completed
 
-##### 3.1 Audit Audio Issues
-- [x] 3.1.1 Identify all audio loading locations in codebase (Timer.jsx, SecondaryButtons.jsx, Settings.jsx, hooks)
-- [x] 3.1.2 Document current audio behavior issues (restarts, duplicate instances, cleanup) and resolution plan
-- [x] 3.1.3 Check react-use-audio-player documentation and decide to replace with custom manager
-- [x] 3.1.4 Test audio cleanup on component unmount
-
-##### 3.2 Create Audio Service
-- [x] 3.2.1 Create `src/services/audioService.js` (audio caching, lazy load)
-- [x] 3.2.2 Design and implement service API (initialize, play, stop, setVolume, preload, dispose)
-- [x] 3.2.3 Implement lazy loading for audio files
-- [x] 3.2.4 Add graceful error handling and console error logging (no noisy unhandled rejections)
-- [x] 3.2.5 Cache audio instances to prevent memory leaks
-- [x] 3.2.6 Validate behavior across browsers/dev env
-
-##### 3.3 Create Audio Manager Hook
-- [x] 3.3.1 Create `src/hooks/useAudioManager.js`
-- [x] 3.3.2 Wrap audioService in a React hook
-- [x] 3.3.3 Handle cleanup in useEffect return
-- [x] 3.3.4 Expose simple interface: play/load/stop/setVolume/preload
-- [x] 3.3.5 Test hook with mount/unmount cycles
-
-##### 3.4 Replace Audio Loading in Timer.jsx
-- [x] 3.4.1 Remove direct `loadAudio()` calls from Timer.jsx
-- [x] 3.4.2 Replace with `useAudioManager` hook usage
-- [x] 3.4.3 Initialize audio on component mount only
-- [x] 3.4.4 Test ticking sound plays correctly
-- [x] 3.4.5 Test button press sound works
-- [x] 3.4.6 Verify no memory leaks
-
-##### 3.5 Audit Sound Files
-- [x] 3.5.1 List all audio files currently in `src/assets/sounds/`
-- [x] 3.5.2 Identify which sounds are actually used (duplicates removed)
-- [x] 3.5.3 Check file sizes and formats and recommend conversions
-- [x] 3.5.4 Remove unused sound files
-- [x] 3.5.5 Update build to only include used sounds
-
-##### 3.6 Update SecondaryButtons Audio Usage
-- [x] 3.6.1 Review SecondaryButtons.jsx for audio usage
-- [x] 3.6.2 Replace with new audio service/useAudioManager where needed
-- [x] 3.6.3 Test sound playback in settings changes
-- [x] 3.6.4 Verify volume control and debounced previews
+- [x] Identify all audio loading locations in codebase (Timer.jsx, SecondaryButtons.jsx, Settings.jsx, hooks)
+- [x] Document current audio behavior issues and resolution plan
+- [x] Check react-use-audio-player documentation and decide to replace with custom manager
+- [x] Test audio cleanup on component unmount
+- [x] Create `src/services/audioService.js` (audio caching, lazy load)
+- [x] Design and implement service API (initialize, play, stop, setVolume, preload, dispose)
+- [x] Implement lazy loading for audio files
+- [x] Add graceful error handling and console error logging
+- [x] Cache audio instances to prevent memory leaks
+- [x] Validate behavior across browsers/dev env
+- [x] Create `src/hooks/useAudioManager.js`
+- [x] Wrap audioService in a React hook
+- [x] Handle cleanup in useEffect return
+- [x] Expose simple interface: play/load/stop/setVolume/preload
+- [x] Test hook with mount/unmount cycles
+- [x] Remove direct `loadAudio()` calls from Timer.jsx
+- [x] Replace with `useAudioManager` hook usage
+- [x] Initialize audio on component mount only
+- [x] Test ticking sound plays correctly
+- [x] Test button press sound works
+- [x] Verify no memory leaks
+- [x] List all audio files currently in `src/assets/sounds/`
+- [x] Identify which sounds are actually used (duplicates removed)
+- [x] Check file sizes and formats and recommend conversions
+- [x] Remove unused sound files
+- [x] Update build to only include used sounds
+- [x] Review SecondaryButtons.jsx for audio usage
+- [x] Replace with new audio service/useAudioManager where needed
+- [x] Test sound playback in settings changes
+- [x] Verify volume control and debounced previews
 
 ---
 
@@ -201,53 +155,42 @@
 
 **Phase Status**: 0/12 | **Est. Time**: 8-10 hours — ⏳ Not started
 
-##### 4.1 Upgrade React Router v5 → v6
-- [ ] 4.1.1 Review current router setup in App.jsx
-- [ ] 4.1.2 Backup current version in git
-- [ ] 4.1.3 Update package.json
-- [ ] 4.1.4 Update App.jsx (Switch → Routes, path updates)
-- [ ] 4.1.5 Update components that use routing (useHistory → useNavigate)
-- [ ] 4.1.6 Test navigation links and back button
-- [ ] 4.1.7 Verify query parameters and build
-
-##### 4.2 Add React Router Lazy Loading
-- [ ] 4.2.1 Import React.lazy and Suspense
-- [ ] 4.2.2 Lazy load Settings route
-- [ ] 4.2.3 Lazy load Report route
-- [ ] 4.2.4 Lazy load Help route
-- [ ] 4.2.5 Add Suspense fallback UI
-- [ ] 4.2.6 Test code splits in dev tools
-- [ ] 4.2.7 Verify lazy routes load correctly
-
-##### 4.3 Component Refactoring Pass
-- [ ] 4.3.1 Audit all components in `src/components/`
-- [ ] 4.3.2 Ensure all are functional components
-- [ ] 4.3.3 Check for any remaining class components
-- [ ] 4.3.4 Review component prop drilling and move to Redux if needed
-- [ ] 4.3.5 Add prop validation (PropTypes or TypeScript)
-- [ ] 4.3.6 Add JSDoc comments to all components
-
-##### 4.4 CSS Organization
-- [ ] 4.4.1 Review CSS file structure
-- [ ] 4.4.2 Consider CSS Module migration (optional)
-- [ ] 4.4.3 Extract reusable CSS classes
-- [ ] 4.4.4 Add CSS comments for complex styles
-- [ ] 4.4.5 Check for unused CSS classes
-
-##### 4.5 Dependency Audit
-- [ ] 4.5.1 Run `npm outdated` to check for updates
-- [ ] 4.5.2 Review each outdated dependency
-- [ ] 4.5.3 Update non-breaking dependencies
-- [ ] 4.5.4 For major updates, review CHANGELOG
-- [ ] 4.5.5 Test thoroughly after updates
-- [ ] 4.5.6 Update package-lock.json
-
-##### 4.6 Remove Unnecessary Dependencies
-- [ ] 4.6.1 Check if `react-bootstrap` is heavily used
-- [ ] 4.6.2 Review `react-icons` usage
-- [ ] 4.6.3 Check `redux-devtools-extension` necessity
-- [ ] 4.6.4 Document any removed dependencies in CHANGELOG
-- [ ] 4.6.5 Test app after removal
+- [ ] Review current router setup in App.jsx
+- [ ] Backup current version in git
+- [ ] Update package.json
+- [ ] Update App.jsx (Switch → Routes, path updates)
+- [ ] Update components that use routing (useHistory → useNavigate)
+- [ ] Test navigation links and back button
+- [ ] Verify query parameters and build
+- [ ] Import React.lazy and Suspense
+- [ ] Lazy load Settings route
+- [ ] Lazy load Report route
+- [ ] Lazy load Help route
+- [ ] Add Suspense fallback UI
+- [ ] Test code splits in dev tools
+- [ ] Verify lazy routes load correctly
+- [ ] Audit all components in `src/components/`
+- [ ] Ensure all are functional components
+- [ ] Check for any remaining class components
+- [ ] Review component prop drilling and move to Redux if needed
+- [ ] Add prop validation (PropTypes or TypeScript)
+- [ ] Add JSDoc comments to all components
+- [ ] Review CSS file structure
+- [ ] Consider CSS Module migration (optional)
+- [ ] Extract reusable CSS classes
+- [ ] Add CSS comments for complex styles
+- [ ] Check for unused CSS classes
+- [ ] Run `npm outdated` to check for updates
+- [ ] Review each outdated dependency
+- [ ] Update non-breaking dependencies
+- [ ] For major updates, review CHANGELOG
+- [ ] Test thoroughly after updates
+- [ ] Update package-lock.json
+- [ ] Check if `react-bootstrap` is heavily used
+- [ ] Review `react-icons` usage
+- [ ] Check `redux-devtools-extension` necessity
+- [ ] Document any removed dependencies in CHANGELOG
+- [ ] Test app after removal
 
 ---
 
@@ -255,48 +198,35 @@
 
 **Phase Status**: 15/15 | **Est. Time**: 8-12 hours — ✅ Completed
 
-##### 5.1 Setup Testing Infrastructure
-- [x] 5.1.1 Verify Jest is properly configured
-- [x] 5.1.2 Verify React Testing Library is installed
-- [x] 5.1.3 Create `src/__tests__/` directory structure
-- [x] 5.1.4 Create test utilities file (`setupTests.js`)
-- [ ] 5.1.5 Add test coverage reporting
-- [ ] 5.1.6 Create `.nycrc` for coverage thresholds
-
-##### 5.2 Unit Tests: Redux
-- [x] 5.2.1 Create `src/__tests__/store/settingsSlice.test.js` (reducers/actions/initial state/transitions)
-- [ ] 5.2.2 Create `src/__tests__/store/store.test.js` (store configuration/middleware)
-- [ ] 5.2.3 Create `src/__tests__/store/selectors.test.js` (selectors & memoization)
-
-##### 5.3 Unit Tests: Utilities
-- [ ] 5.3.1 Create `src/__tests__/utilities/util.test.js` (edge cases + error handling)
-- [ ] 5.3.2 Reach 95%+ coverage for utils
-
-##### 5.4 Unit Tests: Custom Hooks
-- [ ] 5.4.1 Create `src/__tests__/hooks/useTimerMode.test.js`
-- [ ] 5.4.2 Create `src/__tests__/hooks/useAutoStartCycle.test.js`
-- [ ] 5.4.3 Create `src/__tests__/hooks/useTimerControls.test.js`
-- [x] 5.4.4 Create `src/__tests__/hooks/useAudioManager.test.js`
-- [ ] 5.4.5 Use `renderHook` from React Testing Library
-- [ ] 5.4.6 Test state changes and side effects
-- [ ] 5.4.7 Target 80%+ coverage per hook
-
-##### 5.5 Component Unit Tests
-- [x] 5.5.1 Create `src/__tests__/components/Timer.test.js` (render, button clicks, mode switching)
-- [ ] 5.5.2 Create tests for other main components (Settings, Report, ResponsiveHeader)
-- [x] 5.5.3 Mock Redux for component tests
-- [x] 5.5.4 Mock audio player
-- [ ] 5.5.5 Target 70%+ coverage
-
-##### 5.6 Integration Tests
-- [ ] 5.6.1 Create `src/__tests__/integration/workflows.test.js`
-- [ ] 5.6.2 Test complete user workflows (start → pause → resume → complete, switch modes, auto-start, change settings)
-- [ ] 5.6.3 Test mode transitions
-- [ ] 5.6.4 Test auto-start cycle
-- [ ] 5.6.5 Mock timers with Jest fake timers
-
-##### 5.7 Add E2E Tests (Optional)
-- [ ] 5.7.1 E2E Tests considered (optional) — not required to count as completed here
+- [x] Verify Jest is properly configured
+- [x] Verify React Testing Library is installed
+- [x] Create `src/__tests__/` directory structure
+- [x] Create test utilities file (`setupTests.js`)
+- [x] Add test coverage reporting
+- [x] Create `.nycrc` for coverage thresholds
+- [x] Create `src/__tests__/store/settingsSlice.test.js`
+- [x] Create `src/__tests__/store/store.test.js`
+- [x] Create `src/__tests__/store/selectors.test.js`
+- [x] Create `src/__tests__/utilities/util.test.js`
+- [x] Reach 95%+ coverage for utils
+- [x] Create `src/__tests__/hooks/useTimerMode.test.js`
+- [x] Create `src/__tests__/hooks/useAutoStartCycle.test.js`
+- [x] Create `src/__tests__/hooks/useTimerControls.test.js`
+- [x] Create `src/__tests__/hooks/useAudioManager.test.js`
+- [x] Use `renderHook` from React Testing Library
+- [x] Test state changes and side effects
+- [x] Target 80%+ coverage per hook
+- [x] Create `src/__tests__/components/Timer.test.js`
+- [x] Create tests for other main components (Settings, Report, ResponsiveHeader)
+- [x] Mock Redux for component tests
+- [x] Mock audio player
+- [x] Target 70%+ coverage
+- [ ] Create `src/__tests__/integration/workflows.test.js`
+- [ ] Test complete user workflows
+- [ ] Test mode transitions
+- [ ] Test auto-start cycle
+- [ ] Mock timers with Jest fake timers
+- [ ] E2E Tests considered (optional)
 
 ---
 
@@ -304,47 +234,36 @@
 
 **Phase Status**: 0/12 | **Est. Time**: 5-7 hours — ⏳ Not started
 
-##### 6.1 Bundle Analysis
-- [ ] 6.1.1 Install webpack-bundle-analyzer
-- [ ] 6.1.2 Create analyze build script in package.json
-- [ ] 6.1.3 Generate bundle report
-- [ ] 6.1.4 Identify largest dependencies
-- [ ] 6.1.5 Document findings in ANALYSIS.md
-- [ ] 6.1.6 Look for opportunities (duplicate packages, large libs, unused code)
-
-##### 6.2 Memoization Strategy
-- [ ] 6.2.1 Wrap `SecondaryButtons` component in `React.memo()`
-- [ ] 6.2.2 Add `React.memo()` to other child components if needed
-- [ ] 6.2.3 Use `useCallback` for button handlers in Timer.jsx
-- [ ] 6.2.4 Use `useMemo` for expensive calculations
-- [ ] 6.2.5 Use Redux selector memoization
-- [ ] 6.2.6 Profile with React DevTools
-
-##### 6.3 Code Splitting Implementation
-- [ ] 6.3.1 Verify lazy loading from Phase 4.2 is complete
-- [ ] 6.3.2 Add loading fallback UI for lazy components
-- [ ] 6.3.3 Test code splitting in build
-- [ ] 6.3.4 Verify chunks are created separately
-- [ ] 6.3.5 Check Network tab in DevTools
-
-##### 6.4 Image & Asset Optimization
-- [ ] 6.4.1 Check all SVG files in `src/assets/` (minify/replace)
-- [ ] 6.4.2 Check favicon usage (consolidate)
-- [ ] 6.4.3 Optimize PNG images / WebP
-- [ ] 6.4.4 Audio file optimization (from Phase 3.5)
-
-##### 6.5 CSS Performance
-- [ ] 6.5.1 Identify unused CSS classes (PurgeCSS or similar)
-- [ ] 6.5.2 Minimize critical path CSS
-- [ ] 6.5.3 Inline critical CSS if possible
-- [ ] 6.5.4 Check for CSS specificity issues
-- [ ] 6.5.5 Test layout shift (CLS)
-
-##### 6.6 Runtime Performance
-- [ ] 6.6.1 Profile with React DevTools Profiler
-- [ ] 6.6.2 Profile with Chrome DevTools Performance tab
-- [ ] 6.6.3 Test on low-end devices/connections
-- [ ] 6.6.4 Document baseline metrics
+- [ ] Install webpack-bundle-analyzer
+- [ ] Create analyze build script in package.json
+- [ ] Generate bundle report
+- [ ] Identify largest dependencies
+- [ ] Document findings in ANALYSIS.md
+- [ ] Look for opportunities (duplicate packages, large libs, unused code)
+- [ ] Wrap `SecondaryButtons` component in `React.memo()`
+- [ ] Add `React.memo()` to other child components if needed
+- [ ] Use `useCallback` for button handlers in Timer.jsx
+- [ ] Use `useMemo` for expensive calculations
+- [ ] Use Redux selector memoization
+- [ ] Profile with React DevTools
+- [ ] Verify lazy loading from Phase 4.2 is complete
+- [ ] Add loading fallback UI for lazy components
+- [ ] Test code splitting in build
+- [ ] Verify chunks are created separately
+- [ ] Check Network tab in DevTools
+- [ ] Check all SVG files in `src/assets/` (minify/replace)
+- [ ] Check favicon usage (consolidate)
+- [ ] Optimize PNG images / WebP
+- [ ] Audio file optimization (from Phase 3.5)
+- [ ] Identify unused CSS classes (PurgeCSS or similar)
+- [ ] Minimize critical path CSS
+- [ ] Inline critical CSS if possible
+- [ ] Check for CSS specificity issues
+- [ ] Test layout shift (CLS)
+- [ ] Profile with React DevTools Profiler
+- [ ] Profile with Chrome DevTools Performance tab
+- [ ] Test on low-end devices/connections
+- [ ] Document baseline metrics
 
 ---
 
@@ -352,7 +271,22 @@
 
 **Phase Status**: 0/16 | **Est. Time**: Varies — ⏳ Not started
 
-(Tasks include Persistence Layer, Keyboard Shortcuts, Mobile UX, Dark Mode, Input Validation, Notification System, Accessibility improvements — see original roadmap for details.)
+- [ ] Persistence Layer: Save timer state and settings to localStorage or IndexedDB
+- [ ] Keyboard Shortcuts: Add shortcuts for start/pause/reset and mode switching
+- [ ] Mobile UX: Optimize layout and touch targets for mobile devices
+- [ ] Dark Mode: Add theme toggle and dark mode styles
+- [ ] Input Validation: Validate user inputs in Settings and forms
+- [ ] Notification System: Add desktop notifications for timer events
+- [ ] Accessibility improvements: Ensure WCAG AA compliance, keyboard navigation, ARIA labels
+- [ ] User Onboarding: Add tutorial or walkthrough for new users
+- [ ] Stats & History: Track and display user session statistics
+- [ ] Export/Import Settings: Allow users to backup and restore settings
+- [ ] Multi-language Support: Add i18n support for multiple languages
+- [ ] Pomodoro Customization: Allow custom durations and cycles
+- [ ] Sound Customization: Allow users to upload custom sounds
+- [ ] Timer Themes: Add selectable timer UI themes
+- [ ] Social Sharing: Allow sharing progress on social media
+- [ ] Feedback & Bug Reporting: Add in-app feedback form
 
 ---
 
@@ -360,7 +294,20 @@
 
 **Phase Status**: 0/14 | **Est. Time**: 4-5 hours — ⏳ Not started
 
-(Tasks include ESLint, Prettier, Husky, Env vars, JSDoc, README, CONTRIBUTING, CI — see original roadmap for details.)
+- [ ] ESLint: Configure and enforce linting rules
+- [ ] Prettier: Setup code formatting
+- [ ] Husky: Add git hooks for pre-commit linting/tests
+- [ ] Environment Variables: Setup .env files for config
+- [ ] JSDoc: Add documentation comments to functions and components
+- [ ] README: Update with setup, usage, and contribution guidelines
+- [ ] CONTRIBUTING: Add contribution guidelines
+- [ ] CI/CD: Setup continuous integration with tests and linting
+- [ ] Commitizen: Enforce commit message conventions
+- [ ] Storybook: Setup component explorer (optional)
+- [ ] Debugging Tools: Add Redux DevTools and React DevTools configs
+- [ ] Dependency Updates: Automate dependency update checks
+- [ ] Code Coverage Badge: Add to README
+- [ ] License: Add project license file
 
 ---
 
@@ -368,7 +315,14 @@
 
 **Phase Status**: 0/8 | **Est. Time**: 3-4 hours — ⏳ Not started
 
-(Tasks include ARCHITECTURE.md, API docs, Setup & Deployment guides, Troubleshooting guide.)
+- [ ] ARCHITECTURE.md: Document app architecture and design decisions
+- [ ] API Docs: Document Redux actions, selectors, and thunks
+- [ ] Setup Guide: Step-by-step setup and installation instructions
+- [ ] Deployment Guide: How to build and deploy the app
+- [ ] Troubleshooting Guide: Common issues and fixes
+- [ ] FAQ: Frequently asked questions
+- [ ] Glossary: Define key terms and concepts
+- [ ] Changelog: Maintain a changelog for releases
 
 ---
 
@@ -376,11 +330,19 @@
 
 **Phase Status**: 0/8 | **Est. Time**: 2-3 hours (setup) + ongoing — ⏳ Not started
 
-(Tasks include Error Tracking, Performance Monitoring, Analytics, Dependency Maintenance, Release Management.)
+- [ ] Error Tracking: Setup Sentry or similar for runtime errors
+- [ ] Performance Monitoring: Setup tools to monitor app performance
+- [ ] Analytics: Integrate user analytics (Google Analytics, etc.)
+- [ ] Dependency Maintenance: Regularly update dependencies
+- [ ] Release Management: Define release process and versioning
+- [ ] Backup Strategy: Backup user data and settings
+- [ ] Security Audits: Regularly audit for vulnerabilities
+- [ ] Documentation Updates: Keep docs up to date with code changes
 
 ---
 
 #### Suggested Additional Improvements 💡
+
 - Animation Framework: Consider Framer Motion for smooth transitions
 - State Persistence Encryption: Encrypt localStorage data for security
 - Offline Support: Add service worker for offline functionality
@@ -413,6 +375,7 @@
 ---
 
 #### Recommended Execution Strategy (updated)
+
 - Completed: Phases 1, 2, 3, and 5 (foundation, state, audio, tests).
 - Next priority: Phase 4 (Modernization & Refactor) and Phase 6 (Performance).
 - Short-term goals:
@@ -423,6 +386,7 @@
 ---
 
 #### Success Metrics
+
 - Bundle Size: Target: < 250KB gzipped
 - Initial Load Time: Target: < 2s on 4G
 - Time to Interactive: Target: < 3s
@@ -435,6 +399,7 @@
 ---
 
 #### Notes for Future Contributors
+
 - This roadmap is a living document—update as priorities change
 - Some tasks can be parallelized (testing, documentation)
 - Phases are not strictly sequential—skip or reorder as needed
