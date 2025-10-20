@@ -75,7 +75,7 @@ export const settingsSlice = createSlice({
   initialState,
   reducers: {
     /**
-     * Reset settings to defaults
+     * Reset settings to defaults (restores durations too)
      */
     setDefault: () => {
       return { ...initialState };
@@ -141,8 +141,16 @@ export const settingsSlice = createSlice({
       state.current.autostart = Boolean(action.payload);
     },
 
+    /**
+     * Set cycle paused. Requires an explicit boolean payload.
+     */
     setCyclePaused: (state, action) => {
-      state.current.cyclepaused = Boolean(action.payload);
+      if (typeof action.payload === "boolean") {
+        state.current.cyclepaused = action.payload;
+      } else {
+        // Do nothing if payload is not explicit boolean (clean behavior)
+        // Optionally: console.warn("setCyclePaused requires boolean payload");
+      }
     },
 
     /**
@@ -171,7 +179,6 @@ export const settingsSlice = createSlice({
           state.current.currenttime = Number(state.timers.long);
           break;
         default:
-          // keep existing value if mode is invalid
           break;
       }
     },
@@ -182,7 +189,6 @@ export const settingsSlice = createSlice({
     setCounter: (state, action) => {
       const v = Number(action.payload);
       if (Number.isFinite(v)) {
-        // clamp to valid indices [0, cycle.length - 1]
         const maxIdx = Math.max(
           0,
           (state.cycle.sequence || DEFAULT_CYCLE).length - 1
@@ -205,22 +211,29 @@ export const settingsSlice = createSlice({
     counterDecrement: (state) => {
       const cycleLen = (state.cycle.sequence || DEFAULT_CYCLE).length || 1;
       const newVal = Number(state.cycle.counter) - 1;
-      state.cycle.counter = ((newVal % cycleLen) + cycleLen) % cycleLen; // ensures positive wrap
+      state.cycle.counter = ((newVal % cycleLen) + cycleLen) % cycleLen;
     },
 
     /**
-     * Set cycle complete (boolean)
+     * Set cycle complete. Requires explicit boolean payload.
      */
     setCycleComplete: (state, action) => {
-      state.current.cyclecomplete = Boolean(action?.payload ?? true);
+      if (typeof action.payload === "boolean") {
+        state.current.cyclecomplete = action.payload;
+      }
     },
 
     /**
-     * Mark cycle as started
+     * Set cycle started. Requires explicit boolean payload.
+     * Note: when setting true we also clear cyclecomplete; when setting false we do not change cyclecomplete.
      */
-    setCycleStart: (state) => {
-      state.current.cyclecomplete = false;
-      state.current.cyclestarted = true;
+    setCycleStart: (state, action) => {
+      if (typeof action.payload === "boolean") {
+        state.current.cyclestarted = action.payload;
+        if (action.payload === true) {
+          state.current.cyclecomplete = false;
+        }
+      }
     },
 
     /**
@@ -228,11 +241,9 @@ export const settingsSlice = createSlice({
      */
     setCycle: (state, action) => {
       if (Array.isArray(action.payload) && action.payload.length > 0) {
-        // Only update if different
         if (!shallowEqual(state.cycle.sequence, action.payload)) {
           state.cycle.sequence = [...action.payload];
         }
-        // ensure counter within new bounds
         state.cycle.counter = clamp(
           state.cycle.counter,
           0,
@@ -279,7 +290,6 @@ export const settingsSlice = createSlice({
 
     /* -------------------- Development Tools -------------------- */
 
-    // Only available in development
     ...(process.env.NODE_ENV === "development" && {
       debugState: (state) => {
         console.log(
@@ -292,7 +302,7 @@ export const settingsSlice = createSlice({
   },
 });
 
-// Export actual action creators implemented above
+// Export action creators
 export const {
   setDefault,
   updateSettings,
@@ -320,7 +330,6 @@ export const {
   setTotalSeconds,
 } = settingsSlice.actions;
 
-// Backwards-compat alias for older imports (optional)
 export { setCurrentTimeFromMode as setCurrentTime };
 
 export default settingsSlice.reducer;

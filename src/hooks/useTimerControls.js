@@ -1,5 +1,3 @@
-// src/hooks/useTimerControls.js
-
 import { useSelector, useDispatch } from "react-redux";
 import { setCyclePaused } from "../store/settingsSlice";
 import { selectCyclePaused } from "../store/selectors/settingsSelectors";
@@ -8,7 +6,6 @@ import { selectCyclePaused } from "../store/selectors/settingsSelectors";
  * Custom hook for managing timer control state and actions.
  *
  * @returns {Object} Timer control state and helper functions
- * @returns {boolean} return.isRunning - Whether timer is currently running
  * @returns {boolean} return.isPaused - Whether timer is currently paused
  * @returns {Function} return.handleStart - Function to start timer
  * @returns {Function} return.handlePause - Function to pause timer

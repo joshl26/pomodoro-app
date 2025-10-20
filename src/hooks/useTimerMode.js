@@ -1,5 +1,3 @@
-// src/hooks/useTimerMode.js
-
 import { useSelector, useDispatch } from "react-redux";
 import { setTimerModeAndReset } from "../store/settingsThunks";
 import { selectTimerMode } from "../store/selectors/settingsSelectors";

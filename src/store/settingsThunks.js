@@ -11,6 +11,8 @@ import {
   setCounter,
 } from "./settingsSlice";
 
+import { resetTimerForModeThunk } from "./timerThunks";
+
 /**
  * Set timer mode and reset timer seconds accordingly.
  * Optionally auto-start the timer.
@@ -44,15 +46,22 @@ export const setTimerModeAndReset =
 
     const totalSeconds = Math.max(0, Math.floor(currentTime * 60));
 
-    // update derived values
-    dispatch(setCurrentTimeFromMode()); // keeps reducer logic centralized
+    // update derived values in settings slice (keeps reducer logic centralized)
+    dispatch(setCurrentTimeFromMode());
     dispatch(setTotalSeconds(totalSeconds));
     dispatch(setSecondsLeft(totalSeconds));
 
+    // update timer slice so runtime timer is in sync
+    dispatch(resetTimerForModeThunk(totalSeconds));
+
+    // explicitly set paused state to false
     dispatch(setCyclePaused(false));
-    if (autoStart) {
-      dispatch(setCycleStart());
-    } else {
+
+    // explicitly set cyclestarted according to autoStart (requires boolean payload in settings slice)
+    dispatch(setCycleStart(Boolean(autoStart)));
+
+    // if not auto-starting, ensure cyclecomplete is cleared
+    if (!autoStart) {
       dispatch(setCycleComplete(false));
     }
   };
@@ -106,9 +115,8 @@ export const resetCycleAndTimer =
     dispatch(setTimerModeAndReset(1, false));
     dispatch(setCycleComplete(false));
     dispatch(setCyclePaused(false));
-    // Additional reset logic can be added here if needed
 
     if (!keepAudio) {
-      // If you want to stop audio here, you can dispatch an action or handle it in component
+      // If you manage audio in a different slice, you can dispatch an action here
     }
   };

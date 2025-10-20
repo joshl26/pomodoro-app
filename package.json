@@ -93,5 +93,9 @@
       "<rootDir>/jest.setup.js"
     ],
     "testEnvironment": "jsdom"
+  },
+  "overrides": {
+    "whatwg-url": "^15.1.0",
+    "tr46": "^5.1.1"
   }
 }

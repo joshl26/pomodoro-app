@@ -1,37 +1,46 @@
 import { configureStore } from "@reduxjs/toolkit";
-import settingsReducer, { initialState } from "./settingsSlice";
+import settingsReducer, {
+  initialState as settingsInitial,
+} from "./settingsSlice";
+import timerReducer from "./timerSlice";
 
-// Migration function
-const migrateState = (state) => {
-  // Handle version migrations here if needed
-  if (!state || !state.version) {
-    return { ...initialState };
+// Migration helper for settings only
+const migrateSettings = (settings) => {
+  // Add migration code here if your settings shape changed across versions.
+  // For now, if nothing or missing version, return defaults.
+  if (!settings || !settings.version) {
+    return { ...settingsInitial };
   }
-  return state;
+  return settings;
 };
 
-// Load state from localStorage with migration
+// Load only the settings slice from localStorage and migrate it.
+// We intentionally do NOT persist or preload the runtime `timer` slice.
 const loadState = () => {
   try {
-    const serializedState = localStorage.getItem("pomobreakState");
-    if (serializedState === null) {
-      return undefined;
-    }
-    const state = JSON.parse(serializedState);
-    return migrateState(state);
+    const serialized = localStorage.getItem("pomobreakState");
+    if (!serialized) return undefined;
+
+    const parsed = JSON.parse(serialized);
+
+    // If the saved object contains the full store shape, extract settings,
+    // otherwise assume the saved object is the settings slice itself.
+    const savedSettings = parsed?.settings ?? parsed;
+    return { settings: migrateSettings(savedSettings) };
   } catch (err) {
-    console.warn("Failed to load state from localStorage:", err);
+    console.warn("Failed to load settings from localStorage:", err);
     return undefined;
   }
 };
 
-// Save state to localStorage
-const saveState = (state) => {
+// Save only the settings slice to localStorage.
+const saveState = (fullState) => {
   try {
-    const serializedState = JSON.stringify(state);
-    localStorage.setItem("pomobreakState", serializedState);
+    const toSave = fullState?.settings ?? fullState;
+    const serialized = JSON.stringify(toSave);
+    localStorage.setItem("pomobreakState", serialized);
   } catch (err) {
-    console.warn("Failed to save state to localStorage:", err);
+    console.warn("Failed to save settings to localStorage:", err);
   }
 };
 
@@ -40,19 +49,22 @@ const preloadedState = loadState();
 export const store = configureStore({
   reducer: {
     settings: settingsReducer,
+    timer: timerReducer, // Register the runtime timer reducer
   },
   preloadedState,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
+        // keep your existing ignored actions
         ignoredActions: ["persist/PERSIST"],
       },
     }),
 });
 
-// Save state on store changes
+// Persist settings on state changes (only settings slice gets saved)
 store.subscribe(() => {
-  saveState(store.getState());
+  // Save only the settings slice to localStorage so runtime timer isn't persisted
+  saveState({ settings: store.getState().settings });
 });
 
 export default store;

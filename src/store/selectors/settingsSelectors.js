@@ -16,49 +16,87 @@ import { createSelector } from "reselect";
  */
 export const selectSettings = (state) => state.settings || {};
 
-/* Raw/primitive selectors (direct slice properties) */
+/* -------------------------------------------------------------------------- */
+/* Timer Selectors                                                             */
+/* -------------------------------------------------------------------------- */
 
-export const selectPomodoro = (state) => selectSettings(state).pomodoro ?? 25;
+export const selectTimers = (state) => selectSettings(state).timers || {};
 
-export const selectShort = (state) => selectSettings(state).short ?? 5;
+export const selectPomodoro = (state) => selectTimers(state).pomodoro ?? 25;
 
-export const selectLong = (state) => selectSettings(state).long ?? 15;
+export const selectShort = (state) => selectTimers(state).short ?? 5;
+
+export const selectLong = (state) => selectTimers(state).long ?? 15;
+
+/* -------------------------------------------------------------------------- */
+/* Current State Selectors                                                     */
+/* -------------------------------------------------------------------------- */
+
+export const selectCurrent = (state) => selectSettings(state).current || {};
 
 export const selectTimerModeRaw = (state) =>
-  selectSettings(state).timermode ?? 1;
+  selectCurrent(state).timermode ?? 1;
 
 export const selectIsAutoStartRaw = (state) =>
-  Boolean(selectSettings(state).autostart ?? false);
+  Boolean(selectCurrent(state).autostart ?? false);
 
 export const selectSecondsLeftRaw = (state) =>
-  selectSettings(state).secondsleft ?? null;
+  selectCurrent(state).secondsleft ?? null;
 
 export const selectCurrentTimeRaw = (state) =>
-  selectSettings(state).currenttime ?? null;
+  selectCurrent(state).currenttime ?? null;
 
-/* Alarm / audio settings - mapped to actual state structure */
-export const selectButtonSoundRaw = (state) =>
-  Boolean(selectSettings(state).buttonsound ?? false);
+export const selectTotalSecondsRaw = (state) =>
+  selectCurrent(state).totalseconds ?? 1500;
 
-export const selectAlarmVolumeRaw = (state) =>
-  selectSettings(state).alarmvolume ?? 0.5;
+/* -------------------------------------------------------------------------- */
+/* Cycle Selectors                                                            */
+/* -------------------------------------------------------------------------- */
 
-export const selectAlarmSoundRaw = (state) =>
-  selectSettings(state).alarmsound ?? "No Sound";
+export const selectCycle = (state) => selectSettings(state).cycle || {};
 
-export const selectAlarmEnabledRaw = (state) =>
-  Boolean(selectSettings(state).alarmenabled ?? false);
+export const selectCycleSequence = (state) =>
+  selectCycle(state).sequence || [1, 2, 1, 2, 1, 2, 1, 2, 3];
 
-/* Cycle flags */
+export const selectCycleCounter = (state) => selectCycle(state).counter ?? 0;
+
 export const selectCyclePausedRaw = (state) =>
-  Boolean(selectSettings(state).cyclepaused ?? false);
+  Boolean(selectCurrent(state).cyclepaused ?? false);
 
 export const selectCycleCompleteRaw = (state) =>
-  Boolean(selectSettings(state).cyclecomplete ?? false);
+  Boolean(selectCurrent(state).cyclecomplete ?? false);
+
+export const selectCycleStartedRaw = (state) =>
+  Boolean(selectCurrent(state).cyclestarted ?? false);
 
 /* -------------------------------------------------------------------------- */
-/* Derived / memoized selectors (reselect)                                    */
+/* Alarm Selectors                                                            */
 /* -------------------------------------------------------------------------- */
+
+export const selectAlarm = (state) => selectSettings(state).alarm || {};
+
+export const selectButtonSoundRaw = (state) =>
+  Boolean(selectAlarm(state).buttonSound ?? false);
+
+export const selectAlarmVolumeRaw = (state) => selectAlarm(state).volume ?? 0.5;
+
+export const selectAlarmSoundRaw = (state) =>
+  selectAlarm(state).sound ?? "No Sound";
+
+export const selectAlarmEnabledRaw = (state) =>
+  Boolean(selectAlarm(state).enabled ?? false);
+
+/* -------------------------------------------------------------------------- */
+/* Derived / Memoized Selectors (reselect)                                   */
+/* -------------------------------------------------------------------------- */
+
+// Stable default objects
+const DEFAULT_ALARM_SETTINGS = {
+  volume: 0.5,
+  buttonSound: false,
+  enabled: false,
+  sound: "No Sound",
+};
 
 /**
  * selectTimerMode
@@ -81,17 +119,32 @@ export const selectIsAutoStart = createSelector(
 
 /**
  * selectAlarmSettings
- * Returns normalized alarm settings with sensible defaults:
- *  - volume: 0.5 (from your state)
- *  - buttonSound: false (from your state)
+ * Returns normalized alarm settings with sensible defaults
  */
 export const selectAlarmSettings = createSelector(
-  [selectAlarmVolumeRaw, selectButtonSoundRaw],
-  (volume, buttonSound) => {
-    // Return a stable object with the actual values from state
+  [
+    selectAlarmVolumeRaw,
+    selectButtonSoundRaw,
+    selectAlarmEnabledRaw,
+    selectAlarmSoundRaw,
+  ],
+  (volume, buttonSound, enabled, sound) => {
+    // Return default object if all values are at defaults
+    if (
+      volume === 0.5 &&
+      buttonSound === false &&
+      enabled === false &&
+      sound === "No Sound"
+    ) {
+      return DEFAULT_ALARM_SETTINGS;
+    }
+
+    // Otherwise create new object
     return {
       volume: typeof volume === "number" ? volume : 0.5,
       buttonSound: Boolean(buttonSound),
+      enabled: Boolean(enabled),
+      sound: typeof sound === "string" ? sound : "No Sound",
     };
   }
 );
@@ -148,9 +201,10 @@ export const selectSecondsLeft = createSelector(
  *  { percent, totalSeconds, elapsedSeconds, secondsLeft }
  */
 export const selectProgress = createSelector(
-  [selectCurrentTime, selectSecondsLeft],
-  (currentTimeMinutes, secondsLeft) => {
-    const totalSeconds = Math.max(1, Number(currentTimeMinutes) * 60);
+  [selectCurrentTime, selectSecondsLeft, selectTotalSecondsRaw],
+  (currentTimeMinutes, secondsLeft, totalSecondsRaw) => {
+    const totalSeconds =
+      totalSecondsRaw || Math.max(1, Number(currentTimeMinutes) * 60);
     const left =
       secondsLeft === null || secondsLeft === undefined
         ? totalSeconds
@@ -166,6 +220,35 @@ export const selectProgress = createSelector(
   }
 );
 
+/**
+ * selectCycleLength
+ * Returns the length of the cycle sequence
+ */
+export const selectCycleLength = createSelector(
+  [selectCycleSequence],
+  (sequence) => sequence.length
+);
+
+/**
+ * selectCurrentModeValue
+ * Returns the current timer value based on mode
+ */
+export const selectCurrentModeValue = createSelector(
+  [selectTimerMode, selectPomodoro, selectShort, selectLong],
+  (mode, pomodoro, short, long) => {
+    switch (mode) {
+      case 1:
+        return pomodoro;
+      case 2:
+        return short;
+      case 3:
+        return long;
+      default:
+        return pomodoro;
+    }
+  }
+);
+
 /* Cycle flags (memoized wrappers) */
 export const selectCyclePaused = createSelector(
   [selectCyclePausedRaw],
@@ -174,6 +257,11 @@ export const selectCyclePaused = createSelector(
 
 export const selectCycleComplete = createSelector(
   [selectCycleCompleteRaw],
+  Boolean
+);
+
+export const selectCycleStarted = createSelector(
+  [selectCycleStartedRaw],
   Boolean
 );
 
@@ -186,30 +274,62 @@ export const selectButtonSound = createSelector([selectAlarmSettings], (a) =>
   typeof a.buttonSound === "boolean" ? a.buttonSound : false
 );
 
+export const selectAlarmEnabled = createSelector([selectAlarmSettings], (a) =>
+  typeof a.enabled === "boolean" ? a.enabled : false
+);
+
+export const selectAlarmSound = createSelector([selectAlarmSettings], (a) =>
+  typeof a.sound === "string" ? a.sound : "No Sound"
+);
+
 /* -------------------------------------------------------------------------- */
 /* Export convenience default map (optional)                                  */
 /* -------------------------------------------------------------------------- */
 
-/**
- * Grouped selectors for easy import:
- * import selectors from '../store/selectors'
- * selectors.selectCurrentTime(state)
- */
 const selectors = {
+  // Base
   selectSettings,
+
+  // Timers
+  selectTimers,
   selectPomodoro,
   selectShort,
   selectLong,
+
+  // Current state
+  selectCurrent,
   selectTimerMode,
   selectIsAutoStart,
+  selectCurrentTime,
+  selectSecondsLeft,
+  selectTotalSecondsRaw,
+
+  // Cycle
+  selectCycle,
+  selectCycleSequence,
+  selectCycleCounter,
+  selectCycleLength,
+  selectCyclePaused,
+  selectCycleComplete,
+  selectCycleStarted,
+  selectCurrentModeValue,
+
+  // Alarm
+  selectAlarm,
   selectAlarmSettings,
   selectAlarmVolume,
   selectButtonSound,
-  selectCurrentTime,
-  selectSecondsLeft,
+  selectAlarmEnabled,
+  selectAlarmSound,
+
+  // Progress
   selectProgress,
-  selectCyclePaused,
-  selectCycleComplete,
+
+  // Utilities
+  selectTimerModeRaw,
+  selectIsAutoStartRaw,
+  selectSecondsLeftRaw,
+  selectCurrentTimeRaw,
 };
 
 export default selectors;

@@ -1,9 +1,28 @@
+// src/components/Timer.test.jsx
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { screen, waitFor, act } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import Timer from "./Timer";
-import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import settingsReducer, { setDefault } from "../store/settingsSlice";
+import { renderWithProviders } from "../test-utils";
+
+// --- Safe top-level mocks (names prefixed with "mock") ---
+const mockSwitchMode = jest.fn();
+jest.mock("../hooks/useTimerMode", () => ({
+  useTimerMode: () => ({
+    currentMode: 1,
+    switchMode: mockSwitchMode,
+    getModeName: () => "Pomodoro",
+  }),
+}));
+
+const mockAdvance = jest.fn();
+const mockRetreat = jest.fn();
+jest.mock("../hooks/useAutoStartCycle", () => ({
+  useAutoStartCycle: () => ({
+    advance: mockAdvance,
+    retreat: mockRetreat,
+  }),
+}));
 
 jest.mock("react-use-audio-player", () => ({
   useGlobalAudioPlayer: () => ({
@@ -14,87 +33,174 @@ jest.mock("react-use-audio-player", () => ({
   }),
 }));
 
-// Helper to create a fresh store for each test
-function createTestStore() {
-  const store = configureStore({
-    reducer: { settings: settingsReducer },
+describe("Timer component (integration with reducers)", () => {
+  // filter out the React-Redux selector memoization warning that appears in tests
+  const originalWarn = console.warn;
+  beforeAll(() => {
+    console.warn = (...args) => {
+      try {
+        const msg = typeof args[0] === "string" ? args[0] : "";
+        if (
+          msg.includes(
+            "Selector selectAlarmSettings returned a different result"
+          )
+        ) {
+          return;
+        }
+      } catch {
+        // ignore parsing errors and fall through
+      }
+      originalWarn(...args);
+    };
   });
-  store.dispatch(setDefault()); // reset to initial state
-  return store;
-}
 
-describe("Timer component", () => {
-  let store;
+  afterAll(() => {
+    console.warn = originalWarn;
+  });
 
-  beforeEach(() => {
-    store = createTestStore();
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.clearAllTimers();
   });
 
   test("renders start button initially", () => {
-    render(
-      <Provider store={store}>
-        <Timer />
-      </Provider>
-    );
-    const startButton = screen.getByTestId("start-btn");
-    expect(startButton).toBeInTheDocument();
+    renderWithProviders(<Timer />);
+    expect(screen.getByTestId("start-btn")).toBeInTheDocument();
   });
 
-  test("starts and pauses timer correctly", async () => {
-    render(
-      <Provider store={store}>
-        <Timer />
-      </Provider>
-    );
+  test("clicking start dispatches an action (start thunk)", async () => {
+    const { store } = renderWithProviders(<Timer />);
+    const user = userEvent.setup();
 
-    const startButton = screen.getByTestId("start-btn");
-    fireEvent.click(startButton);
+    await user.click(screen.getByTestId("start-btn"));
 
-    const pauseButton = await screen.findByTestId("pause-btn");
-    expect(pauseButton).toBeInTheDocument();
-
-    fireEvent.click(pauseButton);
-
-    const startOrResumeButton =
-      await screen.findByTestId(/start-btn|resume-btn/);
-    expect(startOrResumeButton).toBeInTheDocument();
+    // Wait for the thunk to update the runtime state (running true)
+    await waitFor(() => {
+      expect(store.getState().timer.running).toBe(true);
+    });
   });
 
-  test("forward and backward buttons work", async () => {
-    render(
-      <Provider store={store}>
-        <Timer />
-      </Provider>
-    );
+  test("when running, pause + nav buttons show and next/prev trigger mode changes", async () => {
+    renderWithProviders(<Timer />, {
+      preloadedState: {
+        timer: {
+          running: true,
+          totalSeconds: 25 * 60,
+          secondsLeft: 25 * 60,
+          alarmTriggered: false,
+        },
+      },
+    });
 
-    // Start timer to show nav buttons
-    const startButton = screen.getByTestId("start-btn");
-    fireEvent.click(startButton);
+    const user = userEvent.setup();
 
-    const forwardButton = await screen.findByTestId("next-cycle-btn");
-    const backwardButton = await screen.findByTestId("previous-cycle-btn");
+    expect(await screen.findByTestId("pause-btn")).toBeInTheDocument();
 
-    expect(forwardButton).toBeInTheDocument();
-    expect(backwardButton).toBeInTheDocument();
+    const nextBtn = screen.getByTestId("next-cycle-btn");
+    const prevBtn = screen.getByTestId("previous-cycle-btn");
 
-    fireEvent.click(forwardButton);
-    fireEvent.click(backwardButton);
+    await user.click(nextBtn);
+    expect(mockSwitchMode).toHaveBeenCalled();
+
+    await user.click(prevBtn);
+    expect(mockSwitchMode).toHaveBeenCalledTimes(2);
   });
 
-  test("auto-start toggle works", () => {
-    render(
-      <Provider store={store}>
-        <Timer />
-      </Provider>
-    );
+  test("pause button dispatches when clicked (running -> paused)", async () => {
+    const { store } = renderWithProviders(<Timer />, {
+      preloadedState: {
+        timer: {
+          running: true,
+          totalSeconds: 25 * 60,
+          secondsLeft: 25 * 60 - 10,
+          alarmTriggered: false,
+        },
+      },
+    });
 
-    const autoStartCheckbox = screen.getByTestId("auto-start-breaks-timer");
-    expect(autoStartCheckbox).toBeInTheDocument();
+    const user = userEvent.setup();
 
-    fireEvent.click(autoStartCheckbox);
-    expect(autoStartCheckbox).toBeChecked();
+    await user.click(await screen.findByTestId("pause-btn"));
 
-    fireEvent.click(autoStartCheckbox);
-    expect(autoStartCheckbox).not.toBeChecked();
+    // Wait for the thunk to update the runtime state (running false)
+    await waitFor(() => {
+      expect(store.getState().timer.running).toBe(false);
+    });
+  });
+
+  test("auto-start toggle updates settings in store (integration)", async () => {
+    const { store } = renderWithProviders(<Timer />);
+    const user = userEvent.setup();
+
+    // Initial state (direct shape used by your slice)
+    expect(store.getState().settings.current.autostart).toBe(false);
+
+    // Get the checkbox
+    let checkbox = screen.getByTestId("auto-start-breaks-timer");
+    expect(checkbox).not.toBeChecked();
+
+    // Toggle ON
+    await user.click(checkbox);
+
+    // Wait for the store to update (handle async reducers/thunks)
+    await waitFor(() => {
+      expect(store.getState().settings.current.autostart).toBe(true);
+    });
+
+    // Re-query the checkbox to avoid stale references
+    checkbox = screen.getByTestId("auto-start-breaks-timer");
+    expect(checkbox).toBeChecked();
+
+    // Toggle OFF
+    await user.click(checkbox);
+
+    // Wait for the store to update
+    await waitFor(() => {
+      expect(store.getState().settings.current.autostart).toBe(false);
+    });
+
+    // Re-query the checkbox again
+    checkbox = screen.getByTestId("auto-start-breaks-timer");
+    expect(checkbox).not.toBeChecked();
+  });
+
+  test("starting the timer decrements secondsLeft each second", async () => {
+    // use fake timers and configure userEvent to advance them when it performs actions
+    jest.useFakeTimers();
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+
+    const preloadedState = {
+      settings: {
+        durations: { pomodoro: 1500, shortBreak: 300, longBreak: 900 },
+        autostart: false,
+      },
+    };
+    const { store } = renderWithProviders(<Timer />, { preloadedState });
+
+    // Start the timer
+    await user.click(screen.getByTestId("start-btn"));
+
+    // Ensure running state becomes true
+    await waitFor(() => {
+      expect(store.getState().timer.running).toBe(true);
+    });
+
+    const before = store.getState().timer.secondsLeft;
+
+    // Advance 1 second of fake time (wrap in act to avoid the "not wrapped in act" warning)
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    // allow any queued microtasks to run
+    await Promise.resolve();
+
+    // Wait for store update to reflect tick
+    await waitFor(() => {
+      expect(store.getState().timer.secondsLeft).toBe(before - 1);
+    });
+
+    // Clean up fake timers
+    jest.useRealTimers();
   });
 });

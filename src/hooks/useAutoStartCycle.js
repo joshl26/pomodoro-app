@@ -1,11 +1,10 @@
-// src/hooks/useAutoStartCycle.js
-
 import { useSelector, useDispatch } from "react-redux";
 import { advanceCycle, retreatCycle } from "../store/settingsThunks";
 import {
-  selectProgress,
-  selectCycleComplete,
+  selectCycleSequence,
+  selectCycleCounter,
   selectIsAutoStart,
+  selectCycleComplete,
 } from "../store/selectors/settingsSelectors";
 
 /**
@@ -19,8 +18,9 @@ import {
 export const useAutoStartCycle = () => {
   const dispatch = useDispatch();
   const isAutoStart = useSelector(selectIsAutoStart);
-  const counter = useSelector(selectProgress);
-  const cycle = useSelector(selectCycleComplete);
+  const counter = useSelector(selectCycleCounter);
+  const sequence = useSelector(selectCycleSequence);
+  const cycleComplete = useSelector(selectCycleComplete);
 
   /**
    * Advance to the next cycle mode
@@ -47,7 +47,7 @@ export const useAutoStartCycle = () => {
    * @returns {number} Current mode (1-3)
    */
   const getCurrentMode = () => {
-    return cycle[counter];
+    return sequence[counter];
   };
 
   /**
@@ -55,8 +55,8 @@ export const useAutoStartCycle = () => {
    * @returns {number} Next mode (1-3)
    */
   const getNextMode = () => {
-    const nextIndex = (counter + 1) % cycle.length;
-    return cycle[nextIndex];
+    const nextIndex = (counter + 1) % sequence.length;
+    return sequence[nextIndex];
   };
 
   /**
@@ -64,8 +64,8 @@ export const useAutoStartCycle = () => {
    * @returns {number} Previous mode (1-3)
    */
   const getPreviousMode = () => {
-    const prevIndex = (counter - 1 + cycle.length) % cycle.length;
-    return cycle[prevIndex];
+    const prevIndex = (counter - 1 + sequence.length) % sequence.length;
+    return sequence[prevIndex];
   };
 
   return {
@@ -75,5 +75,6 @@ export const useAutoStartCycle = () => {
     getCurrentMode,
     getNextMode,
     getPreviousMode,
+    cycleComplete,
   };
 };

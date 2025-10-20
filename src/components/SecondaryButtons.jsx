@@ -1,21 +1,15 @@
-import React from "react";
+// src/components/SecondaryButtons.jsx
+import React, { useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./SecondaryButtons.css";
 
-// Import thunks
+import { useGlobalAudioPlayer } from "react-use-audio-player";
+import ButtonPressSound from "../assets/sounds/button-press.wav";
+
+// Thunks / actions
 import { resetCycleAndTimer } from "../store/settingsThunks";
-
-// Import centralized selectors (from src/store/selectors/index.js)
 import {
-  selectAlarmSettings,
-  selectPomodoro,
-  selectShort,
-  selectLong,
-  selectIsAutoStart,
-} from "../store/selectors";
-
-// Import actions (assumed present in your settingsSlice)
-import {
+  setDefault, // Import the setDefault action
   pomoIncrement,
   pomoDecrement,
   shortIncrement,
@@ -29,165 +23,284 @@ import {
   setButtonSoundState,
 } from "../store/settingsSlice";
 
-const SecondaryButtons = () => {
+// Selectors
+import {
+  selectAlarmSettings,
+  selectPomodoro,
+  selectShort,
+  selectLong,
+  selectIsAutoStart,
+} from "../store/selectors";
+
+export default function SecondaryButtons() {
   const dispatch = useDispatch();
 
-  // Select state from centralized selectors
-  const alarmSettings = useSelector(selectAlarmSettings);
+  const alarmSettings = useSelector(selectAlarmSettings) || {};
   const pomoTime = useSelector(selectPomodoro);
   const shortTime = useSelector(selectShort);
   const longTime = useSelector(selectLong);
   const autoStart = useSelector(selectIsAutoStart);
 
-  const handleReset = () => {
-    dispatch(resetCycleAndTimer({ keepAudio: true }));
-  };
+  const { load: loadAudio } = useGlobalAudioPlayer();
+
+  const playButtonSound = useCallback(() => {
+    if (alarmSettings?.buttonSound) {
+      loadAudio(ButtonPressSound, {
+        autoplay: true,
+        initialVolume: alarmSettings.volume ?? 0.5,
+      });
+    }
+  }, [alarmSettings, loadAudio]);
+
+  const handleReset = useCallback(() => {
+    playButtonSound();
+    // Use setDefault action instead of resetCycleAndTimer thunk
+    dispatch(setDefault());
+  }, [dispatch, playButtonSound]);
+
+  const incDec = useCallback(
+    (action) => {
+      playButtonSound();
+      dispatch(action());
+    },
+    [dispatch, playButtonSound]
+  );
+
+  const handleAutoStartChange = useCallback(() => {
+    playButtonSound();
+    dispatch(setAutoStart(!autoStart));
+  }, [dispatch, autoStart, playButtonSound]);
+
+  const handleAlarmToggle = useCallback(
+    (e) => {
+      const enabled = e.target.checked;
+      playButtonSound();
+      dispatch(setAlarmState(enabled));
+    },
+    [dispatch, playButtonSound]
+  );
+
+  const handleAlarmSoundChange = useCallback(
+    (e) => {
+      const value = e.target.value;
+      playButtonSound();
+      dispatch(setAlarmSound(value));
+      // enable alarm if a valid sound is selected (consistent with Settings behavior)
+      if (value && value !== "No Sound") {
+        dispatch(setAlarmState(true));
+      } else {
+        dispatch(setAlarmState(false));
+      }
+    },
+    [dispatch, playButtonSound]
+  );
+
+  const handleVolumeChange = useCallback(
+    (e) => {
+      const v = parseFloat(e.target.value);
+      playButtonSound();
+      dispatch(setAlarmVolume(Number.isFinite(v) ? v : 0));
+    },
+    [dispatch, playButtonSound]
+  );
+
+  const handleButtonSoundToggle = useCallback(() => {
+    playButtonSound();
+    dispatch(setButtonSoundState(!Boolean(alarmSettings.buttonSound)));
+  }, [dispatch, alarmSettings, playButtonSound]);
 
   return (
-    <div className="settings-container">
-      <div className="settings-section">
-        <h3 className="settings-title">Timer Durations</h3>
+    <div className="secondary-buttons-root">
+      <section className="settings-section">
+        <h3>Timer Durations</h3>
 
-        <div className="setting-group">
+        <div
+          className="setting-group"
+          aria-label="Focus time"
+          data-testid="focus-group"
+        >
           <label className="setting-label">Focus Time</label>
           <div className="setting-controls">
             <button
               className="setting-btn decrement"
-              onClick={() => dispatch(pomoDecrement())}
+              onClick={() => incDec(pomoDecrement)}
               aria-label="Decrease focus time"
+              data-testid="pomo-decrement"
             >
-              -
+              −
             </button>
-            <span className="setting-value">{pomoTime} min</span>
+            <span
+              className="setting-value"
+              aria-live="polite"
+              data-testid="pomo-value"
+            >
+              {pomoTime} min
+            </span>
             <button
               className="setting-btn increment"
-              onClick={() => dispatch(pomoIncrement())}
+              onClick={() => incDec(pomoIncrement)}
               aria-label="Increase focus time"
+              data-testid="pomo-increment"
             >
               +
             </button>
           </div>
         </div>
 
-        <div className="setting-group">
+        <div
+          className="setting-group"
+          aria-label="Short break time"
+          data-testid="short-group"
+        >
           <label className="setting-label">Short Break</label>
           <div className="setting-controls">
             <button
               className="setting-btn decrement"
-              onClick={() => dispatch(shortDecrement())}
+              onClick={() => incDec(shortDecrement)}
+              aria-label="Decrease short break time"
+              data-testid="short-decrement"
             >
-              -
+              −
             </button>
-            <span className="setting-value">{shortTime} min</span>
+            <span
+              className="setting-value"
+              aria-live="polite"
+              data-testid="short-value"
+            >
+              {shortTime} min
+            </span>
             <button
               className="setting-btn increment"
-              onClick={() => dispatch(shortIncrement())}
+              onClick={() => incDec(shortIncrement)}
+              aria-label="Increase short break time"
+              data-testid="short-increment"
             >
               +
             </button>
           </div>
         </div>
 
-        <div className="setting-group">
+        <div
+          className="setting-group"
+          aria-label="Long break time"
+          data-testid="long-group"
+        >
           <label className="setting-label">Long Break</label>
           <div className="setting-controls">
             <button
               className="setting-btn decrement"
-              onClick={() => dispatch(longDecrement())}
+              onClick={() => incDec(longDecrement)}
+              aria-label="Decrease long break time"
+              data-testid="long-decrement"
             >
-              -
+              −
             </button>
-            <span className="setting-value">{longTime} min</span>
+            <span
+              className="setting-value"
+              aria-live="polite"
+              data-testid="long-value"
+            >
+              {longTime} min
+            </span>
             <button
               className="setting-btn increment"
-              onClick={() => dispatch(longIncrement())}
+              onClick={() => incDec(longIncrement)}
+              aria-label="Increase long break time"
+              data-testid="long-increment"
             >
               +
             </button>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="settings-section">
-        <h3 className="settings-title">Preferences</h3>
+      <section className="settings-section">
+        <h3>Preferences</h3>
 
         <div className="setting-group">
-          <label className="setting-label checkbox-label">
+          <label className="checkbox-label">
             <input
               type="checkbox"
-              checked={autoStart}
-              onChange={(e) => dispatch(setAutoStart(e.target.checked))}
-              className="setting-checkbox"
+              checked={Boolean(autoStart)}
+              onChange={handleAutoStartChange}
+              aria-checked={Boolean(autoStart)}
+              data-testid="auto-start-toggle"
             />
             Auto Start Breaks
           </label>
         </div>
 
         <div className="setting-group">
-          <label className="setting-label checkbox-label">
+          <label className="checkbox-label">
             <input
               type="checkbox"
               checked={Boolean(alarmSettings.enabled)}
-              onChange={(e) => dispatch(setAlarmState(e.target.checked))}
-              className="setting-checkbox"
+              onChange={handleAlarmToggle}
+              aria-checked={Boolean(alarmSettings.enabled)}
+              data-testid="alarm-enable-toggle"
             />
             Enable Alarm
           </label>
         </div>
 
         <div className="setting-group">
-          <label className="setting-label">Alarm Sound</label>
+          <label>Alarm Sound</label>
           <select
-            value={alarmSettings.sound ?? ""}
-            onChange={(e) => dispatch(setAlarmSound(e.target.value))}
-            className="setting-select"
+            value={alarmSettings.sound ?? "No Sound"}
+            onChange={handleAlarmSoundChange}
+            aria-label="Select alarm sound"
+            data-testid="alarm-sound-select"
           >
-            <option value="">No Sound</option>
+            <option value="No Sound">No Sound</option>
             <option value="Bell">Bell</option>
-            <option value="Beep">Beep</option>
-            <option value="Chime">Chime</option>
+            <option value="Digital">Digital</option>
+            <option value="Kitchen">Kitchen</option>
           </select>
         </div>
 
         <div className="setting-group">
-          <label className="setting-label">
-            Volume: {Math.round((alarmSettings.volume ?? 0.8) * 100)}%
+          <label>
+            Volume: {Math.round((alarmSettings.volume ?? 0.5) * 100)}%
           </label>
           <input
             type="range"
             min="0"
             max="1"
             step="0.01"
-            value={alarmSettings.volume ?? 0.8}
-            onChange={(e) =>
-              dispatch(setAlarmVolume(parseFloat(e.target.value)))
-            }
-            className="setting-slider"
+            value={alarmSettings.volume ?? 0.5}
+            onChange={handleVolumeChange}
+            aria-valuemin={0}
+            aria-valuemax={1}
+            aria-valuenow={alarmSettings.volume ?? 0.5}
+            data-testid="alarm-volume-slider"
           />
         </div>
 
         <div className="setting-group">
-          <label className="setting-label checkbox-label">
+          <label className="checkbox-label">
             <input
               type="checkbox"
               checked={Boolean(alarmSettings.buttonSound)}
-              onChange={(e) => dispatch(setButtonSoundState(e.target.checked))}
-              className="setting-checkbox"
+              onChange={handleButtonSoundToggle}
+              aria-checked={Boolean(alarmSettings.buttonSound)}
+              data-testid="button-sound-toggle"
             />
             Button Sound
           </label>
         </div>
-      </div>
+      </section>
 
-      <div className="settings-section">
+      <section className="settings-section">
         <div className="setting-group">
-          <button onClick={handleReset} className="reset-all-btn">
+          <button
+            onClick={handleReset}
+            className="reset-all-btn"
+            data-testid="reset-all-btn"
+          >
             Reset All Settings
           </button>
         </div>
-      </div>
+      </section>
     </div>
   );
-};
-
-export default SecondaryButtons;
+}
