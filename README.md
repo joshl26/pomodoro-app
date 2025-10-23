@@ -1,22 +1,5 @@
 ### Welcome to PomoBreak (pomodoro-app) README
 
-<p align="center">
-  <a href="https://www.npmjs.com/package/pomodoro-app" target="_blank">
-    <img alt="Version" src="https://img.shields.io/npm/v/pomodoro-app.svg">
-  </a>
-  <img alt="npm" src="https://img.shields.io/badge/npm-%3E%3D8.0.0-blue.svg" />
-  <img alt="node" src="https://img.shields.io/badge/node-%3E%3D17.0.0-blue.svg" />
-  <a href="https://github.com/joshl26/pomodoro-app#readme" target="_blank">
-    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
-  </a>
-  <a href="https://github.com/joshl26/pomodoro-app/graphs/commit-activity" target="_blank">
-    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
-  </a>
-  <a href="https://github.com/joshl26/pomodoro-app/blob/master/LICENSE" target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/github/license/joshl26/pomodoro-app" />
-  </a>
-</p>
-
 ![Test Status](https://github.com/joshl26/pomodoro-app/actions/workflows/test-coverage.yml/badge.svg)
 ![Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/joshl26/a7072c522479866d730b652f16e1a985/raw/pomodoro-app-coverage.json)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
