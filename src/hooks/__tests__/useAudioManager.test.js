@@ -1,3 +1,4 @@
+/* eslint-disable import/first */
 // src/hooks/__tests__/useAudioManager.test.js
 import React from "react";
 import { renderHook } from "@testing-library/react";
