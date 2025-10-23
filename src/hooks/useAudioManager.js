@@ -46,7 +46,7 @@ export function useAudioManager() {
     }
   }, []);
 
-  const playButtonSound = useCallback(() => {
+  const playButtonSound = useCallback(async () => {
     // Only play if button sound is NOT explicitly disabled (undefined = allowed)
     if (alarmSettings.buttonSound === false) return Promise.resolve();
     const vol =
@@ -54,7 +54,7 @@ export function useAudioManager() {
         ? alarmSettings.volume
         : undefined;
     try {
-      return audioManager.play("button", { volume: vol });
+      return await audioManager.play("button", { volume: vol });
     } catch {
       return Promise.resolve();
     }
