@@ -12,6 +12,8 @@ import {
 } from "./store/selectors/settingsSelectors";
 import "./layout.css";
 
+//test
+
 // Lazy load heavy components (Phase 6: Code Splitting)
 // Use dynamic imports with webpackChunkName for better debugging
 const Settings = lazy(
