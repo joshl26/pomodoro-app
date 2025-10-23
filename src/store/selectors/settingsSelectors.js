@@ -9,11 +9,17 @@ const DEFAULT_ALARM_SETTINGS = {
 
 const DEFAULT_SEQUENCE = [1, 2, 1, 2, 1, 2, 1, 2, 3];
 
-export const selectSettings = (state) => state.settings || {};
+// Constant empty objects to prevent unnecessary re-renders
+const EMPTY_SETTINGS = {};
+const EMPTY_TIMERS = {};
+const EMPTY_CURRENT = {};
+const EMPTY_CYCLE = {};
+
+export const selectSettings = (state) => state.settings || EMPTY_SETTINGS;
 
 export const selectTimers = createSelector(
   [selectSettings],
-  (settings) => settings.timers || {}
+  (settings) => settings.timers || EMPTY_TIMERS
 );
 
 export const selectPomodoro = createSelector([selectTimers], (timers) => {
@@ -33,7 +39,7 @@ export const selectLong = createSelector([selectTimers], (timers) => {
 
 export const selectCurrent = createSelector(
   [selectSettings],
-  (settings) => settings.current || {}
+  (settings) => settings.current || EMPTY_CURRENT
 );
 
 export const selectTimerModeRaw = createSelector([selectCurrent], (current) => {
@@ -67,7 +73,7 @@ export const selectTotalSecondsRaw = createSelector(
 
 export const selectCycle = createSelector(
   [selectSettings],
-  (settings) => settings.cycle || {}
+  (settings) => settings.cycle || EMPTY_CYCLE
 );
 
 export const selectCycleSequence = createSelector([selectCycle], (cycle) => {
@@ -93,9 +99,10 @@ export const selectCycleStartedRaw = createSelector(
   (current) => Boolean(current.cyclestarted)
 );
 
+// Fixed: Use constant reference instead of creating new object
 export const selectAlarm = createSelector(
   [selectSettings],
-  (settings) => settings.alarm || {}
+  (settings) => settings.alarm || DEFAULT_ALARM_SETTINGS
 );
 
 export const selectButtonSoundRaw = createSelector([selectAlarm], (alarm) =>

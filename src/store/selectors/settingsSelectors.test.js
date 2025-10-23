@@ -139,9 +139,14 @@ describe("settingsSelectors", () => {
   });
 
   describe("Alarm selectors", () => {
-    it("selectAlarm returns alarm or empty object", () => {
+    it("selectAlarm returns alarm or default alarm settings", () => {
       expect(sel.selectAlarm(baseState)).toEqual(baseState.settings.alarm);
-      expect(sel.selectAlarm({ settings: {} })).toEqual({});
+      expect(sel.selectAlarm({ settings: {} })).toEqual({
+        volume: 0.5,
+        buttonSound: false,
+        enabled: false,
+        sound: "No Sound",
+      });
     });
 
     it("selectButtonSoundRaw returns boolean buttonSound", () => {
