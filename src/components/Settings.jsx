@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useState, useRef } from "react";
 import { Container, Row, Col, Dropdown, Button } from "react-bootstrap";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // v6 change: useHistory → useNavigate
 import { useSelector, useDispatch } from "react-redux";
 import {
   pomoIncrement,
@@ -25,9 +25,13 @@ import { FaPlus, FaMinus } from "react-icons/fa";
 import useAudioManager from "../hooks/useAudioManager";
 import "./Settings.css";
 
+/**
+ * Settings component - Allows user to configure timer durations, sounds, and behavior
+ * Updated for React Router v6
+ */
 const Settings = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate(); // v6 change: useHistory → useNavigate
 
   const { play, stop, playButtonSound, load, setVolume } = useAudioManager();
 
@@ -45,10 +49,12 @@ const Settings = () => {
   const [volume, setLocalVolume] = useState(alarmVolumeState);
   const sliderPreviewTimer = useRef(null);
 
+  // Sync local volume state with Redux state
   useEffect(() => {
     setLocalVolume(alarmVolumeState);
   }, [alarmVolumeState]);
 
+  // Load alarm sound when it changes
   useEffect(() => {
     if (!load) return;
     if (alarmSoundState && alarmSoundState !== "No Sound") {
@@ -59,6 +65,7 @@ const Settings = () => {
     }
   }, [alarmSoundState, load, setVolume, volume]);
 
+  // Load button sound if enabled
   useEffect(() => {
     if (!load) return;
     if (buttonSoundState) {
@@ -66,6 +73,7 @@ const Settings = () => {
     }
   }, [buttonSoundState, load]);
 
+  // Cleanup on unmount - stop all sounds and clear timers
   useEffect(() => {
     return () => {
       if (sliderPreviewTimer.current) {
@@ -80,6 +88,9 @@ const Settings = () => {
     };
   }, [stop]);
 
+  /**
+   * Plays button click sound if enabled
+   */
   const buttonClickSound = useCallback(() => {
     if (!buttonSoundState) return;
     try {
@@ -88,10 +99,14 @@ const Settings = () => {
     playButtonSound();
   }, [buttonSoundState, playButtonSound, stop]);
 
+  /**
+   * Handles back button click - saves volume and navigates to home
+   */
   const backClickHandler = useCallback(() => {
     dispatch(setAlarmVolume(volume));
     buttonClickSound();
 
+    // Update total seconds based on current timer mode
     const modeToSecondsMap = {
       1: pomodoroCount * 60,
       2: shortCount * 60,
@@ -101,7 +116,9 @@ const Settings = () => {
     dispatch(
       setTotalSeconds(modeToSecondsMap[timerMode] || pomodoroCount * 60)
     );
-    history.push("/pomodor/");
+
+    // v6 change: history.push() → navigate()
+    navigate("/");
   }, [
     volume,
     dispatch,
@@ -110,9 +127,12 @@ const Settings = () => {
     pomodoroCount,
     shortCount,
     longCount,
-    history,
+    navigate, // v6 change: history → navigate
   ]);
 
+  /**
+   * Toggles auto-start breaks feature
+   */
   const autostartClickHandler = useCallback(() => {
     buttonClickSound();
     if (autoStartState) {
@@ -126,11 +146,18 @@ const Settings = () => {
     }
   }, [autoStartState, dispatch, buttonClickSound]);
 
+  /**
+   * Toggles button sound feature
+   */
   const buttonSoundClickHandler = useCallback(() => {
     buttonClickSound();
     dispatch(setButtonSoundState(!buttonSoundState));
   }, [buttonSoundState, dispatch, buttonClickSound]);
 
+  /**
+   * Handles alarm sound selection and preview playback
+   * @param {string} selectedSound - The alarm sound to set
+   */
   const alarmClickHandler = useCallback(
     (selectedSound) => {
       buttonClickSound();
@@ -157,6 +184,10 @@ const Settings = () => {
     [dispatch, buttonClickSound, play, stop, setVolume, volume]
   );
 
+  /**
+   * Handles volume slider changes with debounced preview
+   * @param {Event} e - Change event from slider
+   */
   const sliderClickHandler = useCallback(
     (e) => {
       const newVolume = Number(e.target.value);
@@ -171,6 +202,7 @@ const Settings = () => {
         setVolume(alarmSoundState, newVolume);
       }
 
+      // Debounced preview - plays sound after 200ms of no changes
       if (alarmSoundState && alarmSoundState !== "No Sound") {
         if (sliderPreviewTimer.current) {
           clearTimeout(sliderPreviewTimer.current);
@@ -188,6 +220,9 @@ const Settings = () => {
     [alarmSoundState, dispatch, play, stop, setVolume]
   );
 
+  /**
+   * Restores all settings to default values
+   */
   const defaultSettingsClickHandler = useCallback(() => {
     buttonClickSound();
     const defaultVol = 0.5;
@@ -203,6 +238,11 @@ const Settings = () => {
     }
   }, [dispatch, buttonClickSound, alarmSoundState, setVolume]);
 
+  /**
+   * Time increment/decrement buttons component
+   * @param {Object} props
+   * @param {string} props.buttonTime - Timer type ('pomo', 'short', 'long')
+   */
   const TimeButtons = ({ buttonTime }) => {
     const timerMap = {
       pomo: { increment: pomoIncrement, decrement: pomoDecrement },
@@ -266,7 +306,8 @@ const Settings = () => {
             </p>
           </Col>
           <Col xs={12} className="align-right">
-            <Link to="/pomodor/">
+            {/* v6 change: /pomodor/ → / (basename handles prefix) */}
+            <Link to="/">
               <Button
                 id="back-btn"
                 onClick={backClickHandler}

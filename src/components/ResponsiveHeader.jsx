@@ -8,6 +8,10 @@ import "./ResponsiveHeader.css";
 import { Link } from "react-router-dom";
 import { Col } from "react-bootstrap";
 
+/**
+ * Responsive navigation header component
+ * Updated for React Router v6 - uses basename="/pomodor" so paths are relative
+ */
 const ResponsiveHeader = () => {
   return (
     <Container>
@@ -19,7 +23,8 @@ const ResponsiveHeader = () => {
         bg=""
         variant="dark"
       >
-        <Navbar.Brand as={Link} to="/pomodor/">
+        {/* v6 change: /pomodor/ → / (basename handles prefix) */}
+        <Navbar.Brand as={Link} to="/">
           <Col>
             <div className="align-left">
               <img
@@ -37,29 +42,21 @@ const ResponsiveHeader = () => {
           id="responsive-navbar-nav"
         >
           <Nav className="me-auto"></Nav>
-          <Nav defaultActiveKey="/pomodor/">
-            <Nav.Link
-              id="home-nav"
-              as={Link}
-              eventKey="/pomodor/"
-              to="/pomodor/"
-            >
+          {/* v6 change: All routes updated to remove /pomodor prefix */}
+          <Nav defaultActiveKey="/">
+            <Nav.Link id="home-nav" as={Link} eventKey="/" to="/">
               Home
             </Nav.Link>
-            <Nav.Link as={Link} eventKey="/pomodor/help" to="/pomodor/help">
+            <Nav.Link as={Link} eventKey="/help" to="/help">
               Help
             </Nav.Link>
-            <Nav.Link as={Link} eventKey="/pomodor/login" to="/pomodor/login">
+            <Nav.Link as={Link} eventKey="/login" to="/login">
               Login
             </Nav.Link>
-            <Nav.Link as={Link} eventKey="/pomodor/report" to="/pomodor/report">
+            <Nav.Link as={Link} eventKey="/report" to="/report">
               Charts
             </Nav.Link>
-            <Nav.Link
-              as={Link}
-              eventKey="/pomodor/settings"
-              to="/pomodor/settings"
-            >
+            <Nav.Link as={Link} eventKey="/settings" to="/settings">
               Settings
             </Nav.Link>
           </Nav>

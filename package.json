@@ -22,28 +22,30 @@
   },
   "packageManager": "npm@8.19.4",
   "dependencies": {
-    "@reduxjs/toolkit": "^1.9.1",
-    "bootstrap": "^5.2.2",
-    "lodash": "^4.17.21",
-    "react": "^18.2.0",
-    "react-bootstrap": "^2.6.0",
-    "react-dom": "^18.2.0",
-    "react-icons": "^4.11.0",
-    "react-redux": "^8.0.5",
-    "react-router-dom": "^5.3.4",
-    "react-timer-hook": "^3.0.7",
-    "redux": "^4.2.0",
-    "reselect": "^5.1.1",
-    "web-vitals": "^2.1.4"
+    "@reduxjs/toolkit": "^2.9.2",
+    "bootstrap": "^5.3.8",
+    "react": "^18.3.1",
+    "react-bootstrap": "^2.10.6",
+    "react-dev-utils": "^12.0.1",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.5.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^6.28.0",
+    "redux": "^5.0.1",
+    "web-vitals": "^5.1.0"
   },
   "scripts": {
     "start": "craco start",
     "start-windows": "set PORT=3051 && craco start",
     "build": "craco build",
     "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "eject": "react-scripts eject",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "lint": "npx eslint --fix \"src/**/*.{js,jsx}\"",
+    "lint:check": "npx eslint \"src/**/*.{js,jsx}\"",
     "analyze": "cross-env GENERATE_SOURCEMAP=true craco build && source-map-explorer 'build/static/js/*.js'"
   },
   "eslintConfig": {
@@ -65,24 +67,17 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-react": "^7.27.1",
     "@craco/craco": "^7.1.0",
-    "@redux-devtools/core": "^3.13.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^14.6.1",
-    "@types/react-router-dom": "^5.3.3",
-    "cross-env": "^10.1.0",
     "eslint": "^8.57.1",
     "eslint-config-react-app": "^7.0.1",
     "jest": "^27.5.1",
     "prettier": "^3.6.2",
     "react-scripts": "5.0.1",
-    "redux-devtools-extension": "^2.13.9",
     "redux-mock-store": "^1.5.5",
-    "source-map-explorer": "^2.5.3",
-    "webpack-bundle-analyzer": "^4.10.2"
+    "source-map-explorer": "^2.5.3"
   },
   "jest": {
     "moduleNameMapper": {

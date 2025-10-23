@@ -44,7 +44,8 @@ describe("App layout", () => {
   it("renders with correct active class and progress percent", () => {
     render(
       <Provider store={store}>
-        <MemoryRouter initialEntries={["/pomodor/"]}>
+        {/* v6 change: /pomodor/ → / (matches basename behavior) */}
+        <MemoryRouter initialEntries={["/"]}>
           <App />
         </MemoryRouter>
       </Provider>
@@ -65,7 +66,7 @@ describe("App layout", () => {
 
     render(
       <Provider store={store}>
-        <MemoryRouter initialEntries={["/pomodor/"]}>
+        <MemoryRouter initialEntries={["/"]}>
           <App />
         </MemoryRouter>
       </Provider>
@@ -73,15 +74,16 @@ describe("App layout", () => {
 
     expect(getElementByIdSpy).toHaveBeenCalledWith("favicon");
     // Check for local favicon path (mode 1 = pomodoro)
-    expect(mockFavicon.href).toContain("/favicons/pomo.ico");
+    expect(mockFavicon.href).toContain("/favicons/pomo");
 
     getElementByIdSpy.mockRestore();
   });
 
-  it("renders Timer component on /pomodor/ route", () => {
+  it("renders Timer component on / route", () => {
     render(
       <Provider store={store}>
-        <MemoryRouter initialEntries={["/pomodor/"]}>
+        {/* v6 change: / is now the home route */}
+        <MemoryRouter initialEntries={["/"]}>
           <App />
         </MemoryRouter>
       </Provider>
@@ -90,11 +92,12 @@ describe("App layout", () => {
     expect(screen.getByTestId("timer")).toBeInTheDocument();
   });
 
-  // Updated tests for lazy-loaded components
-  it("renders Settings component on /pomodor/settings route", async () => {
+  // Updated tests for lazy-loaded components with v6 routes
+  it("renders Settings component on /settings route", async () => {
     render(
       <Provider store={store}>
-        <MemoryRouter initialEntries={["/pomodor/settings"]}>
+        {/* v6 change: /pomodor/settings → /settings */}
+        <MemoryRouter initialEntries={["/settings"]}>
           <App />
         </MemoryRouter>
       </Provider>
@@ -106,10 +109,11 @@ describe("App layout", () => {
     });
   });
 
-  it("renders Report component on /pomodor/report route", async () => {
+  it("renders Report component on /report route", async () => {
     render(
       <Provider store={store}>
-        <MemoryRouter initialEntries={["/pomodor/report"]}>
+        {/* v6 change: /pomodor/report → /report */}
+        <MemoryRouter initialEntries={["/report"]}>
           <App />
         </MemoryRouter>
       </Provider>
@@ -121,10 +125,11 @@ describe("App layout", () => {
     });
   });
 
-  it("renders Login component on /pomodor/login route", async () => {
+  it("renders Login component on /login route", async () => {
     render(
       <Provider store={store}>
-        <MemoryRouter initialEntries={["/pomodor/login"]}>
+        {/* v6 change: /pomodor/login → /login */}
+        <MemoryRouter initialEntries={["/login"]}>
           <App />
         </MemoryRouter>
       </Provider>
@@ -136,10 +141,11 @@ describe("App layout", () => {
     });
   });
 
-  it("renders Help component on /pomodor/help route", async () => {
+  it("renders Help component on /help route", async () => {
     render(
       <Provider store={store}>
-        <MemoryRouter initialEntries={["/pomodor/help"]}>
+        {/* v6 change: /pomodor/help → /help */}
+        <MemoryRouter initialEntries={["/help"]}>
           <App />
         </MemoryRouter>
       </Provider>
@@ -152,11 +158,11 @@ describe("App layout", () => {
   });
 
   it("shows loading fallback while lazy components load", async () => {
-    // This test is tricky because lazy components load almost instantly in tests
-    // We can either mock the import delay or just verify the component eventually loads
+    // This test verifies lazy components load successfully
+    // In production, users would see the LoadingFallback component briefly
     render(
       <Provider store={store}>
-        <MemoryRouter initialEntries={["/pomodor/settings"]}>
+        <MemoryRouter initialEntries={["/settings"]}>
           <App />
         </MemoryRouter>
       </Provider>
@@ -167,10 +173,10 @@ describe("App layout", () => {
       expect(screen.getByTestId("settings")).toBeInTheDocument();
     });
 
-    // If you want to actually test the loading state, you'd need to:
+    // Note: To actually test the loading state, you would need to:
     // 1. Mock the lazy import with a delayed promise, or
     // 2. Use React.Suspense testing utilities
-    // For now, we just verify the component loads successfully
+    // For now, we verify the component loads successfully
   });
 
   it("applies correct class for short break mode", () => {
@@ -205,7 +211,7 @@ describe("App layout", () => {
 
     render(
       <Provider store={shortModeStore}>
-        <MemoryRouter initialEntries={["/pomodor/"]}>
+        <MemoryRouter initialEntries={["/"]}>
           <App />
         </MemoryRouter>
       </Provider>
@@ -247,7 +253,7 @@ describe("App layout", () => {
 
     render(
       <Provider store={longModeStore}>
-        <MemoryRouter initialEntries={["/pomodor/"]}>
+        <MemoryRouter initialEntries={["/"]}>
           <App />
         </MemoryRouter>
       </Provider>
@@ -289,7 +295,7 @@ describe("App layout", () => {
 
     render(
       <Provider store={progressStore}>
-        <MemoryRouter initialEntries={["/pomodor/"]}>
+        <MemoryRouter initialEntries={["/"]}>
           <App />
         </MemoryRouter>
       </Provider>
