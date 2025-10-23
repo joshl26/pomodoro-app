@@ -1,0 +1,70 @@
+name: Test & Coverage
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests with coverage
+        run: npm test -- --coverage --coverageReporters="json-summary" --coverageReporters="text"
+
+      - name: Extract coverage percentage
+        id: coverage
+        run: |
+          COVERAGE=$(node -p "
+            const coverage = require('./coverage/coverage-summary.json');
+            Math.round(coverage.total.lines.pct);
+          ")
+          echo "COVERAGE=$COVERAGE" >> $GITHUB_OUTPUT
+          echo "Coverage: $COVERAGE%"
+
+      - name: Generate coverage badge
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: ${{ secrets.GIST_ID }}
+          filename: pomodoro-app-coverage.json
+          label: Coverage
+          message: ${{ steps.coverage.outputs.COVERAGE }}%
+          valColorRange: ${{ steps.coverage.outputs.COVERAGE }}
+          maxColorRange: 100
+          minColorRange: 0
+
+      - name: Comment coverage on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const coverage = ${{ steps.coverage.outputs.COVERAGE }};
+            const comment = `## 📊 Test Coverage Report
+
+            **Total Coverage:** ${coverage}%
+
+            ${coverage >= 80 ? '✅ Coverage threshold met!' : '⚠️ Coverage below 80% threshold'}
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

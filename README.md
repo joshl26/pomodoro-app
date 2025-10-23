@@ -17,7 +17,12 @@
   </a>
 </p>
 
+![Test Status](https://github.com/joshl26/pomodoro-app/actions/workflows/test-coverage.yml/badge.svg)
+![Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/joshl26/a7072c522479866d730b652f16e1a985/raw/pomodoro-app-coverage.json)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+
 ### Table of contents
+
 - Overview
 - Features
 - Demo & Screenshots
@@ -36,9 +41,11 @@
 - Acknowledgements
 
 #### Overview
+
 PomoBreak (pomodoro-app) is a lightweight Pomodoro timer built with React and Redux. The project explores UI/UX design, routing, state management, custom audio management, and test coverage for robust front-end development.
 
 #### Features
+
 - Customizable Pomodoro durations (work, short break, long break)
 - Cycle tracking and auto-start options
 - Custom alarm and UI button sounds with preload & volume controls
@@ -47,6 +54,7 @@ PomoBreak (pomodoro-app) is a lightweight Pomodoro timer built with React and Re
 - Custom audio manager to avoid duplicated audio instances and reduce latency
 
 #### Demo & Screenshots
+
 - Live demo: [Live Demo Site](https://joshlehman.ca/pomodor)
 - Landing page: [Screenshot - Landing Page](https://raw.githubusercontent.com/joshl26/joshl26/main/assets/pomodor-1.png)
 - Timers: [Screenshot - Timers](https://raw.githubusercontent.com/joshl26/joshl26/main/assets/pomodor-2.png)
@@ -54,6 +62,7 @@ PomoBreak (pomodoro-app) is a lightweight Pomodoro timer built with React and Re
 - Settings: [Screenshot - Settings](https://raw.githubusercontent.com/joshl26/joshl26/main/assets/pomodor-4.png)
 
 #### Prerequisites
+
 - Node.js >= 17.0.0
 - npm >= 8.0.0
 
@@ -69,29 +78,36 @@ corepack prepare pnpm@<version> --activate
 ```
 
 #### Quick start
+
 1. Clone the repo:
+
 ```bash
 git clone https://github.com/joshl26/pomodoro-app.git
 cd pomodoro-app
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Start dev server:
+
 ```bash
 npm run start
 ```
 
 4. Run tests:
+
 ```bash
 npm run test
 ```
 
 #### Useful scripts (example)
+
 Ensure these scripts exist or adapt them to your package.json:
+
 ```bash
 "start": "react-scripts start",
 "build": "react-scripts build",
@@ -102,7 +118,9 @@ Ensure these scripts exist or adapt them to your package.json:
 ```
 
 ### Project structure (recommended)
+
 A simple overview; actual project layout may vary slightly:
+
 ```
 /src
   /assets
@@ -128,29 +146,36 @@ CONTRIBUTING.md
 ```
 
 ### Key components & hooks (what to look for)
+
 #### Timer.jsx
+
 - Core timer UI
 - Uses Redux for timer state and durations
 - Uses useAudioManager hook for ticking and alarm sounds
 
 #### Settings.jsx
+
 - UI for choosing alarm and button sounds, volume controls
 - Uses useAudioManager.load to preload selected sounds to reduce latency
 - Uses debounced previews for sliders
 
 #### SecondaryButtons.jsx
+
 - Quick controls (forward/back, skip, reset)
 - Plays a short button sound via useAudioManager.play
 
 #### Hooks
+
 - useAudioManager: wrap audio service and expose play/load/stop/setVolume
 - useTimerMode: encapsulates mode transitions (pomodoro, short break, long break)
 - useTimerControls: start/pause/resume logic and associated UI handlers
 
 ### Audio manager — API & examples
+
 The project uses a custom audio manager (service + hook) rather than a library to better control loading, memory, and test behavior. The exact method names in your codebase may vary slightly — below is a recommended interface and examples of how to use it.
 
 #### Typical API (exposed by src/hooks/useAudioManager.js)
+
 - load(key, src) — load and cache an audio asset (preload)
 - play(key, { loop = false }) — play a cached or inline audio; safe against rejected play() promises
 - stop(key) — stop playback of one sound instance
@@ -158,28 +183,31 @@ The project uses a custom audio manager (service + hook) rather than a library t
 - dispose(key) — free resources if needed
 
 Example usage in a component:
+
 ```javascript
 const { load, play, setVolume, stop } = useAudioManager();
 
 // Preload user-selected alarm on settings mount
 useEffect(() => {
-  if (alarmUrl) load('selectedAlarm', alarmUrl)
-}, [alarmUrl, load])
+  if (alarmUrl) load("selectedAlarm", alarmUrl);
+}, [alarmUrl, load]);
 
 // Play preview when user toggles preview button
 const onPreview = () => {
-  stop('preview')    // ensure previous preview stopped
-  play('selectedAlarm') // play preview sound
-}
+  stop("preview"); // ensure previous preview stopped
+  play("selectedAlarm"); // play preview sound
+};
 
 // Update volume immediately
-setVolume('selectedAlarm', 0.6) // 60%
+setVolume("selectedAlarm", 0.6); // 60%
 ```
 
 Testing notes:
+
 - In tests, mock useAudioManager to avoid real audio output:
+
 ```javascript
-jest.mock('../hooks/useAudioManager', () => () => ({
+jest.mock("../hooks/useAudioManager", () => () => ({
   load: jest.fn(),
   play: jest.fn(),
   stop: jest.fn(),
@@ -188,12 +216,18 @@ jest.mock('../hooks/useAudioManager', () => () => ({
 ```
 
 ### Testing & common issues
+
 The project uses Jest + React Testing Library. Common patterns and fixes:
 
 - Use provider wrappers when rendering components that rely on Redux:
+
 ```javascript
-import { Provider } from 'react-redux';
-render(<Provider store={store}><Settings /></Provider>);
+import { Provider } from "react-redux";
+render(
+  <Provider store={store}>
+    <Settings />
+  </Provider>
+);
 ```
 
 - For hook tests, use renderHook from @testing-library/react-hooks or RTL's utilities with providers.
@@ -211,15 +245,18 @@ render(<Provider store={store}><Settings /></Provider>);
   - The audio manager swallows rejected play() promises to avoid test failures. When mocking audio, assert mock calls rather than actual playback.
 
 ### Troubleshooting (common gotchas)
+
 - pnpm mismatch errors: remove or update `packageManager` in package.json, or install matching pnpm via Corepack.
 - Duplicate React instances: run `npm ls react` and remove duplicates (sometimes caused by workspace or local linked package).
 - Slider tests failing: confirm Slider component imports React (if needed) and test uses React Testing Library queries not direct DOM node access.
 - Redux state not updating in tests: use a real store instance unless intentionally mocking dispatch; ensure reducers initialize default state.
 
 ### Code style, linting & pre-commit hooks
+
 - ESLint configuration should enforce best practices (no var, consistent imports). Add rules or extend recommended configs.
 - Prettier for formatting consistency; add `.prettierrc`.
 - Husky + lint-staged for pre-commit checks (example):
+
 ```bash
 npx husky-init && npm install
 # then in package.json
@@ -234,7 +271,9 @@ npx husky-init && npm install
 ```
 
 ### CI / GitHub Actions (suggested)
+
 A minimal CI workflow to run tests, lint, and build:
+
 ```yaml
 name: CI
 
@@ -261,6 +300,7 @@ jobs:
 Add coverage thresholds or fail builds when coverage falls under target.
 
 ### Roadmap & contributing
+
 - The detailed roadmap is in `ROADMAP.md`. It lists completed phases (Performance, State, Audio, Testing) and next priorities (Router migration to v6, code-splitting, bundle analysis).
 - Contributions are welcome. Please follow the repository's [CONTRIBUTING.md](https://github.com/joshl26/pomodoro-app/blob/master/CONTRIBUTING.md) and open issues for feature requests or bug reports.
 - When opening PRs:
@@ -269,31 +309,39 @@ Add coverage thresholds or fail builds when coverage falls under target.
   - Ensure tests are added/updated and lint passes.
 
 #### Suggested PR template (copy into .github/PULL_REQUEST_TEMPLATE.md)
+
 ```markdown
 ## Summary
+
 Short description of what this PR does.
 
 ## Related issue
+
 Closes #<issue_number> or relates to #<issue_number>
 
 ## Changes
+
 - Bullet list of changes
 
 ## How to test
+
 - Steps to reproduce locally
 
 ## Checklist
+
 - [ ] Tests added/updated
 - [ ] Lint/format passes
 - [ ] Build passes
 ```
 
 ### License & authorship
+
 This project is licensed under the MIT License — see the full license at [LICENSE](https://github.com/joshl26/pomodoro-app/blob/master/LICENSE).
 
 Author: Joshua Lehman — portfolio: [joshlehman.ca](https://joshlehman.ca) • GitHub: [joshl26](https://github.com/joshl26) • LinkedIn: [joshrlehman](https://www.linkedin.com/in/joshrlehman/)
 
 ### Acknowledgements & resources
+
 - React, Redux, React Router
 - React Testing Library, Jest
 - Inspiration from open-source Pomodoro apps and front-end patterns
