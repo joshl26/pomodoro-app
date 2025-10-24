@@ -218,7 +218,7 @@ function App() {
     const title = routeTitles[location.pathname] || "404 - Page Not Found";
     document.title = title;
 
-    // Announce to screen readers
+    // Announce to screen readerss
     const announcer = document.getElementById("route-announcer");
     if (announcer) {
       announcer.textContent = `Navigated to ${title}`;
