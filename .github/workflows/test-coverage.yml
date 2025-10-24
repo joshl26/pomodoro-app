@@ -1,10 +1,11 @@
-name: Test & Coverage
+name: CI - Test, Coverage & Publish Docker Image
 
 on:
   push:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  workflow_dispatch:
 
 jobs:
   test:
@@ -12,12 +13,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "20" # Updated to Node 18 for better compatibility
+          node-version: "20"
           cache: "npm"
 
       - name: Install dependencies
@@ -71,3 +72,27 @@ jobs:
               repo: context.repo.repo,
               body: comment
             });
+
+  publish_image:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: joshlehmandev
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: joshlehmandev/pomodoro-app:latest
+          cache-from: type=registry,ref=joshlehmandev/pomodoro-app:latest
+          cache-to: type=inline
