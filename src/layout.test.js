@@ -3,6 +3,16 @@ import { screen, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "./utilities/test-utils/renderWithProviders"; // Adjust path if needed
 import App from "./layout";
 
+// Mock window.scrollTo to avoid JSDOM not implemented error
+beforeAll(() => {
+  window.scrollTo = jest.fn();
+});
+
+// Define mock Settings component outside jest.mock to avoid Jest scope error
+const MockSettings = () => <div data-testid="settings">Mocked Settings</div>;
+
+jest.mock("./components/Settings", () => MockSettings);
+
 describe("App layout", () => {
   const initialState = {
     settings: {
@@ -53,9 +63,31 @@ describe("App layout", () => {
     renderWithProviders(<App />, { preloadedState: initialState, route: "/" });
 
     expect(getElementByIdSpy).toHaveBeenCalledWith("favicon");
-    expect(mockFavicon.href).toContain("/favicons/pomo");
+    expect(mockFavicon.href).toContain("/pomodor/favicons/pomo/favicon.ico");
 
     getElementByIdSpy.mockRestore();
+  });
+
+  it("sets default favicon for invalid timerMode", () => {
+    const mockFavicon = { href: "" };
+    jest.spyOn(document, "getElementById").mockReturnValue(mockFavicon);
+
+    const invalidTimerModeState = {
+      ...initialState,
+      settings: {
+        ...initialState.settings,
+        current: { ...initialState.settings.current, timermode: 999 },
+      },
+    };
+
+    renderWithProviders(<App />, {
+      preloadedState: invalidTimerModeState,
+      route: "/",
+    });
+
+    expect(mockFavicon.href).toContain("/pomodor/favicons/pomo/favicon.ico");
+
+    jest.restoreAllMocks();
   });
 
   it("renders Timer component on / route and sets correct page title", async () => {
@@ -75,7 +107,7 @@ describe("App layout", () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId("settings")).toBeInTheDocument();
+      expect(screen.getByText("Mocked Settings")).toBeInTheDocument();
     });
 
     await waitFor(() => {
@@ -89,14 +121,12 @@ describe("App layout", () => {
       route: "/report",
     });
 
-    await waitFor(async () => {
-      await waitFor(() => {
-        expect(screen.getByTestId("report")).toBeInTheDocument();
-      });
+    await waitFor(() => {
+      expect(screen.getByTestId("report")).toBeInTheDocument();
+    });
 
-      await waitFor(() => {
-        expect(document.title).toBe("Report - View Your Pomodoro Sessions");
-      });
+    await waitFor(() => {
+      expect(document.title).toBe("Report - View Your Pomodoro Sessions");
     });
   });
 
@@ -128,6 +158,15 @@ describe("App layout", () => {
     await waitFor(() => {
       expect(document.title).toBe("Help - Pomodoro Timer Support and FAQs");
     });
+  });
+
+  it("renders 404 page on unknown route", () => {
+    renderWithProviders(<App />, {
+      preloadedState: initialState,
+      route: "/unknown",
+    });
+
+    expect(screen.getByText(/404 - Page Not Found/i)).toBeInTheDocument();
   });
 
   it("applies correct class for short break mode", () => {
@@ -194,5 +233,50 @@ describe("App layout", () => {
     const progressBar = screen.getByRole("progressbar");
     expect(progressBar).toBeInTheDocument();
     expect(progressBar).toHaveAttribute("aria-valuenow", "75");
+  });
+
+  it("renders skip to main content link with correct attributes", () => {
+    renderWithProviders(<App />, { preloadedState: initialState, route: "/" });
+
+    const skipLink = screen.getByRole("link", {
+      name: /skip to main content/i,
+    });
+    expect(skipLink).toBeInTheDocument();
+    expect(skipLink).toHaveAttribute("href", "#main-content");
+    expect(skipLink).toHaveAttribute("tabindex", "0");
+  });
+
+  it("moves focus to main content on route change", () => {
+    renderWithProviders(<App />, { preloadedState: initialState, route: "/" });
+
+    const mainContent = screen.getByRole("main");
+    expect(document.activeElement).toBe(mainContent);
+  });
+
+  it("updates route announcer text on route change", async () => {
+    const announcer = document.createElement("div");
+    announcer.id = "route-announcer";
+    document.body.appendChild(announcer);
+
+    // Initial render with route "/"
+    const { unmount } = renderWithProviders(<App />, {
+      preloadedState: initialState,
+      route: "/",
+    });
+    expect(announcer.textContent).toContain("Pomodoro Timer");
+
+    // Unmount and render again with route "/settings" to simulate navigation
+    unmount();
+
+    renderWithProviders(<App />, {
+      preloadedState: initialState,
+      route: "/settings",
+    });
+
+    await waitFor(() => {
+      expect(announcer.textContent).toContain("Settings");
+    });
+
+    document.body.removeChild(announcer);
   });
 });

@@ -1,7 +1,7 @@
 /* eslint-disable import/first */
 // src/hooks/__tests__/useAudioManager.test.js
 import React from "react";
-import { renderHook } from "@testing-library/react";
+import { renderHook, act } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import settingsReducer, { initialState } from "../../store/settingsSlice";
@@ -140,6 +140,18 @@ describe("useAudioManager", () => {
       expect(audioManager.play).toHaveBeenCalledWith("Bell", {
         volume: undefined,
       });
+    });
+
+    test("play handles invalid sound name gracefully", async () => {
+      audioManager.play.mockRejectedValueOnce(new Error("Invalid sound"));
+      const store = createTestStore();
+      const { result } = renderHook(() => useAudioManager(), {
+        wrapper: createWrapper(store),
+      });
+
+      await expect(result.current.play("UnknownSound")).rejects.toThrow(
+        "Invalid sound"
+      );
     });
   });
 
@@ -297,6 +309,19 @@ describe("useAudioManager", () => {
         volume: undefined,
       });
     });
+
+    test("playButtonSound does not play if volume is 0 and buttonSound is false", async () => {
+      const store = createTestStore({
+        alarm: { ...initialState.alarm, volume: 0, buttonSound: false },
+      });
+      const { result } = renderHook(() => useAudioManager(), {
+        wrapper: createWrapper(store),
+      });
+
+      await result.current.playButtonSound();
+
+      expect(audioManager.play).not.toHaveBeenCalled();
+    });
   });
 
   describe("setVolume method", () => {
@@ -324,6 +349,19 @@ describe("useAudioManager", () => {
 
       expect(returnValue).toBeNull();
     });
+
+    test("setVolume handles invalid volume values gracefully", () => {
+      audioManager.setVolume.mockImplementationOnce(() => {
+        throw new Error("Invalid volume");
+      });
+      const store = createTestStore();
+      const { result } = renderHook(() => useAudioManager(), {
+        wrapper: createWrapper(store),
+      });
+
+      const returnValue = result.current.setVolume("Bell", -1);
+      expect(returnValue).toBeNull();
+    });
   });
 
   describe("mute/unmute/isMuted methods", () => {
@@ -338,6 +376,18 @@ describe("useAudioManager", () => {
       expect(audioManager.mute).toHaveBeenCalled();
     });
 
+    test("handles audioManager.mute throwing error gracefully", () => {
+      audioManager.mute.mockImplementationOnce(() => {
+        throw new Error("Mute failed");
+      });
+      const store = createTestStore();
+      const { result } = renderHook(() => useAudioManager(), {
+        wrapper: createWrapper(store),
+      });
+
+      expect(() => result.current.mute()).not.toThrow();
+    });
+
     test("unmute calls audioManager.unmute", () => {
       const store = createTestStore();
       const { result } = renderHook(() => useAudioManager(), {
@@ -347,6 +397,18 @@ describe("useAudioManager", () => {
       result.current.unmute();
 
       expect(audioManager.unmute).toHaveBeenCalled();
+    });
+
+    test("handles audioManager.unmute throwing error gracefully", () => {
+      audioManager.unmute.mockImplementationOnce(() => {
+        throw new Error("Unmute failed");
+      });
+      const store = createTestStore();
+      const { result } = renderHook(() => useAudioManager(), {
+        wrapper: createWrapper(store),
+      });
+
+      expect(() => result.current.unmute()).not.toThrow();
     });
 
     test("isMuted calls audioManager.isMuted", () => {
@@ -371,6 +433,18 @@ describe("useAudioManager", () => {
       const muted = result.current.isMuted();
 
       expect(muted).toBe(true);
+    });
+
+    test("handles audioManager.isMuted throwing error gracefully", () => {
+      audioManager.isMuted.mockImplementationOnce(() => {
+        throw new Error("isMuted failed");
+      });
+      const store = createTestStore();
+      const { result } = renderHook(() => useAudioManager(), {
+        wrapper: createWrapper(store),
+      });
+
+      expect(() => result.current.isMuted()).not.toThrow();
     });
   });
 

@@ -29,7 +29,11 @@ jest.mock("../../hooks/useAudioManager", () => ({
 const renderWithProviders = (ui, { store }) => {
   return render(
     <Provider store={store}>
-      <MemoryRouter>{ui}</MemoryRouter>
+      <MemoryRouter
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
+        {ui}
+      </MemoryRouter>
     </Provider>
   );
 };
@@ -748,106 +752,8 @@ describe("Settings component", () => {
     });
   });
 
+  // Uncomment and adjust these edge case tests if needed
   // describe("Edge Cases", () => {
-  //   it("handles missing alarm object in state", () => {
-  //     store = mockStore({
-  //       settings: {
-  //         timers: { pomodoro: 25, short: 5, long: 15 },
-  //         autostart: false,
-  //         timermode: 1,
-  //       },
-  //     });
-  //     store.dispatch = dispatchMock;
-
-  //     expect(() => {
-  //       renderWithProviders(<Settings />, { store });
-  //     }).not.toThrow();
-  //   });
-
-  //   it("handles undefined volume in state", () => {
-  //     store = mockStore({
-  //       settings: {
-  //         ...defaultState.settings,
-  //         alarm: {
-  //           buttonSound: false,
-  //           enabled: false,
-  //           sound: "No Sound",
-  //         },
-  //       },
-  //     });
-
-  //     renderWithProviders(<Settings />, { store });
-
-  //     expect(screen.getByText("0")).toBeInTheDocument();
-  //   });
-
-  //   it("stops button sound before playing when clicking rapidly", () => {
-  //     store = mockStore({
-  //       settings: {
-  //         ...defaultState.settings,
-  //         alarm: {
-  //           ...defaultState.settings.alarm,
-  //           buttonSound: true,
-  //         },
-  //       },
-  //     });
-  //     store.dispatch = dispatchMock;
-
-  //     renderWithProviders(<Settings />, { store });
-  //     const incrementBtn = screen.getByLabelText("Increment Pomodoro");
-
-  //     fireEvent.click(incrementBtn);
-  //     fireEvent.click(incrementBtn);
-
-  //     expect(mockStop).toHaveBeenCalledWith("button");
-  //   });
-
-  //   it("handles setVolume being undefined gracefully", async () => {
-  //     const {
-  //       default: useAudioManager,
-  //     } = require("../../hooks/useAudioManager");
-  //     useAudioManager.mockImplementationOnce(() => ({
-  //       play: mockPlay,
-  //       stop: mockStop,
-  //       load: mockLoad,
-  //       playButtonSound: mockPlayButtonSound,
-  //       setVolume: undefined,
-  //     }));
-
-  //     store = mockStore({
-  //       settings: {
-  //         ...defaultState.settings,
-  //         alarm: {
-  //           volume: 0.5,
-  //           buttonSound: false,
-  //           enabled: true,
-  //           sound: "Bell",
-  //         },
-  //       },
-  //     });
-
-  //     renderWithProviders(<Settings />, { store });
-
-  //     await waitFor(() => {
-  //       expect(mockLoad).toHaveBeenCalledWith("Bell");
-  //     });
-  //   });
-
-  //   it("handles load being undefined gracefully", () => {
-  //     const {
-  //       default: useAudioManager,
-  //     } = require("../../hooks/useAudioManager");
-  //     useAudioManager.mockImplementationOnce(() => ({
-  //       play: mockPlay,
-  //       stop: mockStop,
-  //       load: undefined,
-  //       playButtonSound: mockPlayButtonSound,
-  //       setVolume: mockSetVolume,
-  //     }));
-
-  //     expect(() => {
-  //       renderWithProviders(<Settings />, { store });
-  //     }).not.toThrow();
-  //   });
+  //   ...
   // });
 });

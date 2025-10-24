@@ -166,6 +166,19 @@ function generateCombinedSchema(siteUrl, includeFAQ = false) {
   };
 }
 
+// 404 Not Found Page Component
+function NotFound() {
+  return (
+    <Container
+      className="not-found-container"
+      style={{ padding: "2rem", textAlign: "center" }}
+    >
+      <h1>404 - Page Not Found</h1>
+      <p>Sorry, the page you are looking for does not exist.</p>
+    </Container>
+  );
+}
+
 function App() {
   const timerMode = useSelector(selectTimerMode);
   const progress = useSelector(selectProgress);
@@ -198,6 +211,7 @@ function App() {
       "/help": "Help - Pomodoro Timer Support and FAQs",
       "/report": "Report - View Your Pomodoro Sessions",
       "/login": "Login - Access Your Pomodoro Account",
+      "/404": "404 - Page Not Found",
     };
 
     const title = routeTitles[location.pathname] || "PomoBreak Timer";
@@ -355,6 +369,27 @@ function App() {
                       <div data-testid="help">
                         <Help />
                       </div>
+                    </>
+                  }
+                />
+                {/* Catch-all route for 404 */}
+                <Route
+                  path="*"
+                  element={
+                    <>
+                      <SEO
+                        title="404 - Page Not Found"
+                        description="The page you are looking for does not exist."
+                        canonicalUrl={`${BASE_URL}/404`}
+                        jsonLd={{
+                          "@context": "https://schema.org",
+                          "@type": "WebPage",
+                          name: "404 Not Found",
+                          url: `${BASE_URL}/404`,
+                          description: "Page not found.",
+                        }}
+                      />
+                      <NotFound />
                     </>
                   }
                 />
