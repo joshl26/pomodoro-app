@@ -1,33 +1,25 @@
-# Use official Node.js 18 Alpine image for smaller size
 FROM node:18-alpine
 
-# Set working directory
 WORKDIR /pomodoro-app
 
-# Copy package files first for better caching
+# Copy package files for caching
 COPY package.json package-lock.json* ./
+
+# Copy CRACO config file (adjust if named differently)
+COPY craco.config.js ./
 
 # Install dependencies
 RUN npm ci
 
-# Copy rest of the source code
+# Copy source and public folders
 COPY public ./public
 COPY src ./src
 
-# Build the React app for production
+# Build the React app
 RUN npm run build
 
-# Use a lightweight web server to serve the build output
-FROM nginx:alpine
+# Expose port 3051 (or your app's port)
+EXPOSE 3051
 
-# Copy built files from previous stage
-COPY --from=0 /pomodoro-app/build /usr/share/nginx/html
-
-# Copy custom nginx config if needed (optional)
-# COPY nginx.conf /etc/nginx/nginx.conf
-
-# Expose port 80 (default nginx port)
-EXPOSE 80
-
-# Start nginx server
-CMD ["nginx", "-g", "daemon off;"]
+# Start the app (assuming craco start or your start script)
+CMD ["npm", "start"]
