@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Homepage / Timer -->
+  <url>
+    <loc>https://joshlehman.ca/pomodor/</loc>
+    <lastmod>2025-10-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://joshlehman.ca/pomodor/android-chrome-512x512.png</image:loc>
+      <image:title>PomoBreak Timer</image:title>
+      <image:caption>Pomodoro productivity timer interface</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Settings Page -->
+  <url>
+    <loc>https://joshlehman.ca/pomodor/settings</loc>
+    <lastmod>2025-10-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Help Page -->
+  <url>
+    <loc>https://joshlehman.ca/pomodor/help</loc>
+    <lastmod>2025-10-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Charts/Report Page -->
+  <url>
+    <loc>https://joshlehman.ca/pomodor/report</loc>
+    <lastmod>2025-10-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Login Page -->
+  <url>
+    <loc>https://joshlehman.ca/pomodor/login</loc>
+    <lastmod>2025-10-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+</urlset>

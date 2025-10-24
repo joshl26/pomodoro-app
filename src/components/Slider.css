@@ -2,98 +2,125 @@ input[type="range"] {
   appearance: none;
   margin: 0 auto;
   width: 100%;
+  background: transparent; /* Remove default background */
 }
+
+/* Focus outline for accessibility */
 input[type="range"]:focus {
-  outline: none;
+  outline: 2px solid #005fcc;
+  outline-offset: 2px;
 }
+
+/* WebKit track */
 input[type="range"]::-webkit-slider-runnable-track {
   width: 100%;
   height: 8.4px;
   cursor: pointer;
-  /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
-  /* background: #3071a9; */
-  /* border-radius: 60px; */
-  /* border: 0.2px solid #010101; */
+  background: #ccc;
+  border-radius: 4px;
+  border: 1px solid #999;
 }
+
+/* WebKit thumb */
 input[type="range"]::-webkit-slider-thumb {
-  /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
-  border: 1px solid #000000;
-  height: 30px;
-  width: 30px;
+  border: 1px solid #000;
+  height: 28px;
+  width: 28px;
   border-radius: 50%;
-  background: #ffffff;
+  background: #fff;
   cursor: pointer;
   -webkit-appearance: none;
-  margin-top: -11px;
+  margin-top: -10px; /* Center thumb on track */
+  transition: background-color 0.3s ease;
 }
-input[type="range"]:focus::-webkit-slider-runnable-track {
-  background: transparent;
+
+input[type="range"]::-webkit-slider-thumb:hover,
+input[type="range"]:focus::-webkit-slider-thumb {
+  background-color: #e6e6e6;
 }
+
+/* Firefox track */
 input[type="range"]::-moz-range-track {
   width: 100%;
   height: 8.4px;
   cursor: pointer;
-  /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
-  background: transparent;
-  /* border-radius: 1.3px;
-  border: 0.2px solid #010101; */
+  background: #ccc;
+  border-radius: 4px;
+  border: 1px solid #999;
 }
+
+/* Firefox thumb */
 input[type="range"]::-moz-range-thumb {
-  /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
-  /* border: 1px solid #000000; */
-  height: 36px;
-  width: 16px;
-  border-radius: 3px;
-  background: #ffffff;
+  border: 1px solid #000;
+  height: 28px;
+  width: 28px;
+  border-radius: 50%;
+  background: #fff;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
+
+input[type="range"]::-moz-range-thumb:hover,
+input[type="range"]:focus::-moz-range-thumb {
+  background-color: #e6e6e6;
+}
+
+/* IE track */
 input[type="range"]::-ms-track {
   width: 100%;
   height: 8.4px;
   cursor: pointer;
   background: transparent;
   border-color: transparent;
-  border-width: 16px 0;
+  border-width: 8px 0;
   color: transparent;
 }
+
+/* IE fill lower */
 input[type="range"]::-ms-fill-lower {
-  background: transparent;
-  /* border: 0.2px solid #010101; */
-  border-radius: 2.6px;
-  /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
-}
-input[type="range"]::-ms-fill-upper {
-  background: transparent;
-  /* border: 0.2px solid #010101; */
-  border-radius: 2.6px;
-  /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
-}
-input[type="range"]::-ms-thumb {
-  /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000; */
-  height: 36px;
-  width: 16px;
-  border-radius: 3px;
-  background: #ffffff;
-  cursor: pointer;
-}
-input[type="range"]:focus::-ms-fill-lower {
-  background: transparent;
-}
-input[type="range"]:focus::-ms-fill-upper {
-  background: transparent;
+  background: #ccc;
+  border-radius: 4px;
+  border: 1px solid #999;
 }
 
+/* IE fill upper */
+input[type="range"]::-ms-fill-upper {
+  background: #ccc;
+  border-radius: 4px;
+  border: 1px solid #999;
+}
+
+/* IE thumb */
+input[type="range"]::-ms-thumb {
+  border: 1px solid #000;
+  height: 28px;
+  width: 28px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+input[type="range"]:focus::-ms-fill-lower,
+input[type="range"]:focus::-ms-fill-upper {
+  background: #bbb;
+}
+
+input[type="range"]::-ms-thumb:hover,
+input[type="range"]:focus::-ms-thumb {
+  background-color: #e6e6e6;
+}
+
+/* Container styling */
 .slider-container {
   margin: 0 auto;
   width: 50vw;
   padding-top: 1rem;
 }
 
-/* Medium devices (landscape tablets, 768px and up) */
+/* Medium devices (landscape tablets, 769px and up) */
 @media only screen and (min-width: 769px) {
   .slider-container {
-    margin: 0 auto;
     width: 100%;
     padding-top: 1rem;
   }

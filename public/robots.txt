@@ -1,0 +1,13 @@
+# robots.txt for PomoBreak
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://joshlehman.ca/pomodor/sitemap.xml
+
+# Disallow admin or internal pages (if any)
+# Disallow: /admin/
+# Disallow: /api/
+
+# Crawl delay (optional, helps prevent server overload)
+Crawl-delay: 1

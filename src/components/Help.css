@@ -1,7 +1,176 @@
-.howto-image {
-  width: 100%;
+.help-container {
+  padding: 2.5rem 1.5rem;
+  max-width: 720px;
+  margin: 0 auto;
+  color: #fff; /* white text */
+  font-family: var(
+    --font-family,
+    "Segoe UI",
+    Tahoma,
+    Geneva,
+    Verdana,
+    sans-serif
+  );
+  background-color: transparent;
+  line-height: 1.6;
+  user-select: text;
+  outline: none;
 }
 
-.textalign-center {
+.text-center {
   text-align: center;
+}
+
+.spacer {
+  height: 2rem;
+}
+
+h2 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  font-size: 1.75rem;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  transition: color 0.3s ease;
+}
+
+p,
+ul,
+ol,
+dl {
+  font-size: 1.125rem;
+  color: #eee;
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.02em;
+}
+
+ol,
+ul {
+  padding-left: 2rem;
+}
+
+ol li,
+ul li {
+  margin-bottom: 0.75rem;
+}
+
+.faq dl {
+  padding-left: 1rem;
+}
+
+.faq dt {
+  font-weight: 700;
+  margin-top: 1rem;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.faq dt::before {
+  content: "➤";
+  position: absolute;
+  left: 0;
+  color: #fff;
+  transition: transform 0.3s ease;
+}
+
+.faq dt.open::before {
+  transform: rotate(90deg);
+}
+
+.faq dd {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+  color: #ddd;
+  line-height: 1.5;
+}
+
+.align-center {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.howto-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--border-radius, 12px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.3s ease;
+  cursor: default;
+}
+
+.howto-image:hover,
+.howto-image:focus {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  outline: none;
+}
+
+figcaption {
+  font-size: 0.9rem;
+  color: #ccc;
+  text-align: center;
+  margin-top: 0.75rem;
+  font-style: italic;
+  user-select: none;
+}
+
+.help-container a {
+  color: #fff;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.help-container a:hover,
+.help-container a:focus {
+  color: #ddd;
+  outline: none;
+}
+
+.help-container :focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .help-container {
+    padding: 2rem 1rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  p,
+  ul,
+  ol,
+  dl {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .help-container {
+    padding: 1.5rem 0.75rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  p,
+  ul,
+  ol,
+  dl {
+    font-size: 0.95rem;
+  }
+
+  .spacer {
+    height: 1.5rem;
+  }
 }

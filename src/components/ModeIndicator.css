@@ -1,0 +1,19 @@
+.mode-indicator {
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--primary-color);
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  background-color: var(--background-light);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  user-select: none;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+/* Dark mode */
+body:not(.light-theme) .mode-indicator {
+  background-color: var(--background-dark);
+  color: var(--primary-color);
+  box-shadow: 0 2px 6px rgba(255, 255, 255, 0.1);
+}

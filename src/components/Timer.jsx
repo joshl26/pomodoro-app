@@ -41,23 +41,13 @@ function Timer() {
   const timer = useSelector(selectTimer);
   const rawAlarmSettings = useSelector(selectAlarmSettings);
 
-  // FIX 1: Memoize alarm settings properly
-  const alarmSettings = useMemo(() => {
-    if (!rawAlarmSettings) {
-      return {
-        enabled: false,
-        sound: "No Sound",
-        volume: 0.8,
-        buttonSound: true,
-      };
-    }
-    return {
-      enabled: rawAlarmSettings.enabled,
-      sound: rawAlarmSettings.sound,
-      volume: rawAlarmSettings.volume,
-      buttonSound: rawAlarmSettings.buttonSound,
-    };
-  }, [rawAlarmSettings]);
+  // Destructure alarm settings with defaults
+  const {
+    enabled: alarmEnabled = false,
+    sound: alarmSound = "No Sound",
+    volume: alarmVolume = 0.8,
+    buttonSound: buttonSoundState = true,
+  } = rawAlarmSettings || {};
 
   const {
     running = false,
@@ -66,10 +56,7 @@ function Timer() {
     alarmTriggered = false,
   } = timer || {};
 
-  const { volume: alarmVolume = 0.8, buttonSound: buttonSoundState = true } =
-    alarmSettings;
-
-  // FIX 2: Memoize calculated values
+  // Memoize calculated values
   const totalSeconds = useMemo(() => {
     return Math.max(
       1,
@@ -87,12 +74,10 @@ function Timer() {
     return Math.max(0, totalSeconds - secondsLeft);
   }, [totalSeconds, secondsLeft]);
 
-  // FIX 3: Add missing return statement in progressPercent
   const progressPercent = useMemo(() => {
     return Math.min(100, Math.max(0, (elapsedSeconds / totalSeconds) * 100));
   }, [elapsedSeconds, totalSeconds]);
 
-  // FIX 4: Memoize time display values
   const { minutes, seconds } = useMemo(() => {
     return {
       minutes: Math.floor(secondsLeft / 60),
@@ -103,7 +88,7 @@ function Timer() {
   // Audio manager
   const { play, stop, playButtonSound } = useAudioManager();
   const tickIntervalRef = useRef(null);
-  const currentAlarmRef = useRef(null);
+  const currentAlarmSoundRef = useRef(null);
 
   // Play/stop ticking sound while running
   useEffect(() => {
@@ -142,16 +127,14 @@ function Timer() {
       stop("tick");
       dispatch(resetTimerForModeThunk({ keepAudio: true }));
 
-      if (alarmSettings.enabled) {
+      if (alarmEnabled) {
         const soundName =
-          alarmSettings.sound && alarmSettings.sound !== "No Sound"
-            ? alarmSettings.sound
-            : "alarm";
+          alarmSound && alarmSound !== "No Sound" ? alarmSound : "alarm";
 
-        currentAlarmRef.current = soundName;
+        currentAlarmSoundRef.current = soundName;
         play(soundName, {
           loop: true,
-          volume: alarmSettings.volume ?? alarmVolume,
+          volume: alarmVolume,
         }).catch(() => {});
       }
 
@@ -160,22 +143,21 @@ function Timer() {
         dispatch(startTimerWithSeconds(nextTotal));
       }
     } else {
-      if (currentAlarmRef.current) {
-        stop(currentAlarmRef.current);
-        currentAlarmRef.current = null;
+      if (currentAlarmSoundRef.current) {
+        stop(currentAlarmSoundRef.current);
+        currentAlarmSoundRef.current = null;
       }
     }
   }, [
     alarmTriggered,
-    alarmSettings.enabled,
-    alarmSettings.sound,
-    alarmSettings.volume,
+    alarmEnabled,
+    alarmSound,
+    alarmVolume,
     autoStartState,
     currentTime,
     dispatch,
     play,
     stop,
-    alarmVolume,
   ]);
 
   // Button sound wrapper
@@ -236,13 +218,11 @@ function Timer() {
     switchMode,
   ]);
 
-  // FIX 5: Memoize reset handler
   const handleReset = useCallback(() => {
     playBtnSound();
     dispatch(resetTimerForModeThunk({ keepAudio: true }));
   }, [playBtnSound, dispatch]);
 
-  // FIX 6: Memoize autostart toggle handler
   const handleToggleAutoStart = useCallback(
     (checked) => {
       dispatch(setAutoStart(checked));
@@ -250,7 +230,6 @@ function Timer() {
     [dispatch]
   );
 
-  // FIX 7: Memoize mode name (avoid recalculation on every render)
   const currentModeName = useMemo(() => {
     return getModeName();
   }, [getModeName]);
@@ -267,19 +246,19 @@ function Timer() {
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (currentAlarmRef.current) {
-        stop(currentAlarmRef.current);
-        currentAlarmRef.current = null;
+      if (currentAlarmSoundRef.current) {
+        stop(currentAlarmSoundRef.current);
+        currentAlarmSoundRef.current = null;
       }
       stop("tick");
     };
   }, [stop]);
 
   return (
-    <div className="timer-container">
+    <section className="timer-container" aria-label="Pomodoro Timer">
       <div className="timer-content">
         <ModeIndicator currentModeName={currentModeName} />
-        <TimeDisplay minutes={minutes} seconds={seconds} />
+        <TimeDisplay minutes={minutes} seconds={seconds} ariaLive="polite" />
         <ProgressBar
           progressPercent={progressPercent}
           currentMode={currentMode}
@@ -314,9 +293,8 @@ function Timer() {
       </div>
 
       <SecondaryButtons />
-    </div>
+    </section>
   );
 }
 
-// FIX 8: Wrap Timer in React.memo for Phase 6 optimization
 export default React.memo(Timer);

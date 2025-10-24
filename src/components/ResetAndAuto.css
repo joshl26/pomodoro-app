@@ -1,0 +1,77 @@
+/* ResetAndAuto.css */
+
+.reset-container,
+.autobreak-container {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Reset button styling */
+.control-btn.reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition:
+    background-color var(--transition-speed),
+    box-shadow var(--transition-speed);
+  user-select: none;
+}
+
+.control-btn.reset-btn:hover,
+.control-btn.reset-btn:focus {
+  background-color: rgb(200, 70, 65); /* Slightly darker primary */
+  box-shadow: 0 0 8px var(--primary-color);
+  outline: none;
+}
+
+/* Icon inside button */
+.control-btn.reset-btn svg {
+  width: 1.2em;
+  height: 1.2em;
+  fill: currentColor;
+  pointer-events: none; /* Prevent icon from capturing pointer events */
+}
+
+/* Auto start checkbox label */
+.autobreak-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Checkbox input */
+.autobreak-toggle input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  margin: 0;
+  accent-color: var(--primary-color); /* Modern browsers */
+  flex-shrink: 0;
+}
+
+/* Focus outline for checkbox */
+.autobreak-toggle input[type="checkbox"]:focus {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .reset-container,
+  .autobreak-container {
+    justify-content: center;
+  }
+}

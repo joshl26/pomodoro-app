@@ -166,3 +166,99 @@ a:focus {
     padding: 1rem;
   }
 }
+
+/* Skip to main content link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--primary-color);
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 0 0 4px 0;
+  z-index: 10000;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid var(--secondary-color);
+  outline-offset: 2px;
+}
+
+/* Route announcer for screen readers */
+#route-announcer {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Focus visible styles (keyboard navigation) */
+*:focus-visible {
+  outline: 3px solid var(--secondary-color);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Remove outline for mouse users but keep for keyboard */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --primary-color: #ff0000;
+    --secondary-color: #00ffff;
+    --tertiary-color: #0000ff;
+  }
+
+  button,
+  input,
+  select {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Dark mode support (auto-detect) */
+@media (prefers-color-scheme: dark) {
+  body:not(.light-theme) {
+    background-color: var(--background-dark);
+    color: var(--text-primary);
+  }
+}
+
+/* Ensure sufficient color contrast */
+button:disabled,
+input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Touch target size (minimum 44x44px for accessibility) */
+@media (pointer: coarse) {
+  button,
+  input[type="checkbox"],
+  input[type="radio"],
+  select,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

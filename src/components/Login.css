@@ -1,0 +1,12 @@
+.login-container {
+  background-color: var(--background-light);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+body:not(.light-theme) .login-container {
+  background-color: var(--background-dark);
+  box-shadow: 0 6px 18px rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}

@@ -4,11 +4,9 @@ import ReactDOM from "react-dom/client";
 import App from "./layout";
 import store from "./store/store";
 import { Provider } from "react-redux";
+import { HelmetProvider } from "react-helmet-async";
 
-// Importing the Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
-
-// Import global styles
 import "./index.css";
 
 const rootElement = document.getElementById("root");
@@ -18,11 +16,13 @@ if (rootElement) {
 
   root.render(
     <React.StrictMode>
-      <Provider store={store}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </Provider>
+      <HelmetProvider>
+        <Provider store={store}>
+          <BrowserRouter basename="/pomodor">
+            <App />
+          </BrowserRouter>
+        </Provider>
+      </HelmetProvider>
     </React.StrictMode>
   );
 } else {

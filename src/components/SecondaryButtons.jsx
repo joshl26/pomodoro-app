@@ -1,4 +1,3 @@
-// src/components/SecondaryButtons.jsx
 import React, { useCallback, useMemo, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./SecondaryButtons.css";
@@ -55,22 +54,18 @@ function SecondaryButtons() {
   const longTime = useSelector(selectLong);
   const autoStart = useSelector(selectIsAutoStart);
 
-  // use centralized audio hook; include load, stop, setVolume
   const { playButtonSound, load, stop, setVolume } = useAudioManager();
 
-  // Preload the currently selected alarm sound (unless "No Sound")
   useEffect(() => {
     if (!load) return;
     if (alarmSettings.sound && alarmSettings.sound !== "No Sound") {
       const inst = load(alarmSettings.sound);
-      // set instance volume to stored volume
       if (inst && typeof setVolume === "function") {
         setVolume(alarmSettings.sound, alarmSettings.volume);
       }
     }
   }, [alarmSettings.sound, alarmSettings.volume, load, setVolume]);
 
-  // Preload button sound when button sounds are enabled
   useEffect(() => {
     if (!load) return;
     if (alarmSettings.buttonSound) {
@@ -78,7 +73,6 @@ function SecondaryButtons() {
     }
   }, [alarmSettings.buttonSound, load]);
 
-  // stop on unmount
   useEffect(() => {
     return () => {
       stop("button");
@@ -130,7 +124,6 @@ function SecondaryButtons() {
       dispatch(setAlarmSound(value));
       if (value && value !== "No Sound") {
         dispatch(setAlarmState(true));
-        // ensure instance exists and set its volume
         if (load) {
           const inst = load(value);
           if (inst && typeof setVolume === "function") {
@@ -150,7 +143,6 @@ function SecondaryButtons() {
       safePlayButton();
       const numeric = Number.isFinite(v) ? v : 0;
       dispatch(setAlarmVolume(numeric));
-      // update loaded instance if present
       if (
         alarmSettings.sound &&
         alarmSettings.sound !== "No Sound" &&
@@ -169,17 +161,16 @@ function SecondaryButtons() {
 
   return (
     <div className="secondary-buttons-root">
-      <section className="settings-section">
-        <h3>Timer Durations</h3>
-
-        <div
-          className="setting-group"
-          aria-label="Focus time"
-          data-testid="focus-group"
-        >
-          <label className="setting-label">Focus Time</label>
-          <div className="setting-controls">
+      <section className="settings-section" aria-label="Timer Durations">
+        <fieldset>
+          <legend>Focus Time</legend>
+          <div
+            className="setting-controls"
+            aria-live="polite"
+            data-testid="focus-group"
+          >
             <button
+              type="button"
               className="setting-btn decrement"
               onClick={() => incDec(pomoDecrement)}
               aria-label="Decrease focus time"
@@ -187,14 +178,11 @@ function SecondaryButtons() {
             >
               −
             </button>
-            <span
-              className="setting-value"
-              aria-live="polite"
-              data-testid="pomo-value"
-            >
+            <span className="setting-value" data-testid="pomo-value">
               {pomoTime} min
             </span>
             <button
+              type="button"
               className="setting-btn increment"
               onClick={() => incDec(pomoIncrement)}
               aria-label="Increase focus time"
@@ -203,16 +191,17 @@ function SecondaryButtons() {
               +
             </button>
           </div>
-        </div>
+        </fieldset>
 
-        <div
-          className="setting-group"
-          aria-label="Short break time"
-          data-testid="short-group"
-        >
-          <label className="setting-label">Short Break</label>
-          <div className="setting-controls">
+        <fieldset>
+          <legend>Short Break</legend>
+          <div
+            className="setting-controls"
+            aria-live="polite"
+            data-testid="short-group"
+          >
             <button
+              type="button"
               className="setting-btn decrement"
               onClick={() => incDec(shortDecrement)}
               aria-label="Decrease short break time"
@@ -220,14 +209,11 @@ function SecondaryButtons() {
             >
               −
             </button>
-            <span
-              className="setting-value"
-              aria-live="polite"
-              data-testid="short-value"
-            >
+            <span className="setting-value" data-testid="short-value">
               {shortTime} min
             </span>
             <button
+              type="button"
               className="setting-btn increment"
               onClick={() => incDec(shortIncrement)}
               aria-label="Increase short break time"
@@ -236,16 +222,17 @@ function SecondaryButtons() {
               +
             </button>
           </div>
-        </div>
+        </fieldset>
 
-        <div
-          className="setting-group"
-          aria-label="Long break time"
-          data-testid="long-group"
-        >
-          <label className="setting-label">Long Break</label>
-          <div className="setting-controls">
+        <fieldset>
+          <legend>Long Break</legend>
+          <div
+            className="setting-controls"
+            aria-live="polite"
+            data-testid="long-group"
+          >
             <button
+              type="button"
               className="setting-btn decrement"
               onClick={() => incDec(longDecrement)}
               aria-label="Decrease long break time"
@@ -253,14 +240,11 @@ function SecondaryButtons() {
             >
               −
             </button>
-            <span
-              className="setting-value"
-              aria-live="polite"
-              data-testid="long-value"
-            >
+            <span className="setting-value" data-testid="long-value">
               {longTime} min
             </span>
             <button
+              type="button"
               className="setting-btn increment"
               onClick={() => incDec(longIncrement)}
               aria-label="Increase long break time"
@@ -269,12 +253,10 @@ function SecondaryButtons() {
               +
             </button>
           </div>
-        </div>
+        </fieldset>
       </section>
 
-      <section className="settings-section">
-        <h3>Preferences</h3>
-
+      <section className="settings-section" aria-label="Preferences">
         <div className="setting-group">
           <label className="checkbox-label">
             <input
@@ -302,8 +284,9 @@ function SecondaryButtons() {
         </div>
 
         <div className="setting-group">
-          <label>Alarm Sound</label>
+          <label htmlFor="alarm-sound-select">Alarm Sound</label>
           <select
+            id="alarm-sound-select"
             value={alarmSettings.sound ?? "No Sound"}
             onChange={handleAlarmSoundChange}
             aria-label="Select alarm sound"
@@ -317,11 +300,12 @@ function SecondaryButtons() {
         </div>
 
         <div className="setting-group">
-          <label>
+          <label htmlFor="alarm-volume-slider" id="alarm-volume-label">
             Volume: {Math.round((alarmSettings.volume ?? 0.5) * 100)}%
           </label>
           <input
             type="range"
+            id="alarm-volume-slider"
             min="0"
             max="1"
             step="0.01"
@@ -330,6 +314,8 @@ function SecondaryButtons() {
             aria-valuemin={0}
             aria-valuemax={1}
             aria-valuenow={alarmSettings.volume ?? 0.5}
+            aria-valuetext={`${Math.round((alarmSettings.volume ?? 0.5) * 100)} percent`}
+            aria-labelledby="alarm-volume-label"
             data-testid="alarm-volume-slider"
           />
         </div>
@@ -351,6 +337,7 @@ function SecondaryButtons() {
       <section className="settings-section">
         <div className="setting-group">
           <button
+            type="button"
             onClick={handleReset}
             className="reset-all-btn"
             data-testid="reset-all-btn"

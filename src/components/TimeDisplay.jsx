@@ -1,12 +1,12 @@
 import React from "react";
 
-function TimeDisplay({ minutes, seconds }) {
+function TimeDisplay({ minutes, seconds, ariaLive = "polite" }) {
   const formatTime = (value) => value.toString().padStart(2, "0");
 
   return (
     <div
       className="time-display"
-      aria-live="polite"
+      aria-live={ariaLive}
       aria-atomic="true"
       role="timer"
     >

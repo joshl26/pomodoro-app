@@ -3,6 +3,8 @@ import React from "react";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { render } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import settingsReducer from "../../store/settingsSlice";
 import timerReducer from "../../store/timerSlice";
 
@@ -24,14 +26,24 @@ export function createTestStore(preloadedState = {}) {
 }
 
 /**
- * Render component with redux provider and convenience return values
+ * Render component with redux, router, and helmet providers.
  * options:
  *   preloadedState: custom store state
+ *   route: initial route for MemoryRouter (default "/")
  */
-export function renderWithProviders(ui, { preloadedState } = {}) {
+export function renderWithProviders(ui, { preloadedState, route = "/" } = {}) {
   const store = createTestStore(preloadedState);
+  function Wrapper({ children }) {
+    return (
+      <Provider store={store}>
+        <HelmetProvider>
+          <MemoryRouter initialEntries={[route]}>{children}</MemoryRouter>
+        </HelmetProvider>
+      </Provider>
+    );
+  }
   return {
-    ...render(<Provider store={store}>{ui}</Provider>),
+    ...render(ui, { wrapper: Wrapper }),
     store,
   };
 }

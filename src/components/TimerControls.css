@@ -1,0 +1,32 @@
+.control-btn {
+  border: 2px solid transparent;
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  font-size: 1rem;
+}
+
+.control-btn:focus {
+  outline: none;
+  border-color: #005fcc;
+  box-shadow: 0 0 0 3px rgba(0, 95, 204, 0.5);
+}
+
+.control-btn:hover {
+  background-color: #0056b3;
+}
+
+.nav-btn {
+  padding: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.start-btn,
+.pause-btn {
+  font-weight: 600;
+}
