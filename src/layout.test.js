@@ -1,16 +1,13 @@
 import React from "react";
 import { screen, waitFor } from "@testing-library/react";
-import { renderWithProviders } from "./utilities/test-utils/renderWithProviders"; // Adjust path if needed
+import { renderWithProviders } from "./utilities/test-utils/renderWithProviders";
 import App from "./layout";
 
-// Mock window.scrollTo to avoid JSDOM not implemented error
 beforeAll(() => {
   window.scrollTo = jest.fn();
 });
 
-// Define mock Settings component outside jest.mock to avoid Jest scope error
 const MockSettings = () => <div data-testid="settings">Mocked Settings</div>;
-
 jest.mock("./components/Settings", () => MockSettings);
 
 describe("App layout", () => {
@@ -43,8 +40,27 @@ describe("App layout", () => {
     },
   };
 
+  const renderApp = (route, state = initialState) =>
+    renderWithProviders(<App />, { preloadedState: state, route });
+
+  afterEach(() => {
+    // Clean up Helmet side effects to avoid test pollution
+    document.head
+      // eslint-disable-next-line testing-library/no-node-access
+      .querySelectorAll('link[rel="canonical"]')
+      .forEach((el) => el.remove());
+    // eslint-disable-next-line testing-library/no-node-access
+    document.head.querySelectorAll("title").forEach((el) => el.remove());
+    // eslint-disable-next-line testing-library/no-node-access
+    document.head.querySelectorAll("meta").forEach((el) => el.remove());
+    document.head
+      // eslint-disable-next-line testing-library/no-node-access
+      .querySelectorAll('script[type="application/ld+json"]')
+      .forEach((el) => el.remove());
+  });
+
   it("renders with correct active class and progress percent", () => {
-    renderWithProviders(<App />, { preloadedState: initialState, route: "/" });
+    renderApp("/");
 
     const rootDiv = screen.getByTestId("app-root");
     expect(rootDiv).toHaveClass("pomodoro");
@@ -56,16 +72,27 @@ describe("App layout", () => {
 
   it("updates favicon href based on timerMode", () => {
     const mockFavicon = { href: "" };
-    const getElementByIdSpy = jest
-      .spyOn(document, "getElementById")
-      .mockReturnValue(mockFavicon);
+    jest.spyOn(document, "getElementById").mockReturnValue(mockFavicon);
 
-    renderWithProviders(<App />, { preloadedState: initialState, route: "/" });
+    // Render with timerMode 1
+    const { unmount } = renderApp("/");
 
-    expect(getElementByIdSpy).toHaveBeenCalledWith("favicon");
     expect(mockFavicon.href).toContain("/pomodor/favicons/pomo/favicon.ico");
 
-    getElementByIdSpy.mockRestore();
+    unmount();
+
+    // Render with timerMode 2
+    renderApp("/", {
+      ...initialState,
+      settings: {
+        ...initialState.settings,
+        current: { ...initialState.settings.current, timermode: 2 },
+      },
+    });
+
+    expect(mockFavicon.href).toContain("/pomodor/favicons/short/favicon.ico");
+
+    jest.restoreAllMocks();
   });
 
   it("sets default favicon for invalid timerMode", () => {
@@ -80,10 +107,7 @@ describe("App layout", () => {
       },
     };
 
-    renderWithProviders(<App />, {
-      preloadedState: invalidTimerModeState,
-      route: "/",
-    });
+    renderApp("/", invalidTimerModeState);
 
     expect(mockFavicon.href).toContain("/pomodor/favicons/pomo/favicon.ico");
 
@@ -91,7 +115,7 @@ describe("App layout", () => {
   });
 
   it("renders Timer component on / route and sets correct page title", async () => {
-    renderWithProviders(<App />, { preloadedState: initialState, route: "/" });
+    renderApp("/");
 
     expect(screen.getByTestId("timer")).toBeInTheDocument();
 
@@ -101,72 +125,63 @@ describe("App layout", () => {
   });
 
   it("renders Settings component on /settings route and sets correct page title", async () => {
-    renderWithProviders(<App />, {
-      preloadedState: initialState,
-      route: "/settings",
-    });
+    renderApp("/settings");
 
     await waitFor(() => {
       expect(screen.getByText("Mocked Settings")).toBeInTheDocument();
-    });
-
-    await waitFor(() => {
+      // eslint-disable-next-line testing-library/no-wait-for-multiple-assertions
       expect(document.title).toBe("Settings - Customize Your Pomodoro Timer");
     });
   });
 
   it("renders Report component on /report route and sets correct page title", async () => {
-    renderWithProviders(<App />, {
-      preloadedState: initialState,
-      route: "/report",
-    });
+    renderApp("/report");
 
     await waitFor(() => {
       expect(screen.getByTestId("report")).toBeInTheDocument();
-    });
-
-    await waitFor(() => {
+      // eslint-disable-next-line testing-library/no-wait-for-multiple-assertions
       expect(document.title).toBe("Report - View Your Pomodoro Sessions");
     });
   });
 
   it("renders Login component on /login route and sets correct page title", async () => {
-    renderWithProviders(<App />, {
-      preloadedState: initialState,
-      route: "/login",
-    });
+    renderApp("/login");
 
     await waitFor(() => {
       expect(screen.getByTestId("login")).toBeInTheDocument();
-    });
-
-    await waitFor(() => {
+      // eslint-disable-next-line testing-library/no-wait-for-multiple-assertions
       expect(document.title).toBe("Login - Access Your Pomodoro Account");
     });
   });
 
   it("renders Help component on /help route and sets correct page title", async () => {
-    renderWithProviders(<App />, {
-      preloadedState: initialState,
-      route: "/help",
-    });
+    renderApp("/help");
 
     await waitFor(() => {
       expect(screen.getByTestId("help")).toBeInTheDocument();
-    });
-
-    await waitFor(() => {
+      // eslint-disable-next-line testing-library/no-wait-for-multiple-assertions
       expect(document.title).toBe("Help - Pomodoro Timer Support and FAQs");
     });
   });
 
-  it("renders 404 page on unknown route", () => {
-    renderWithProviders(<App />, {
-      preloadedState: initialState,
-      route: "/unknown",
-    });
+  it("renders 404 page on unknown route", async () => {
+    renderApp("/unknown");
 
     expect(screen.getByText(/404 - Page Not Found/i)).toBeInTheDocument();
+    expect(document.title).toBe("404 - Page Not Found");
+
+    // Wait for canonical links to appear
+    await waitFor(() => {
+      // eslint-disable-next-line testing-library/no-node-access
+      const canonicalLinks = document.querySelectorAll('link[rel="canonical"]');
+      expect(canonicalLinks.length).toBeGreaterThan(0);
+
+      const has404Canonical = Array.from(canonicalLinks).some((link) =>
+        link.getAttribute("href").includes("/404")
+      );
+      // eslint-disable-next-line testing-library/no-wait-for-multiple-assertions
+      expect(has404Canonical).toBe(true);
+    });
   });
 
   it("applies correct class for short break mode", () => {
@@ -176,16 +191,13 @@ describe("App layout", () => {
         ...initialState.settings,
         current: {
           ...initialState.settings.current,
-          timermode: 2, // short break mode
+          timermode: 2,
         },
         progress: { percent: 10 },
       },
     };
 
-    renderWithProviders(<App />, {
-      preloadedState: shortBreakState,
-      route: "/",
-    });
+    renderApp("/", shortBreakState);
 
     const rootDiv = screen.getByTestId("app-root");
     expect(rootDiv).toHaveClass("short");
@@ -198,16 +210,13 @@ describe("App layout", () => {
         ...initialState.settings,
         current: {
           ...initialState.settings.current,
-          timermode: 3, // long break mode
+          timermode: 3,
         },
         progress: { percent: 90 },
       },
     };
 
-    renderWithProviders(<App />, {
-      preloadedState: longBreakState,
-      route: "/",
-    });
+    renderApp("/", longBreakState);
 
     const rootDiv = screen.getByTestId("app-root");
     expect(rootDiv).toHaveClass("long");
@@ -228,7 +237,7 @@ describe("App layout", () => {
       },
     };
 
-    renderWithProviders(<App />, { preloadedState: progressState, route: "/" });
+    renderApp("/", progressState);
 
     const progressBar = screen.getByRole("progressbar");
     expect(progressBar).toBeInTheDocument();
@@ -236,7 +245,7 @@ describe("App layout", () => {
   });
 
   it("renders skip to main content link with correct attributes", () => {
-    renderWithProviders(<App />, { preloadedState: initialState, route: "/" });
+    renderApp("/");
 
     const skipLink = screen.getByRole("link", {
       name: /skip to main content/i,
@@ -247,10 +256,9 @@ describe("App layout", () => {
   });
 
   it("moves focus to main content on route change", () => {
-    renderWithProviders(<App />, { preloadedState: initialState, route: "/" });
+    renderApp("/");
 
-    const mainContent = screen.getByRole("main");
-    expect(document.activeElement).toBe(mainContent);
+    expect(screen.getByRole("main")).toHaveFocus();
   });
 
   it("updates route announcer text on route change", async () => {
@@ -258,20 +266,13 @@ describe("App layout", () => {
     announcer.id = "route-announcer";
     document.body.appendChild(announcer);
 
-    // Initial render with route "/"
-    const { unmount } = renderWithProviders(<App />, {
-      preloadedState: initialState,
-      route: "/",
-    });
+    const { unmount } = renderApp("/");
+
     expect(announcer.textContent).toContain("Pomodoro Timer");
 
-    // Unmount and render again with route "/settings" to simulate navigation
     unmount();
 
-    renderWithProviders(<App />, {
-      preloadedState: initialState,
-      route: "/settings",
-    });
+    renderApp("/settings");
 
     await waitFor(() => {
       expect(announcer.textContent).toContain("Settings");

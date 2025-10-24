@@ -203,7 +203,7 @@ function App() {
     }
   }, [timerMode]);
 
-  // Announce route changes to screen readers
+  // Announce route changes to screen readers and set document title
   useEffect(() => {
     const routeTitles = {
       "/": "Pomodoro Timer - Boost Your Productivity",
@@ -214,7 +214,8 @@ function App() {
       "/404": "404 - Page Not Found",
     };
 
-    const title = routeTitles[location.pathname] || "PomoBreak Timer";
+    // Default to 404 title if path not recognized
+    const title = routeTitles[location.pathname] || "404 - Page Not Found";
     document.title = title;
 
     // Announce to screen readers

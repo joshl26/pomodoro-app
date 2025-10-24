@@ -1,7 +1,7 @@
 /* eslint-disable import/first */
 // src/hooks/__tests__/useAudioManager.test.js
 import React from "react";
-import { renderHook, act } from "@testing-library/react";
+import { renderHook } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import settingsReducer, { initialState } from "../../store/settingsSlice";
@@ -153,6 +153,39 @@ describe("useAudioManager", () => {
         "Invalid sound"
       );
     });
+
+    test("play forwards all options correctly", async () => {
+      const store = createTestStore();
+      const { result } = renderHook(() => useAudioManager(), {
+        wrapper: createWrapper(store),
+      });
+
+      await result.current.play("Bell", {
+        loop: true,
+        playbackRate: 1.5,
+        volume: 0.4,
+      });
+      expect(audioManager.play).toHaveBeenCalledWith("Bell", {
+        loop: true,
+        playbackRate: 1.5,
+        volume: 0.4,
+      });
+    });
+
+    test("play with explicit volume 0 should use 0, not fallback", async () => {
+      const store = createTestStore({
+        alarm: { ...initialState.alarm, volume: 0.8 },
+      });
+      const { result } = renderHook(() => useAudioManager(), {
+        wrapper: createWrapper(store),
+      });
+
+      await result.current.play("Bell", { volume: 0 });
+
+      expect(audioManager.play).toHaveBeenCalledWith("Bell", {
+        volume: 0,
+      });
+    });
   });
 
   describe("stop method", () => {
@@ -180,6 +213,19 @@ describe("useAudioManager", () => {
 
       expect(returnValue).toBeNull();
       expect(audioManager.stop).toHaveBeenCalledWith("Bell");
+    });
+
+    test("stop returns null and does not throw on error", () => {
+      audioManager.stop.mockImplementationOnce(() => {
+        throw new Error("Stop error");
+      });
+      const store = createTestStore();
+      const { result } = renderHook(() => useAudioManager(), {
+        wrapper: createWrapper(store),
+      });
+
+      const ret = result.current.stop("Bell");
+      expect(ret).toBeNull();
     });
   });
 
@@ -291,7 +337,6 @@ describe("useAudioManager", () => {
         wrapper: createWrapper(store),
       });
 
-      // Should not throw, just resolve
       await expect(result.current.playButtonSound()).resolves.toBeUndefined();
     });
 
@@ -321,6 +366,21 @@ describe("useAudioManager", () => {
       await result.current.playButtonSound();
 
       expect(audioManager.play).not.toHaveBeenCalled();
+    });
+
+    test("playButtonSound with volume 0 should pass 0", async () => {
+      const store = createTestStore({
+        alarm: { ...initialState.alarm, volume: 0, buttonSound: true },
+      });
+      const { result } = renderHook(() => useAudioManager(), {
+        wrapper: createWrapper(store),
+      });
+
+      await result.current.playButtonSound();
+
+      expect(audioManager.play).toHaveBeenCalledWith("button", {
+        volume: 0,
+      });
     });
   });
 
@@ -542,36 +602,6 @@ describe("useAudioManager", () => {
 
       expect(audioManager.play).toHaveBeenCalledWith("Bell", {
         volume: undefined,
-      });
-    });
-
-    test("play with explicit volume 0 should use 0, not fallback", async () => {
-      const store = createTestStore({
-        alarm: { ...initialState.alarm, volume: 0.8 },
-      });
-      const { result } = renderHook(() => useAudioManager(), {
-        wrapper: createWrapper(store),
-      });
-
-      await result.current.play("Bell", { volume: 0 });
-
-      expect(audioManager.play).toHaveBeenCalledWith("Bell", {
-        volume: 0,
-      });
-    });
-
-    test("playButtonSound with volume 0 should pass 0", async () => {
-      const store = createTestStore({
-        alarm: { ...initialState.alarm, volume: 0, buttonSound: true },
-      });
-      const { result } = renderHook(() => useAudioManager(), {
-        wrapper: createWrapper(store),
-      });
-
-      await result.current.playButtonSound();
-
-      expect(audioManager.play).toHaveBeenCalledWith("button", {
-        volume: 0,
       });
     });
   });

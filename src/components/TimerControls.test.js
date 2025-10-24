@@ -1,4 +1,3 @@
-// src/components/__tests__/TimerControls.test.jsx
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { TimerControls } from "./TimerControls";
@@ -100,5 +99,89 @@ describe("TimerControls", () => {
 
     fireEvent.click(screen.getByTestId("previous-cycle-btn"));
     expect(onBackward).toHaveBeenCalledTimes(1);
+  });
+
+  describe("keyboard navigation", () => {
+    test("arrow keys navigate focus between buttons when running and not paused", () => {
+      render(
+        <TimerControls
+          running={true}
+          cyclePaused={false}
+          onStart={onStart}
+          onPause={onPause}
+          onResume={onResume}
+          onForward={onForward}
+          onBackward={onBackward}
+          playBtnSound={playBtnSound}
+        />
+      );
+
+      const prevBtn = screen.getByTestId("previous-cycle-btn");
+      const pauseBtn = screen.getByTestId("pause-btn");
+      const nextBtn = screen.getByTestId("next-cycle-btn");
+
+      // Focus first button
+      prevBtn.focus();
+      // eslint-disable-next-line testing-library/no-node-access
+      expect(document.activeElement).toBe(prevBtn);
+
+      // ArrowRight moves focus to pauseBtn (index 1)
+      fireEvent.keyDown(prevBtn, { key: "ArrowRight" });
+      // eslint-disable-next-line testing-library/no-node-access
+      expect(document.activeElement).toBe(pauseBtn);
+
+      // ArrowRight moves focus to nextBtn (index 2)
+      fireEvent.keyDown(pauseBtn, { key: "ArrowRight" });
+      // eslint-disable-next-line testing-library/no-node-access
+      expect(document.activeElement).toBe(nextBtn);
+
+      // ArrowRight cycles back to prevBtn (index 0)
+      fireEvent.keyDown(nextBtn, { key: "ArrowRight" });
+      // eslint-disable-next-line testing-library/no-node-access
+      expect(document.activeElement).toBe(prevBtn);
+
+      // ArrowLeft cycles back to nextBtn (index 2)
+      fireEvent.keyDown(prevBtn, { key: "ArrowLeft" });
+      // eslint-disable-next-line testing-library/no-node-access
+      expect(document.activeElement).toBe(nextBtn);
+
+      // ArrowUp cycles to pauseBtn (index 1)
+      fireEvent.keyDown(prevBtn, { key: "ArrowUp" });
+      // eslint-disable-next-line testing-library/no-node-access
+      expect(document.activeElement).toBe(pauseBtn);
+
+      // ArrowDown cycles to nextBtn (index 2)
+      fireEvent.keyDown(pauseBtn, { key: "ArrowDown" });
+      // eslint-disable-next-line testing-library/no-node-access
+      expect(document.activeElement).toBe(nextBtn);
+    });
+    test("arrow keys navigate focus on Start button when not running", () => {
+      render(
+        <TimerControls
+          running={false}
+          cyclePaused={false}
+          onStart={onStart}
+          onPause={onPause}
+          onResume={onResume}
+          onForward={onForward}
+          onBackward={onBackward}
+          playBtnSound={playBtnSound}
+        />
+      );
+
+      const startBtn = screen.getByTestId("start-btn");
+      startBtn.focus();
+      // eslint-disable-next-line testing-library/no-node-access
+      expect(document.activeElement).toBe(startBtn);
+
+      // Arrow keys should not throw or change focus (only one button)
+      fireEvent.keyDown(startBtn, { key: "ArrowRight" });
+      // eslint-disable-next-line testing-library/no-node-access
+      expect(document.activeElement).toBe(startBtn);
+
+      fireEvent.keyDown(startBtn, { key: "ArrowLeft" });
+      // eslint-disable-next-line testing-library/no-node-access
+      expect(document.activeElement).toBe(startBtn);
+    });
   });
 });
