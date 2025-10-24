@@ -36,9 +36,9 @@
     "web-vitals": "^5.1.0"
   },
   "scripts": {
-    "start": "craco start",
-    "start-windows": "set PORT=3051 && craco start",
-    "build": "craco build",
+    "start": "export PORT=3051 && react-scripts start",
+    "start-windows": "set PORT=3051 && react-scripts start",
+    "build": "react-scripts build",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -47,7 +47,7 @@
     "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "lint": "npx eslint --fix \"src/**/*.{js,jsx}\"",
     "lint:check": "npx eslint \"src/**/*.{js,jsx}\"",
-    "analyze": "cross-env GENERATE_SOURCEMAP=true craco build && source-map-explorer 'build/static/js/*.js'"
+    "analyze": "cross-env GENERATE_SOURCEMAP=true react-scripts build && source-map-explorer 'build/static/js/*.js'"
   },
   "eslintConfig": {
     "extends": [
