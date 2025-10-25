@@ -1,19 +1,21 @@
 import React from "react";
 import { FaRedo } from "react-icons/fa";
-import "./ResetAndAuto.css";
 
 function ResetAndAuto({
   autoStartState,
   onToggleAutoStart,
   onReset,
   playBtnSound,
+  resetBtnTestId = "reset-btn",
+  autoStartToggleTestId = "auto-start-breaks-timer",
 }) {
   const handleResetClick = () => {
     playBtnSound();
     onReset();
   };
 
-  const handleAutoStartChange = (e) => {
+  const handleToggleChange = (e) => {
+    playBtnSound();
     onToggleAutoStart(e.target.checked);
   };
 
@@ -21,11 +23,11 @@ function ResetAndAuto({
     <>
       <div className="reset-container">
         <button
-          type="button"
           className="control-btn reset-btn"
           onClick={handleResetClick}
           aria-label="Reset Timer"
-          data-testid="reset-btn"
+          data-testid={resetBtnTestId}
+          type="button"
         >
           <FaRedo aria-hidden="true" focusable="false" /> Reset Timer
         </button>
@@ -39,9 +41,9 @@ function ResetAndAuto({
           <input
             id="auto-start-breaks-checkbox"
             type="checkbox"
-            data-testid="auto-start-breaks-timer"
             checked={autoStartState}
-            onChange={handleAutoStartChange}
+            onChange={handleToggleChange}
+            data-testid={autoStartToggleTestId}
             aria-checked={autoStartState}
           />
           <span>Auto Start Breaks</span>

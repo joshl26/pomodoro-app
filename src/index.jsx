@@ -18,7 +18,12 @@ if (rootElement) {
     <React.StrictMode>
       <HelmetProvider>
         <Provider store={store}>
-          <BrowserRouter basename="/pomodor">
+          <BrowserRouter
+            future={{
+              v7_startTransition: true,
+            }}
+            basename="/pomodor"
+          >
             <App />
           </BrowserRouter>
         </Provider>

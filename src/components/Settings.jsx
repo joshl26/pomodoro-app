@@ -50,15 +50,6 @@ const Settings = () => {
   const [volume, setLocalVolume] = useState(alarmVolumeState);
   const sliderPreviewTimer = useRef(null);
 
-  // // Announce page load to screen readers
-  // useEffect(() => {
-  //   document.title = "Settings - PomoBreak Timer";
-  //   const announcer = document.getElementById("route-announcer");
-  //   if (announcer) {
-  //     announcer.textContent = "Settings page loaded";
-  //   }
-  // }, []);
-
   useEffect(() => {
     setLocalVolume(alarmVolumeState);
   }, [alarmVolumeState]);
@@ -245,7 +236,7 @@ const Settings = () => {
               dispatch(setCurrentTimeFromMode());
             }}
             variant="custom"
-            className="time-buttons"
+            className="time-buttons increment-btn"
           >
             <FaPlus className="time-change" aria-hidden="true" />
           </Button>
@@ -259,7 +250,7 @@ const Settings = () => {
               dispatch(setCurrentTimeFromMode());
             }}
             variant="custom"
-            className="time-buttons"
+            className="time-buttons decrement-btn"
           >
             <FaMinus className="time-change" aria-hidden="true" />
           </Button>
@@ -269,193 +260,202 @@ const Settings = () => {
   };
 
   return (
-    <Container className="settings-container">
-      <h1>Settings</h1>
-      <div className="spacer-small" />
+    <div className="settings-wrapper">
+      <Container className="settings-container">
+        <h1 className="settings-title">Settings</h1>
 
-      <div className="settings-card">
-        <Row>
-          <Col xs={12} md={7}>
-            <p className="card-text align-right">
-              Tip: Click back to save your changes
-            </p>
-          </Col>
-          <Col xs={12} className="align-right">
-            <Link to="/">
-              <Button
-                id="back-btn"
-                onClick={backClickHandler}
-                variant="outline-light"
-                className="btn-back"
-              >
-                Back
-              </Button>
-            </Link>
-          </Col>
-        </Row>
+        <div className="settings-card">
+          <Row className="settings-header">
+            <Col xs={12} md={7}>
+              <p className="card-text settings-tip">
+                Tip: Click back to save your changes
+              </p>
+            </Col>
+            <Col xs={12} md={5} className="text-end">
+              <Link to="/">
+                <Button
+                  id="back-btn"
+                  onClick={backClickHandler}
+                  variant="outline-light"
+                  className="btn-back"
+                >
+                  Back
+                </Button>
+              </Link>
+            </Col>
+          </Row>
 
-        <div className="spacer-small" />
-        <div className="divider" />
-        <div className="spacer-small" />
+          <div className="settings-divider" />
 
-        {/* Time Settings */}
-        <h4 className="card-text">Time (minutes)</h4>
-        <Row>
-          <Col md={4} className="card-text">
-            <p className="timer-text">Pomodoro</p>
-            <Row>
-              <Col className="padding-left">
-                <div className="card-time">
-                  <h4 className="time-text">{pomodoroCount}</h4>
-                </div>
+          {/* Time Settings */}
+          <div className="settings-section">
+            <h4 className="section-title">Time (minutes)</h4>
+            <Row className="time-controls-row">
+              <Col xs={12} md={4} className="time-control-col">
+                <p className="timer-label">Pomodoro</p>
+                <Row className="time-control-inner">
+                  <Col xs={6} className="time-display-col">
+                    <div className="card-time">
+                      <h4 className="time-text">{pomodoroCount}</h4>
+                    </div>
+                  </Col>
+                  <TimeButtons buttonTime="pomo" />
+                </Row>
               </Col>
-              <TimeButtons buttonTime="pomo" />
-            </Row>
-          </Col>
-          <Col md={4} className="card-text">
-            <p className="timer-text">Short Break</p>
-            <Row>
-              <Col className="padding-left">
-                <div className="card-time">
-                  <h4 className="time-text">{shortCount}</h4>
-                </div>
+              <Col xs={12} md={4} className="time-control-col">
+                <p className="timer-label">Short Break</p>
+                <Row className="time-control-inner">
+                  <Col xs={6} className="time-display-col">
+                    <div className="card-time">
+                      <h4 className="time-text">{shortCount}</h4>
+                    </div>
+                  </Col>
+                  <TimeButtons buttonTime="short" />
+                </Row>
               </Col>
-              <TimeButtons buttonTime="short" />
-            </Row>
-          </Col>
-          <Col md={4} className="card-text">
-            <p className="timer-text">Long Break</p>
-            <Row>
-              <Col className="padding-left">
-                <div className="card-time">
-                  <h4 className="time-text">{longCount}</h4>
-                </div>
+              <Col xs={12} md={4} className="time-control-col">
+                <p className="timer-label">Long Break</p>
+                <Row className="time-control-inner">
+                  <Col xs={6} className="time-display-col">
+                    <div className="card-time">
+                      <h4 className="time-text">{longCount}</h4>
+                    </div>
+                  </Col>
+                  <TimeButtons buttonTime="long" />
+                </Row>
               </Col>
-              <TimeButtons buttonTime="long" />
             </Row>
-          </Col>
-          <div className="spacer" />
-        </Row>
+          </div>
 
-        <div className="divider" />
-        <div className="spacer" />
+          <div className="settings-divider" />
 
-        {/* Auto-start Toggle */}
-        <Row>
-          <Col>
-            <h4 className="card-text">Auto start Breaks?</h4>
-          </Col>
-          <Col style={{ textAlign: "left" }}>
-            <input
-              type="checkbox"
-              id="toggle-autostart"
-              checked={autoStartState}
-              onChange={autostartClickHandler}
-              aria-label="Auto start breaks"
-            />
-            <label htmlFor="toggle-autostart" className="toggle-label">
-              {autoStartState ? "Yes" : "No"}
-            </label>
-          </Col>
-        </Row>
+          {/* Auto-start Toggle */}
+          <div className="settings-section">
+            <Row className="settings-row">
+              <Col xs={12} md={6}>
+                <h4 className="section-title">Auto start Breaks?</h4>
+              </Col>
+              <Col xs={12} md={6} className="toggle-col">
+                <input
+                  type="checkbox"
+                  id="toggle-autostart"
+                  checked={autoStartState}
+                  onChange={autostartClickHandler}
+                  aria-label="Auto start breaks"
+                  className="settings-checkbox"
+                />
+                <label htmlFor="toggle-autostart" className="toggle-label">
+                  {autoStartState ? "Yes" : "No"}
+                </label>
+              </Col>
+            </Row>
+          </div>
 
-        <div className="spacer" />
-        <div className="divider" />
-        <div className="spacer" />
+          <div className="settings-divider" />
 
-        {/* Button Sounds Toggle */}
-        <Row>
-          <Col>
-            <h4 className="card-text">Button sounds?</h4>
-          </Col>
-          <Col style={{ textAlign: "left" }}>
-            <input
-              type="checkbox"
-              id="toggle-buttonsound"
-              checked={buttonSoundState}
-              onChange={buttonSoundClickHandler}
-              aria-label="Button sounds"
-            />
-            <label htmlFor="toggle-buttonsound" className="toggle-label">
-              {buttonSoundState ? "Yes" : "No"}
-            </label>
-          </Col>
-        </Row>
+          {/* Button Sounds Toggle */}
+          <div className="settings-section">
+            <Row className="settings-row">
+              <Col xs={12} md={6}>
+                <h4 className="section-title">Button sounds?</h4>
+              </Col>
+              <Col xs={12} md={6} className="toggle-col">
+                <input
+                  type="checkbox"
+                  id="toggle-buttonsound"
+                  checked={buttonSoundState}
+                  onChange={buttonSoundClickHandler}
+                  aria-label="Button sounds"
+                  className="settings-checkbox"
+                />
+                <label htmlFor="toggle-buttonsound" className="toggle-label">
+                  {buttonSoundState ? "Yes" : "No"}
+                </label>
+              </Col>
+            </Row>
+          </div>
 
-        <div className="spacer" />
-        <div className="divider" />
-        <div className="spacer" />
+          <div className="settings-divider" />
 
-        {/* Alarm Sound Dropdown */}
-        <Row>
-          <Col>
-            <h4 className="card-text">Alarm Sounds</h4>
-          </Col>
-          <Col>
-            <Dropdown>
-              <Dropdown.Toggle variant="custom-sounds" id="dropdown-basic">
-                {alarmSoundState}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => alarmClickHandler("Bell")}>
-                  Bell
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => alarmClickHandler("Digital")}>
-                  Digital
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => alarmClickHandler("Kitchen")}>
-                  Kitchen
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => alarmClickHandler("No Sound")}>
-                  No Sound
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Col>
-          <Col />
-        </Row>
+          {/* Alarm Sound Dropdown */}
+          <div className="settings-section">
+            <Row className="settings-row">
+              <Col xs={12} md={6}>
+                <h4 className="section-title">Alarm Sounds</h4>
+              </Col>
+              <Col xs={12} md={6} className="dropdown-col">
+                <Dropdown>
+                  <Dropdown.Toggle
+                    variant="custom-sounds"
+                    id="dropdown-basic"
+                    className="alarm-dropdown"
+                  >
+                    {alarmSoundState}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={() => alarmClickHandler("Bell")}>
+                      Bell
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => alarmClickHandler("Digital")}>
+                      Digital
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => alarmClickHandler("Kitchen")}>
+                      Kitchen
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() => alarmClickHandler("No Sound")}
+                    >
+                      No Sound
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Col>
+            </Row>
+          </div>
 
-        <div className="spacer" />
-        <div className="divider" />
-        <div className="spacer" />
+          <div className="settings-divider" />
 
-        {/* Alarm Volume Slider */}
-        <Row className="alarm-volume">
-          <Col xs={12} md={4}>
-            <h4 className="card-text">Alarm Volume</h4>
-          </Col>
-          <Col xs={12} md={4} style={{ paddingLeft: "25px" }}>
-            <Slider
-              value={volume}
-              onChange={sliderClickHandler}
-              onClick={sliderClickHandler}
-              aria-label="Alarm Volume"
-            />
-          </Col>
-          <Col xs={12} md={4}>
-            <h2>{Math.round((volume || 0) * 100)}</h2>
-          </Col>
-        </Row>
+          {/* Alarm Volume Slider */}
+          <div className="settings-section">
+            <Row className="settings-row volume-row">
+              <Col xs={12} md={4}>
+                <h4 className="section-title">Alarm Volume</h4>
+              </Col>
+              <Col xs={12} md={5} className="slider-col">
+                <Slider
+                  value={volume}
+                  onChange={sliderClickHandler}
+                  onClick={sliderClickHandler}
+                  aria-label="Alarm Volume"
+                />
+              </Col>
+              <Col xs={12} md={3} className="volume-display-col">
+                <h2 className="volume-text">
+                  {Math.round((volume || 0) * 100)}
+                </h2>
+              </Col>
+            </Row>
+          </div>
 
-        <div className="divider" />
-        <div className="spacer" />
+          <div className="settings-divider" />
 
-        {/* Restore Defaults Button */}
-        <Row>
-          <Col className="align-center">
-            <Button
-              onClick={defaultSettingsClickHandler}
-              variant="outline-light"
-              className="default-settings"
-            >
-              Restore Defaults
-            </Button>
-          </Col>
-        </Row>
-
-        <div className="spacer" />
-      </div>
-    </Container>
+          {/* Restore Defaults Button */}
+          <div className="settings-section">
+            <Row>
+              <Col className="text-center">
+                <Button
+                  onClick={defaultSettingsClickHandler}
+                  variant="outline-light"
+                  className="default-settings"
+                >
+                  Restore Defaults
+                </Button>
+              </Col>
+            </Row>
+          </div>
+        </div>
+      </Container>
+    </div>
   );
 };
 

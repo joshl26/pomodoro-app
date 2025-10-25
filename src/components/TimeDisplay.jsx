@@ -1,6 +1,6 @@
 import React from "react";
 
-function TimeDisplay({ minutes, seconds, ariaLive = "polite" }) {
+export default function TimeDisplay({ minutes, seconds, ariaLive = "polite" }) {
   const formatTime = (value) => value.toString().padStart(2, "0");
 
   return (
@@ -10,11 +10,13 @@ function TimeDisplay({ minutes, seconds, ariaLive = "polite" }) {
       aria-atomic="true"
       role="timer"
     >
-      <span className="time-minutes">{formatTime(minutes)}</span>
+      <span className="time-minutes" aria-label="minutes">
+        {formatTime(minutes)}
+      </span>
       <span className="time-separator">:</span>
-      <span className="time-seconds">{formatTime(seconds)}</span>
+      <span className="time-seconds" aria-label="seconds">
+        {formatTime(seconds)}
+      </span>
     </div>
   );
 }
-
-export default React.memo(TimeDisplay);

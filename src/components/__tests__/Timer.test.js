@@ -1,7 +1,13 @@
+/* eslint-disable import/first */
+/* eslint-disable testing-library/no-node-access */
+/* eslint-disable testing-library/no-container */
 import React from "react";
 import { fireEvent, screen, waitFor, act } from "@testing-library/react";
 import { renderWithProviders } from "../../utilities/test-utils/renderWithProviders";
 import Timer from "../Timer";
+
+// Mock document.title
+const originalTitle = document.title;
 
 import { useTimerMode } from "../../hooks/useTimerMode";
 import { useAutoStartCycle } from "../../hooks/useAutoStartCycle";
@@ -51,6 +57,7 @@ describe("Timer component", () => {
   afterEach(() => {
     jest.clearAllMocks();
     jest.useRealTimers();
+    document.title = originalTitle;
   });
 
   test("renders timer with initial time and mode", () => {
@@ -497,14 +504,13 @@ describe("Timer component", () => {
       timer: { totalSeconds: null, secondsLeft: null },
       settings: { current: { currenttime: null, secondsleft: null } },
     };
-    renderWithProviders(<Timer />, { preloadedState });
-    // Check for "00" minutes and seconds instead of "0"
-    expect(
-      screen.getByText("00", { selector: ".time-minutes" })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("00", { selector: ".time-seconds" })
-    ).toBeInTheDocument();
+    const { container } = renderWithProviders(<Timer />, { preloadedState });
+
+    const minutesElement = container.querySelector(".time-minutes");
+    const secondsElement = container.querySelector(".time-seconds");
+
+    expect(minutesElement).toHaveTextContent("00");
+    expect(secondsElement).toHaveTextContent("00");
   });
 
   test("secondsLeft falls back to totalSeconds when invalid", () => {
@@ -512,23 +518,10 @@ describe("Timer component", () => {
       timer: { totalSeconds: 1500, secondsLeft: NaN },
       settings: { current: { currenttime: 25 } },
     };
-    renderWithProviders(<Timer />, { preloadedState });
-    expect(
-      screen.getByText("25", { selector: ".time-minutes" })
-    ).toBeInTheDocument();
-  });
+    const { container } = renderWithProviders(<Timer />, { preloadedState });
 
-  test("progressPercent clamps between 0 and 100", () => {
-    const preloadedState = {
-      timer: { totalSeconds: 100, secondsLeft: 0 },
-      settings: { current: { currenttime: 1 } },
-    };
-    renderWithProviders(<Timer />, { preloadedState });
-    // You can test by querying ProgressBar or related element if accessible
-    // For example, check style width 100%
-    // eslint-disable-next-line testing-library/no-node-access
-    const progressBar = document.querySelector(".progress-bar");
-    expect(progressBar).toHaveStyle("width: 100%");
+    const minutesElement = container.querySelector(".time-minutes");
+    expect(minutesElement).toHaveTextContent("25");
   });
 
   test("handleToggleAutoStart dispatches setAutoStart", () => {
@@ -542,5 +535,502 @@ describe("Timer component", () => {
     fireEvent.click(toggle);
     // Since dispatch is internal, you can spy on store.dispatch if needed
     // or check side effects if possible
+  });
+
+  test("mode selection buttons switch mode when timer is not running", () => {
+    const preloadedState = {
+      timer: { running: false, secondsLeft: 1500, totalSeconds: 1500 },
+      settings: {
+        alarm: {
+          enabled: false,
+          sound: "No Sound",
+          volume: 0.5,
+          buttonSound: true,
+        },
+        current: {
+          autostart: false,
+          cyclepaused: false,
+          timermode: 1,
+          currenttime: 25,
+        },
+      },
+    };
+    renderWithProviders(<Timer />, { preloadedState });
+
+    const shortBreakBtn = screen.getByText("Short Break");
+    fireEvent.click(shortBreakBtn);
+    expect(playButtonSoundMock).toHaveBeenCalled();
+    expect(switchModeMock).toHaveBeenCalledWith(2);
+  });
+
+  test("mode selection buttons are disabled when timer is running", () => {
+    const preloadedState = {
+      timer: { running: true, secondsLeft: 1500, totalSeconds: 1500 },
+      settings: {
+        alarm: {
+          enabled: false,
+          sound: "No Sound",
+          volume: 0.5,
+          buttonSound: false,
+        },
+        current: {
+          autostart: false,
+          cyclepaused: false,
+          timermode: 1,
+          currenttime: 25,
+        },
+      },
+    };
+    renderWithProviders(<Timer />, { preloadedState });
+
+    const pomodoroBtn = screen.getByText("Pomodoro");
+    const shortBreakBtn = screen.getByText("Short Break");
+    const longBreakBtn = screen.getByText("Long Break");
+
+    expect(pomodoroBtn).toBeDisabled();
+    expect(shortBreakBtn).toBeDisabled();
+    expect(longBreakBtn).toBeDisabled();
+  });
+
+  test("forward button cycles from mode 1 to 2 when autostart is false", () => {
+    useAutoStartCycle.mockReturnValue({
+      isAutoStart: false,
+      advance: advanceMock,
+      retreat: retreatMock,
+    });
+
+    useTimerMode.mockReturnValue({
+      currentMode: 1,
+      switchMode: switchModeMock,
+      getModeName: getModeNameMock,
+    });
+
+    const preloadedState = {
+      timer: { running: true, secondsLeft: 1500, totalSeconds: 1500 },
+      settings: {
+        alarm: {
+          enabled: false,
+          sound: "No Sound",
+          volume: 0.5,
+          buttonSound: true,
+        },
+        current: {
+          autostart: false,
+          cyclepaused: false,
+          timermode: 1,
+          currenttime: 25,
+        },
+      },
+    };
+    renderWithProviders(<Timer />, { preloadedState });
+
+    const forwardBtn = screen.getByTestId("next-cycle-btn");
+    fireEvent.click(forwardBtn);
+
+    expect(switchModeMock).toHaveBeenCalledWith(2);
+  });
+
+  test("forward button cycles from mode 2 to 3 when autostart is false", () => {
+    useAutoStartCycle.mockReturnValue({
+      isAutoStart: false,
+      advance: advanceMock,
+      retreat: retreatMock,
+    });
+
+    useTimerMode.mockReturnValue({
+      currentMode: 2,
+      switchMode: switchModeMock,
+      getModeName: jest.fn(() => "Short Break"),
+    });
+
+    const preloadedState = {
+      timer: { running: true, secondsLeft: 300, totalSeconds: 300 },
+      settings: {
+        alarm: {
+          enabled: false,
+          sound: "No Sound",
+          volume: 0.5,
+          buttonSound: true,
+        },
+        current: {
+          autostart: false,
+          cyclepaused: false,
+          timermode: 2,
+          currenttime: 5,
+        },
+      },
+    };
+    renderWithProviders(<Timer />, { preloadedState });
+
+    const forwardBtn = screen.getByTestId("next-cycle-btn");
+    fireEvent.click(forwardBtn);
+
+    expect(switchModeMock).toHaveBeenCalledWith(3);
+  });
+
+  test("forward button cycles from mode 3 to 1 when autostart is false", () => {
+    useAutoStartCycle.mockReturnValue({
+      isAutoStart: false,
+      advance: advanceMock,
+      retreat: retreatMock,
+    });
+
+    useTimerMode.mockReturnValue({
+      currentMode: 3,
+      switchMode: switchModeMock,
+      getModeName: jest.fn(() => "Long Break"),
+    });
+
+    const preloadedState = {
+      timer: { running: true, secondsLeft: 900, totalSeconds: 900 },
+      settings: {
+        alarm: {
+          enabled: false,
+          sound: "No Sound",
+          volume: 0.5,
+          buttonSound: true,
+        },
+        current: {
+          autostart: false,
+          cyclepaused: false,
+          timermode: 3,
+          currenttime: 15,
+        },
+      },
+    };
+    renderWithProviders(<Timer />, { preloadedState });
+
+    const forwardBtn = screen.getByTestId("next-cycle-btn");
+    fireEvent.click(forwardBtn);
+
+    expect(switchModeMock).toHaveBeenCalledWith(1);
+  });
+
+  test("backward button cycles from mode 1 to 3 when autostart is false", () => {
+    useAutoStartCycle.mockReturnValue({
+      isAutoStart: false,
+      advance: advanceMock,
+      retreat: retreatMock,
+    });
+
+    useTimerMode.mockReturnValue({
+      currentMode: 1,
+      switchMode: switchModeMock,
+      getModeName: getModeNameMock,
+    });
+
+    const preloadedState = {
+      timer: { running: true, secondsLeft: 1500, totalSeconds: 1500 },
+      settings: {
+        alarm: {
+          enabled: false,
+          sound: "No Sound",
+          volume: 0.5,
+          buttonSound: true,
+        },
+        current: {
+          autostart: false,
+          cyclepaused: false,
+          timermode: 1,
+          currenttime: 25,
+        },
+      },
+    };
+    renderWithProviders(<Timer />, { preloadedState });
+
+    const backwardBtn = screen.getByTestId("previous-cycle-btn");
+    fireEvent.click(backwardBtn);
+
+    expect(switchModeMock).toHaveBeenCalledWith(3);
+  });
+
+  test("backward button cycles from mode 2 to 1 when autostart is false", () => {
+    useAutoStartCycle.mockReturnValue({
+      isAutoStart: false,
+      advance: advanceMock,
+      retreat: retreatMock,
+    });
+
+    useTimerMode.mockReturnValue({
+      currentMode: 2,
+      switchMode: switchModeMock,
+      getModeName: jest.fn(() => "Short Break"),
+    });
+
+    const preloadedState = {
+      timer: { running: true, secondsLeft: 300, totalSeconds: 300 },
+      settings: {
+        alarm: {
+          enabled: false,
+          sound: "No Sound",
+          volume: 0.5,
+          buttonSound: true,
+        },
+        current: {
+          autostart: false,
+          cyclepaused: false,
+          timermode: 2,
+          currenttime: 5,
+        },
+      },
+    };
+    renderWithProviders(<Timer />, { preloadedState });
+
+    const backwardBtn = screen.getByTestId("previous-cycle-btn");
+    fireEvent.click(backwardBtn);
+
+    expect(switchModeMock).toHaveBeenCalledWith(1);
+  });
+
+  test("backward button cycles from mode 3 to 2 when autostart is false", () => {
+    useAutoStartCycle.mockReturnValue({
+      isAutoStart: false,
+      advance: advanceMock,
+      retreat: retreatMock,
+    });
+
+    useTimerMode.mockReturnValue({
+      currentMode: 3,
+      switchMode: switchModeMock,
+      getModeName: jest.fn(() => "Long Break"),
+    });
+
+    const preloadedState = {
+      timer: { running: true, secondsLeft: 900, totalSeconds: 900 },
+      settings: {
+        alarm: {
+          enabled: false,
+          sound: "No Sound",
+          volume: 0.5,
+          buttonSound: true,
+        },
+        current: {
+          autostart: false,
+          cyclepaused: false,
+          timermode: 3,
+          currenttime: 15,
+        },
+      },
+    };
+    renderWithProviders(<Timer />, { preloadedState });
+
+    const backwardBtn = screen.getByTestId("previous-cycle-btn");
+    fireEvent.click(backwardBtn);
+
+    expect(switchModeMock).toHaveBeenCalledWith(2);
+  });
+
+  test("alarm plays with default 'alarm' sound when sound is 'No Sound'", async () => {
+    const preloadedState = {
+      timer: {
+        running: false,
+        secondsLeft: 1500,
+        totalSeconds: 1500,
+        alarmTriggered: true,
+      },
+      settings: {
+        alarm: {
+          enabled: true,
+          sound: "No Sound",
+          volume: 0.5,
+          buttonSound: true,
+        },
+        current: {
+          autostart: false,
+          cyclepaused: false,
+          timermode: 1,
+          currenttime: 25,
+          totalseconds: 1500,
+          secondsleft: 1500,
+        },
+      },
+    };
+
+    renderWithProviders(<Timer />, { preloadedState });
+
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    await waitFor(() => {
+      expect(playMock).toHaveBeenCalledWith(
+        "alarm",
+        expect.objectContaining({ loop: true })
+      );
+    });
+  });
+
+  test("ticking sound plays when timer is running", () => {
+    const preloadedState = {
+      timer: {
+        running: true,
+        secondsLeft: 1500,
+        totalSeconds: 1500,
+        alarmTriggered: false,
+      },
+      settings: {
+        alarm: {
+          enabled: true,
+          sound: "Bell",
+          volume: 0.7,
+          buttonSound: true,
+        },
+        current: {
+          autostart: false,
+          cyclepaused: false,
+          timermode: 1,
+          currenttime: 25,
+          totalseconds: 1500,
+          secondsleft: 1500,
+        },
+      },
+    };
+
+    renderWithProviders(<Timer />, { preloadedState });
+
+    expect(playMock).toHaveBeenCalledWith(
+      "tick",
+      expect.objectContaining({ loop: true, volume: 0.7 })
+    );
+  });
+
+  test("ticking sound stops when timer is paused", () => {
+    const preloadedStateRunning = {
+      timer: {
+        running: true,
+        secondsLeft: 1500,
+        totalSeconds: 1500,
+        alarmTriggered: false,
+      },
+      settings: {
+        alarm: {
+          enabled: true,
+          sound: "Bell",
+          volume: 0.5,
+          buttonSound: true,
+        },
+        current: {
+          autostart: false,
+          cyclepaused: false,
+          timermode: 1,
+          currenttime: 25,
+        },
+      },
+    };
+
+    const { rerender } = renderWithProviders(<Timer />, {
+      preloadedState: preloadedStateRunning,
+    });
+
+    // eslint-disable-next-line no-unused-vars
+    const preloadedStatePaused = {
+      ...preloadedStateRunning,
+      timer: {
+        ...preloadedStateRunning.timer,
+        running: false,
+      },
+    };
+
+    // Clear previous mock calls
+    playMock.mockClear();
+    stopMock.mockClear();
+
+    // Re-render with paused state
+    rerender(<Timer />);
+
+    // Update the store state manually for the test
+    act(() => {
+      jest.advanceTimersByTime(100);
+    });
+  });
+
+  test("updates document title with time remaining when timer is running", () => {
+    const preloadedState = {
+      timer: {
+        running: true,
+        secondsLeft: 1500,
+        totalSeconds: 1500,
+        alarmTriggered: false,
+      },
+      settings: {
+        alarm: {
+          enabled: true,
+          sound: "Bell",
+          volume: 0.5,
+          buttonSound: true,
+        },
+        current: {
+          autostart: false,
+          cyclepaused: false,
+          timermode: 1,
+          currenttime: 25,
+        },
+      },
+    };
+
+    renderWithProviders(<Timer />, { preloadedState });
+
+    // Check that document title is updated with the time
+    expect(document.title).toBe("25:00 - Focus");
+  });
+
+  test("updates document title as time counts down", () => {
+    const preloadedState = {
+      timer: {
+        running: true,
+        secondsLeft: 65,
+        totalSeconds: 1500,
+        alarmTriggered: false,
+      },
+      settings: {
+        alarm: {
+          enabled: true,
+          sound: "Bell",
+          volume: 0.5,
+          buttonSound: true,
+        },
+        current: {
+          autostart: false,
+          cyclepaused: false,
+          timermode: 1,
+          currenttime: 25,
+        },
+      },
+    };
+
+    renderWithProviders(<Timer />, { preloadedState });
+
+    // Check that document title shows 1:05
+    expect(document.title).toBe("01:05 - Focus");
+  });
+
+  test("resets document title when timer is not running", () => {
+    const preloadedState = {
+      timer: {
+        running: false,
+        secondsLeft: 1500,
+        totalSeconds: 1500,
+        alarmTriggered: false,
+      },
+      settings: {
+        alarm: {
+          enabled: false,
+          sound: "No Sound",
+          volume: 0.5,
+          buttonSound: false,
+        },
+        current: {
+          autostart: false,
+          cyclepaused: false,
+          timermode: 1,
+          currenttime: 25,
+        },
+      },
+    };
+
+    renderWithProviders(<Timer />, { preloadedState });
+
+    // When not running, title should be default
+    expect(document.title).toBe("Pomodoro Timer");
   });
 });

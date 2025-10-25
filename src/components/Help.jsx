@@ -177,9 +177,9 @@ const Help = () => {
           alt="Diagram illustrating the Pomodoro Technique workflow: work intervals followed by short and long breaks."
           className="howto-image"
         />
-        <figcaption className="text-muted">
+        {/* <figcaption className="text-muted">
           Pomodoro Technique overview
-        </figcaption>
+        </figcaption> */}
       </figure>
     </Container>
   );

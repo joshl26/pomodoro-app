@@ -10,6 +10,8 @@ import Progress from "./components/Progress";
 import {
   selectTimerMode,
   selectProgress,
+  selectSecondsLeftRaw,
+  selectTotalSecondsRaw,
 } from "./store/selectors/settingsSelectors";
 import { mainSiteSchema } from "./utilities/mainSiteSchema";
 import "./layout.css";
@@ -62,7 +64,7 @@ const faqJsonLd = {
       name: "What does auto-break do?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Auto-break automatically switches between work and break timers so you don’t have to manually start each session.",
+        text: "Auto-break automatically switches between work and break timers so you don't have to manually start each session.",
       },
     },
     {
@@ -182,13 +184,29 @@ function NotFound() {
 function App() {
   const timerMode = useSelector(selectTimerMode);
   const progress = useSelector(selectProgress);
+  const totalSecondsRaw = useSelector(selectTotalSecondsRaw);
+  const secondsLeftRaw = useSelector(selectSecondsLeftRaw);
   const location = useLocation();
   const mainContentRef = useRef(null);
 
-  const percentComplete = useMemo(
-    () => progress.percent || 0,
-    [progress.percent]
-  );
+  // Calculate progress from timer state, fallback to progress state
+  const percentComplete = useMemo(() => {
+    // First priority: use progress.percent if available (for tests and manual setting)
+    if (progress?.percent !== undefined && progress?.percent !== null) {
+      return Number(progress.percent);
+    }
+
+    // Second priority: calculate from raw timer values
+    const total = Number(totalSecondsRaw);
+    const remaining = Number(secondsLeftRaw);
+
+    if (total > 0 && Number.isFinite(total) && Number.isFinite(remaining)) {
+      const elapsed = Math.max(0, total - remaining);
+      return Math.round(Math.min(100, Math.max(0, (elapsed / total) * 100)));
+    }
+
+    return 0;
+  }, [progress, totalSecondsRaw, secondsLeftRaw]);
 
   const activeClass = useMemo(() => {
     switch (timerMode) {
@@ -218,7 +236,7 @@ function App() {
     const title = routeTitles[location.pathname] || "404 - Page Not Found";
     document.title = title;
 
-    // Announce to screen readerss
+    // Announce to screen readers
     const announcer = document.getElementById("route-announcer");
     if (announcer) {
       announcer.textContent = `Navigated to ${title}`;

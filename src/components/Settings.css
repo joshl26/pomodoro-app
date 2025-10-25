@@ -1,284 +1,520 @@
-/* Settings.css */
+/* Settings Page - Modern Design */
 
-/* Container for the settings card */
+.settings-wrapper {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background: inherit;
+}
+
 .settings-container {
+  max-width: 900px;
+  margin: 0 auto;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Title */
+.settings-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 2rem;
+  letter-spacing: -0.5px;
+}
+
+/* Main Card */
+.settings-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.settings-card:hover {
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Header Section */
+.settings-header {
+  margin-bottom: 1.5rem;
+}
+
+.settings-tip {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+.btn-back {
+  padding: 0.6rem 1.5rem;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  background: transparent;
+  color: #fff;
+}
+
+.btn-back:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-back:active {
+  transform: translateY(0);
+}
+
+/* Divider */
+.settings-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  margin: 1.5rem 0;
+}
+
+/* Section */
+.settings-section {
+  padding: 1rem 0;
+}
+
+.section-title {
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.3px;
+}
+
+.settings-row {
+  align-items: center;
+}
+
+/* Time Controls */
+.time-controls-row {
+  margin-top: 1rem;
+}
+
+.time-control-col {
+  margin-bottom: 1.5rem;
+}
+
+.timer-label {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.time-control-inner {
+  align-items: center;
+  justify-content: center;
+}
+
+.time-display-col {
   display: flex;
   justify-content: center;
-  padding: 2rem 1rem;
-  min-height: 80vh;
-  background-color: transparent;
+  align-items: center;
 }
 
-/* Card wrapper */
-.settings-card {
-  width: 100%;
-  max-width: 650px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: var(--border-radius);
-  padding: 2rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  color: #eee; /* lighter text */
-  transition: background-color 0.3s ease;
-}
-
-body.light-theme .settings-card {
-  background-color: rgba(245, 245, 245, 0.9);
-  color: #222;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-}
-
-/* Headings */
-h1,
-h4 {
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: inherit;
-}
-
-/* Text paragraphs */
-p {
-  margin-top: 1rem;
-  margin-bottom: 0;
-  color: #ddd; /* lighter secondary text */
-}
-
-/* Divider line */
-.divider {
-  height: 2px;
-  background-color: var(--primary-color);
-  margin: 2rem 0;
-  border-radius: 2px;
-}
-
-/* Spacers */
-.spacer-small {
-  height: 1.5rem;
-}
-
-.spacer {
-  height: 1rem;
-}
-
-/* Alignments */
-.align-right {
-  text-align: right;
-  padding-right: 1rem;
-}
-
-.align-center {
-  text-align: center;
-}
-
-/* Timer text labels */
-.timer-text {
-  margin: 1rem 0 0.5rem 0;
-  font-weight: 600;
-  color: #eee; /* lighter */
-  text-align: left;
-}
-
-/* Time display box */
 .card-time {
-  background-color: var(--background-light);
-  color: var(--text-primary);
-  border-radius: var(--border-radius);
-  padding: 0.5rem 1rem;
-  width: 60px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1rem 1.5rem;
+  min-width: 80px;
   text-align: center;
-  font-weight: 700;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  user-select: none;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
 }
 
-/* Time text inside the box */
+.card-time:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
 .time-text {
+  color: #fff;
+  font-size: 1.8rem;
+  font-weight: 700;
   margin: 0;
-  font-size: 1.25rem;
-  color: var(--primary-color);
+  line-height: 1;
 }
 
-/* Enhanced button styles with white outlines */
+/* Time Buttons */
+.padding-right {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-left: 1rem;
+}
 
 .time-buttons {
-  margin: 0.25rem 0;
   width: 44px;
-  height: 40px;
-  border-radius: var(--border-radius);
-  border: 2px solid #fff; /* white outline */
-  background-color: var(--primary-color);
-  color: var(--background-light);
-  cursor: pointer;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    box-shadow 0.3s ease;
+  height: 44px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 8px rgba(219, 82, 77, 0.4);
-  font-weight: 700;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
-.time-buttons:hover,
-.time-buttons:focus {
-  background-color: #e04e48; /* Slightly darker red */
-  color: var(--background-light);
-  outline: none;
-  box-shadow: 0 6px 12px rgba(219, 82, 77, 0.7);
+.time-buttons:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.time-buttons:active {
+  transform: translateY(0) scale(0.95);
+}
+
+.increment-btn:hover {
+  background: rgba(76, 175, 80, 0.2);
+  border-color: rgba(76, 175, 80, 0.5);
+}
+
+.decrement-btn:hover {
+  background: rgba(244, 67, 54, 0.2);
+  border-color: rgba(244, 67, 54, 0.5);
 }
 
 .time-change {
-  width: 12px;
-  height: 12px;
-  pointer-events: none;
+  font-size: 1.2rem;
+  color: #fff;
 }
 
-/* Padding helpers */
-.padding-left {
-  padding-left: 1.5rem !important;
-}
-
-.padding-right {
-  padding-right: 1.5rem !important;
-}
-
-/* Toggle labels */
-.toggle-label {
-  margin-left: 0.5rem;
-  font-weight: 600;
-  color: #eee; /* lighter */
-  user-select: none;
-  cursor: pointer;
-}
-
-/* Checkbox inputs */
-input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-  accent-color: var(--primary-color);
-  vertical-align: middle;
-}
-
-input[type="checkbox"]:focus {
-  outline: 3px solid var(--primary-color);
-  outline-offset: 2px;
-}
-
-/* Dropdown button */
-.btn-custom-sounds {
-  padding: 0.6em 1.2em;
-  border: 2px solid #fff; /* white outline */
-  color: #fff; /* white text */
-  background-color: transparent;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    box-shadow 0.3s ease;
-  min-width: 140px;
-  font-weight: 600;
-  box-shadow: 0 2px 6px rgba(219, 82, 77, 0.3);
-}
-
-.btn-custom-sounds:hover,
-.btn-custom-sounds:focus {
-  background-color: var(--primary-color);
-  color: var(--background-light);
-  outline: none;
-  box-shadow: 0 4px 12px rgba(219, 82, 77, 0.7);
-}
-
-/* Back button */
-.btn-back {
-  width: 160px;
-  border-radius: var(--border-radius);
-  border: 2px solid #fff; /* white outline */
-  background-color: var(--primary-color);
-  color: var(--background-light);
-  cursor: pointer;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    box-shadow 0.3s ease;
-  font-weight: 700;
-  box-shadow: 0 4px 8px rgba(219, 82, 77, 0.5);
-}
-
-.btn-back:hover,
-.btn-back:focus {
-  background-color: #e04e48;
-  color: var(--background-light);
-  outline: none;
-  box-shadow: 0 6px 14px rgba(219, 82, 77, 0.8);
-}
-
-/* Restore defaults button */
-.default-settings {
-  width: 160px;
-  border-radius: var(--border-radius);
-  border: 2px solid #fff; /* white outline */
-  background-color: var(--primary-color);
-  color: var(--background-light);
-  cursor: pointer;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    box-shadow 0.3s ease;
-  font-weight: 700;
-  padding: 0.5rem 1rem;
-  box-shadow: 0 4px 8px rgba(219, 82, 77, 0.5);
-}
-
-.default-settings:hover,
-.default-settings:focus {
-  background-color: #e04e48;
-  color: var(--background-light);
-  outline: none;
-  box-shadow: 0 6px 14px rgba(219, 82, 77, 0.8);
-}
-
-/* Alarm volume slider container */
-.alarm-volume {
+/* Toggle Switches */
+.toggle-col {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 1rem;
+}
+
+.settings-checkbox {
+  display: none;
+}
+
+.toggle-label {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  margin: 0;
+  overflow: hidden;
+}
+
+.toggle-label::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  background: #fff;
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-label::after {
+  content: attr(data-label);
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  transition: opacity 0.3s ease;
+}
+
+.settings-checkbox:checked + .toggle-label {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.settings-checkbox:checked + .toggle-label::before {
+  transform: translateX(28px);
+}
+
+.toggle-label:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Dropdown */
+.dropdown-col {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.alarm-dropdown {
+  min-width: 160px;
+  padding: 0.6rem 1.2rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.alarm-dropdown:hover,
+.alarm-dropdown:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Dropdown - adapts to timer mode colors */
+.dropdown-menu {
+  background: #d95550;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Override for different modes - Add these classes to your parent container based on mode */
+.mode-focus .dropdown-menu,
+.timer-mode-1 .dropdown-menu {
+  background: #d95550 !important;
+}
+
+.mode-short .dropdown-menu,
+.timer-mode-2 .dropdown-menu {
+  background: #4c9196 !important;
+}
+
+.mode-long .dropdown-menu,
+.timer-mode-3 .dropdown-menu {
+  background: #457ba2 !important;
+}
+
+.dropdown-item {
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.dropdown-item:active {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Volume Section */
+.volume-row {
+  align-items: center;
+}
+
+.slider-col {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.volume-display-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.volume-text {
+  color: #fff;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+  min-width: 70px;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Restore Defaults Button */
+.default-settings {
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  transition: all 0.3s ease;
   margin-top: 1rem;
 }
 
-.alarm-volume h2 {
-  margin: 0;
-  font-weight: 700;
-  color: var(--primary-color);
+.default-settings:hover {
+  background: rgba(244, 67, 54, 0.2);
+  border-color: rgba(244, 67, 54, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
 }
 
-/* Responsive adjustments */
+.default-settings:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-  .settings-card {
-    width: 90%;
-    padding: 1.5rem;
-  }
-
-  .padding-left,
-  .padding-right {
-    padding-left: 0.75rem !important;
-    padding-right: 0.75rem !important;
-  }
-
-  .alarm-volume {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
-@media (max-width: 480px) {
-  .settings-container {
+  .settings-wrapper {
     padding: 1rem 0.5rem;
   }
 
-  .btn-back,
-  .default-settings {
+  .settings-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .settings-card {
+    padding: 1.5rem;
+    border-radius: 20px;
+  }
+
+  .settings-header {
+    text-align: center;
+  }
+
+  .settings-tip {
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .text-end {
+    text-align: center !important;
+  }
+
+  .btn-back {
     width: 100%;
   }
+
+  .time-control-col {
+    padding: 0 0.5rem;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .toggle-col,
+  .dropdown-col {
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  .slider-col {
+    padding: 1rem 0;
+  }
+
+  .volume-row {
+    text-align: center;
+  }
+
+  .volume-display-col {
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .settings-card {
+    padding: 1rem;
+  }
+
+  .time-text {
+    font-size: 1.5rem;
+  }
+
+  .card-time {
+    padding: 0.75rem 1rem;
+    min-width: 60px;
+  }
+
+  .time-buttons {
+    width: 38px;
+    height: 38px;
+  }
+
+  .padding-right {
+    padding-left: 0.5rem;
+  }
+}
+
+/* Accessibility */
+.settings-checkbox:focus + .toggle-label {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.time-buttons:focus,
+.btn-back:focus,
+.alarm-dropdown:focus,
+.default-settings:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+/* Animation for interactive elements */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+.time-buttons:active {
+  animation: pulse 0.4s ease-out;
+}
+
+/* Smooth transitions */
+* {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease;
 }

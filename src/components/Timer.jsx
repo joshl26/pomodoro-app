@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import SecondaryButtons from "./SecondaryButtons";
 
 import {
   selectIsAutoStart,
@@ -21,15 +20,20 @@ import {
   resumeTimer,
 } from "../store/timerThunks";
 
-import { setAutoStart } from "../store/settingsSlice";
+import {
+  setAutoStart,
+  setSecondsLeft,
+  setTotalSeconds,
+} from "../store/settingsSlice";
 
-import ProgressBar from "./ProgressBar";
 import { TimerControls } from "./TimerControls";
 import ResetAndAuto from "./ResetAndAuto";
 import ModeIndicator from "./ModeIndicator";
 import TimeDisplay from "./TimeDisplay";
 
 import { tick as tickAction } from "../store/timerSlice";
+
+import "./Timer.css";
 
 function Timer() {
   const dispatch = useDispatch();
@@ -70,20 +74,20 @@ function Timer() {
       : totalSeconds;
   }, [runtimeSecondsLeft, totalSeconds]);
 
-  const elapsedSeconds = useMemo(() => {
-    return Math.max(0, totalSeconds - secondsLeft);
-  }, [totalSeconds, secondsLeft]);
-
-  const progressPercent = useMemo(() => {
-    return Math.min(100, Math.max(0, (elapsedSeconds / totalSeconds) * 100));
-  }, [elapsedSeconds, totalSeconds]);
-
   const { minutes, seconds } = useMemo(() => {
     return {
       minutes: Math.floor(secondsLeft / 60),
       seconds: secondsLeft % 60,
     };
   }, [secondsLeft]);
+
+  // Update Redux state for App progress bar
+  useEffect(() => {
+    if (running) {
+      dispatch(setTotalSeconds(totalSeconds));
+      dispatch(setSecondsLeft(secondsLeft));
+    }
+  }, [dispatch, running, totalSeconds, secondsLeft]);
 
   // Audio manager
   const { play, stop, playButtonSound } = useAudioManager();
@@ -108,6 +112,10 @@ function Timer() {
 
     if (running) {
       dispatch(tickAction({ now: Date.now() }));
+      // Update Redux state for progress bar
+      dispatch(setTotalSeconds(totalSeconds));
+      dispatch(setSecondsLeft(secondsLeft));
+
       tickIntervalRef.current = setInterval(() => {
         dispatch(tickAction({ now: Date.now() }));
       }, 1000);
@@ -119,7 +127,7 @@ function Timer() {
         tickIntervalRef.current = null;
       }
     };
-  }, [running, dispatch]);
+  }, [running, dispatch, totalSeconds, secondsLeft]);
 
   // Alarm triggered effect
   useEffect(() => {
@@ -160,6 +168,28 @@ function Timer() {
     stop,
   ]);
 
+  const { currentMode, switchMode, getModeName } = useTimerMode();
+  const { advance, retreat } = useAutoStartCycle();
+
+  const currentModeName = useMemo(() => {
+    return getModeName();
+  }, [getModeName]);
+
+  // Update document title with timer when running
+  useEffect(() => {
+    if (running) {
+      const formattedMinutes = String(minutes).padStart(2, "0");
+      const formattedSeconds = String(seconds).padStart(2, "0");
+      document.title = `${formattedMinutes}:${formattedSeconds} - ${currentModeName}`;
+    } else {
+      document.title = "Pomodoro Timer";
+    }
+
+    return () => {
+      document.title = "Pomodoro Timer";
+    };
+  }, [running, minutes, seconds, currentModeName]);
+
   // Button sound wrapper
   const playBtnSound = useCallback(() => {
     if (buttonSoundState === false) return;
@@ -178,9 +208,6 @@ function Timer() {
   const handleResume = useCallback(() => {
     dispatch(resumeTimer());
   }, [dispatch]);
-
-  const { currentMode, switchMode, getModeName } = useTimerMode();
-  const { advance, retreat } = useAutoStartCycle();
 
   const forwardButtonClicked = useCallback(() => {
     playBtnSound();
@@ -230,9 +257,14 @@ function Timer() {
     [dispatch]
   );
 
-  const currentModeName = useMemo(() => {
-    return getModeName();
-  }, [getModeName]);
+  // Mode button handler
+  const handleModeSelect = useCallback(
+    (mode) => {
+      playBtnSound();
+      switchMode(mode);
+    },
+    [playBtnSound, switchMode]
+  );
 
   // AutoStart side effect
   const prevAutoStartRef = useRef(autoStartState);
@@ -258,11 +290,46 @@ function Timer() {
     <section className="timer-container" aria-label="Pomodoro Timer">
       <div className="timer-content">
         <ModeIndicator currentModeName={currentModeName} />
+
+        {/* Mode Selection Buttons */}
+        <div
+          className="mode-buttons"
+          role="group"
+          aria-label="Timer mode selection"
+        >
+          <button
+            className={`mode-btn ${currentMode === 1 ? "active" : ""}`}
+            onClick={() => handleModeSelect(1)}
+            aria-label="Switch to Pomodoro mode"
+            aria-pressed={currentMode === 1}
+            type="button"
+            disabled={running}
+          >
+            Pomodoro
+          </button>
+          <button
+            className={`mode-btn ${currentMode === 2 ? "active" : ""}`}
+            onClick={() => handleModeSelect(2)}
+            aria-label="Switch to Short Break mode"
+            aria-pressed={currentMode === 2}
+            type="button"
+            disabled={running}
+          >
+            Short Break
+          </button>
+          <button
+            className={`mode-btn ${currentMode === 3 ? "active" : ""}`}
+            onClick={() => handleModeSelect(3)}
+            aria-label="Switch to Long Break mode"
+            aria-pressed={currentMode === 3}
+            type="button"
+            disabled={running}
+          >
+            Long Break
+          </button>
+        </div>
+
         <TimeDisplay minutes={minutes} seconds={seconds} ariaLive="polite" />
-        <ProgressBar
-          progressPercent={progressPercent}
-          currentMode={currentMode}
-        />
 
         <div className="timer-controls">
           <TimerControls
@@ -291,8 +358,6 @@ function Timer() {
           autoStartToggleTestId="auto-start-toggle"
         />
       </div>
-
-      <SecondaryButtons />
     </section>
   );
 }
