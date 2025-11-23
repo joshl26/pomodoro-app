@@ -5,7 +5,7 @@
   <!-- Homepage / Timer -->
   <url>
     <loc>https://joshlehman.ca/pomodor/</loc>
-    <lastmod>2025-10-23</lastmod>
+    <lastmod>2025-11-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -18,7 +18,7 @@
   <!-- Settings Page -->
   <url>
     <loc>https://joshlehman.ca/pomodor/settings</loc>
-    <lastmod>2025-10-23</lastmod>
+    <lastmod>2025-11-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -26,7 +26,7 @@
   <!-- Help Page -->
   <url>
     <loc>https://joshlehman.ca/pomodor/help</loc>
-    <lastmod>2025-10-23</lastmod>
+    <lastmod>2025-11-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -34,7 +34,7 @@
   <!-- Charts/Report Page -->
   <url>
     <loc>https://joshlehman.ca/pomodor/report</loc>
-    <lastmod>2025-10-23</lastmod>
+    <lastmod>2025-11-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -42,7 +42,7 @@
   <!-- Login Page -->
   <url>
     <loc>https://joshlehman.ca/pomodor/login</loc>
-    <lastmod>2025-10-23</lastmod>
+    <lastmod>2025-11-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
