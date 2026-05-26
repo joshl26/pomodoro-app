@@ -38,10 +38,12 @@ const LoadingFallback = () => (
   </div>
 );
 
+const publicUrl = process.env.PUBLIC_URL || "";
+
 const FAVICON_PATHS = {
-  1: "/pomodor/favicons/pomo/favicon.ico",
-  2: "/pomodor/favicons/short/favicon.ico",
-  3: "/pomodor/favicons/long/favicon.ico",
+  1: `${publicUrl}/favicons/pomo/favicon.ico`,
+  2: `${publicUrl}/favicons/short/favicon.ico`,
+  3: `${publicUrl}/favicons/long/favicon.ico`,
 };
 
 function getFaviconEl() {
@@ -138,7 +140,7 @@ function SEO({ title, description, jsonLd, canonicalUrl }) {
   );
 }
 
-const BASE_URL = "https://joshlehman.ca/pomodor";
+const BASE_URL = "https://pomodoro.joshlehman.ca";
 
 function generateCombinedSchema(siteUrl, includeFAQ = false) {
   const pomodoroNodes = [

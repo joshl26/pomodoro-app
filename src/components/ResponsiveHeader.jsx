@@ -18,7 +18,7 @@ const navLinks = [
 
 /**
  * Responsive navigation header component
- * Updated for React Router v6 - uses basename="/pomodor" so paths are relative
+ * Updated for React Router v6 - uses the router basename so paths are relative
  */
 const ResponsiveHeader = () => {
   const location = useLocation();

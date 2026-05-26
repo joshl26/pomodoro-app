@@ -11,6 +11,7 @@ Complete guide for deploying PomoBreak to various hosting platforms.
 3. [Deployment Platforms](#deployment-platforms)
    - [GitHub Pages](#github-pages)
    - [Netlify](#netlify)
+   - [Render](#render)
    - [Vercel](#vercel)
    - [AWS S3 + CloudFront](#aws-s3--cloudfront)
    - [Docker](#docker)
@@ -308,6 +309,43 @@ netlify deploy --prod
 # Or with build
 netlify build && netlify deploy --prod
 ```
+
+---
+
+### Render
+
+Render should deploy this app as a `Static Site`, not a web service.
+
+#### Option 1: Blueprint Deploy
+
+This repo now includes `render.yaml`, so Render can provision the site from the repository automatically.
+
+1. Push the repo to GitHub.
+2. In Render, click `New` -> `Blueprint`.
+3. Select the repository.
+4. Confirm the generated static site settings and create the service.
+
+Render will use:
+
+```yaml
+buildCommand: npm ci && npm run build
+staticPublishPath: build
+```
+
+The rewrite rule in `render.yaml` sends all routes to `index.html`, which is required for the React Router client-side routes like `/settings` and `/help`.
+
+#### Option 2: Manual Static Site
+
+If you do not want to use the blueprint file, create a `Static Site` in Render with:
+
+- Build command: `npm ci && npm run build`
+- Publish directory: `build`
+
+Then add a rewrite rule:
+
+- Source: `/*`
+- Destination: `/index.html`
+- Action: `Rewrite`
 
 ---
 

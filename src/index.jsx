@@ -10,6 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 
 const rootElement = document.getElementById("root");
+const routerBaseName = process.env.PUBLIC_URL || "/";
 
 if (rootElement) {
   const root = ReactDOM.createRoot(rootElement);
@@ -22,7 +23,7 @@ if (rootElement) {
             future={{
               v7_startTransition: true,
             }}
-            basename="/pomodor"
+            basename={routerBaseName}
           >
             <App />
           </BrowserRouter>

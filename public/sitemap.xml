@@ -4,12 +4,12 @@
 
   <!-- Homepage / Timer -->
   <url>
-    <loc>https://joshlehman.ca/pomodor/</loc>
+    <loc>https://pomodoro.joshlehman.ca/</loc>
     <lastmod>2025-11-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://joshlehman.ca/pomodor/android-chrome-512x512.png</image:loc>
+      <image:loc>https://pomodoro.joshlehman.ca/android-chrome-512x512.png</image:loc>
       <image:title>PomoBreak Timer</image:title>
       <image:caption>Pomodoro productivity timer interface</image:caption>
     </image:image>
@@ -17,7 +17,7 @@
 
   <!-- Settings Page -->
   <url>
-    <loc>https://joshlehman.ca/pomodor/settings</loc>
+    <loc>https://pomodoro.joshlehman.ca/settings</loc>
     <lastmod>2025-11-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -25,7 +25,7 @@
 
   <!-- Help Page -->
   <url>
-    <loc>https://joshlehman.ca/pomodor/help</loc>
+    <loc>https://pomodoro.joshlehman.ca/help</loc>
     <lastmod>2025-11-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -33,7 +33,7 @@
 
   <!-- Charts/Report Page -->
   <url>
-    <loc>https://joshlehman.ca/pomodor/report</loc>
+    <loc>https://pomodoro.joshlehman.ca/report</loc>
     <lastmod>2025-11-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -41,7 +41,7 @@
 
   <!-- Login Page -->
   <url>
-    <loc>https://joshlehman.ca/pomodor/login</loc>
+    <loc>https://pomodoro.joshlehman.ca/login</loc>
     <lastmod>2025-11-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

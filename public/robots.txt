@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://joshlehman.ca/pomodor/sitemap.xml
+Sitemap: https://pomodoro.joshlehman.ca/sitemap.xml
 
 # Disallow admin or internal pages (if any)
 # Disallow: /admin/

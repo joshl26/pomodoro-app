@@ -77,7 +77,7 @@ describe("App layout", () => {
     // Render with timerMode 1
     const { unmount } = renderApp("/");
 
-    expect(mockFavicon.href).toContain("/pomodor/favicons/pomo/favicon.ico");
+    expect(mockFavicon.href).toContain("/favicons/pomo/favicon.ico");
 
     unmount();
 
@@ -90,7 +90,7 @@ describe("App layout", () => {
       },
     });
 
-    expect(mockFavicon.href).toContain("/pomodor/favicons/short/favicon.ico");
+    expect(mockFavicon.href).toContain("/favicons/short/favicon.ico");
 
     jest.restoreAllMocks();
   });
@@ -109,7 +109,7 @@ describe("App layout", () => {
 
     renderApp("/", invalidTimerModeState);
 
-    expect(mockFavicon.href).toContain("/pomodor/favicons/pomo/favicon.ico");
+    expect(mockFavicon.href).toContain("/favicons/pomo/favicon.ico");
 
     jest.restoreAllMocks();
   });
@@ -268,7 +268,9 @@ describe("App layout", () => {
 
     const { unmount } = renderApp("/");
 
-    expect(announcer.textContent).toContain("Pomodoro Timer");
+    await waitFor(() => {
+      expect(announcer.textContent).toContain("Pomodoro Timer");
+    });
 
     unmount();
 
